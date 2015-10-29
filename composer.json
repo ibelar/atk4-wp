@@ -1,0 +1,18 @@
+{
+  "name": "atk4-wp",
+  "description": "Atk4 framework adapted for Wordpress plugin",
+  "license": "MIT",
+  "require": {
+    "atk4\/atk4":"4.3.*"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "autoloader-suffix": "atk4_wp_plugin"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+      "psr-0": {
+        "": "lib/"
+      }
+  }
+}
