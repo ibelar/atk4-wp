@@ -405,6 +405,16 @@ class WpAtk extends App_Web
 		$this->hook('post-render-output');
 	}
 
+	public function outputDebug( $msg, $shift=0 )
+	{
+		if( $msg instanceof DB ){
+			$this->js(true)->univ()->dialogOK('SQL Debug', $shift);
+			return;
+		}
+		if($this->hook('output-debug',array($msg,$shift)))return true;
+		echo "<font color=blue>",$msg,"</font><br>";
+	}
+
 	/**
 	 * Will render all objects within the app and collect
 	 * all Html in appHtmlBuffer.
