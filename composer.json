@@ -1,6 +1,6 @@
 {
   "name": "atk4-wp",
-  "description": "Atk4 framework adapted for Wordpress plugin",
+  "description": "Atk4 framework adapted for Wordpress",
   "license": "MIT",
   "require": {
     "atk4\/atk4":"4.3.*"
