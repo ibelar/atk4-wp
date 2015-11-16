@@ -34,9 +34,12 @@ class WpPathfinder extends PathFinder
 		$base_directory = dirname(__DIR__);
 		$atk_base_path = $base_directory . '/vendor/atk4/atk4';
 		$wp_public_path = $base_directory . '/public';
-		$atk_public_url = plugin_dir_url(__DIR__ ) . 'vendor/atk4/atk4/public/atk4';
+		//$atk_public_url = plugin_dir_url(__DIR__ ) . 'vendor/atk4/atk4/public/atk4';
+		//$atk_public_url = str_replace( site_url(), '', $atk_public_url);
+		$atk_public_url = content_url(). '/atk4-wp/vendor/atk4/atk4/public/atk4';
 		$atk_public_url = str_replace( site_url(), '', $atk_public_url);
-		$wp_public_url = plugin_dir_url(__DIR__) . 'public';
+		//$wp_public_url = plugin_dir_url(__DIR__) . 'public';
+		$wp_public_url = content_url().'/atk4-wp/public';
 		$wp_public_url = str_replace( site_url(), '', $wp_public_url);
 
 		$templates_folder=array('template','templates');

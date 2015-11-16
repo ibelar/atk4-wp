@@ -420,7 +420,7 @@ class WpAtk extends App_Web
 	 * all Html in appHtmlBuffer.
 	 *
 	 * Shortcode are using getAppHtml because Wordpress shortcode need
-	 * to return html value instead of echo the html.
+	 * to return html value instead of sending it via echo.
 	 *
 	 * @return mixed
 	 * @throws BaseException
