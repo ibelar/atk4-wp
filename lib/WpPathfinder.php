@@ -32,13 +32,18 @@ class WpPathfinder extends PathFinder
 		//$base_directory=
 
 		$base_directory = dirname(__DIR__);
+		//path to atk4 files
 		$atk_base_path = $base_directory . '/vendor/atk4/atk4';
+		//path to atk4-wp public files
 		$wp_public_path = $base_directory . '/public';
-		//$atk_public_url = plugin_dir_url(__DIR__ ) . 'vendor/atk4/atk4/public/atk4';
-		//$atk_public_url = str_replace( site_url(), '', $atk_public_url);
+
+		// url to atk4 public files
+		// need to remove site url from url, otherwise, atk4 will output it twice.
 		$atk_public_url = content_url(). '/atk4-wp/vendor/atk4/atk4/public/atk4';
 		$atk_public_url = str_replace( site_url(), '', $atk_public_url);
-		//$wp_public_url = plugin_dir_url(__DIR__) . 'public';
+
+		// url to atk4-wp public files
+		// need to remove site url from url, otherwise, atk4 will output it twice.
 		$wp_public_url = content_url().'/atk4-wp/public';
 		$wp_public_url = str_replace( site_url(), '', $wp_public_url);
 
@@ -148,11 +153,21 @@ class WpPathfinder extends PathFinder
 	}
 
 
+	/**
+	 * Add pathfinder location for the plugin directory.
+	 * $pluginPath usually equal to plugin_dir_path( __FILE__ ) and is also equivalent to the plugin config location
+	 *
+	 *
+	 * @param $pluginPath
+	 */
 	public function addPluginLocations( $pluginPath )
 	{
 		$templates_folder=array('template','templates');
 
+		//path to plugin public directory
 		$pluginPublicPath = $pluginPath . 'public';
+		// url to plugin public directory.
+		// need to remove site url from it.
 		$pluginPublicUrl  = plugin_dir_url($pluginPath . 'public');
 		$pluginPublicUrl  = str_replace( site_url(), '', $pluginPublicUrl . 'public');
 
