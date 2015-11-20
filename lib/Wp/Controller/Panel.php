@@ -16,7 +16,7 @@ class Wp_Controller_Panel extends AbstractController
 	public function init()
 	{
 		parent::init();
-		$this->panels = $this->app->getConfig('panel');
+		$this->panels = $this->app->getConfig('panel', []);
 		//$this->frontPanels = $this->app->getConfig('front_panel', null);
 
 	}

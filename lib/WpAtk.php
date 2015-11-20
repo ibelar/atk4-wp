@@ -451,7 +451,7 @@ class WpAtk extends App_Web
 
 
 	/** Default handling of Wp Content page. */
-	function layout_Content()
+	public function layout_Content()
 	{
 		$layout = $this->layout ?: $this;
 		$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
@@ -460,6 +460,20 @@ class WpAtk extends App_Web
 		} else {
 			$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
 		}*/
+	}
+
+	public function getWpPageUrl()
+	{
+		global $post;
+
+		$url = '';
+		if ( is_home() ){
+			$url = site_url();
+		} else {
+			$url = get_permalink( $post->ID );
+		}
+
+		return $url;
 	}
 
 }
