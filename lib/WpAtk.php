@@ -291,8 +291,12 @@ class WpAtk extends App_Web
 			if ( isset($shortcode['css'])){
 				$this->enqueueCtrl->enqueueFiles( $shortcode['css'], 'css');
 			}
-			$self->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
-			return $self->getAppHtml();
+			$sc = $self->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
+			$scHtml = $self->getAppHtml();
+			$self->clearAppHtml();
+			$self->removeElement($sc->short_name);
+
+			return $scHtml;
 		});
 		//add this shortcode to our panel list.
 		//This will allow to get ajax working.
@@ -431,6 +435,11 @@ class WpAtk extends App_Web
 		$this->addHook('sc_render', [$this, 'setAppHtmlBuffer']);
 		$this->recursiveRender();
 		return $this->appHtmlBuffer;
+	}
+
+	public function clearAppHtml()
+	{
+		$this->appHtmlBuffer = null;
 	}
 
 	/**
