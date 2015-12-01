@@ -313,6 +313,19 @@ class WpAtk extends App_Web
 
 	/**
 	 * Generates URL for wordpress environment.
+	 * Will generate admin-ajax url by default.
+	 * Reason for this is not to change all atk view that need ajax call, like form, crud, grid etc.
+	 * To generate a ajax url simply call:
+	 *      Ex: $this->app->url() or using argument $this->app->url('', ['arg'=>'value'])
+	 *
+	 * If you need to generate an admin page link instead (ex: http://www.site.com/admin.php?arg=value )
+	 * then you need to specify $page = 'admin' in your call.
+	 *
+	 *      Ex: $this->app->url('admin', ['arg'=>'value'])
+	 *
+	 * For external url simply use:
+	 *
+	 *      Ex: $this->app->url('http://www.site.com', ['arg'=>'value'])
 	 *
 	 * @param null $page
 	 * @param  array $arguments [description]
@@ -329,6 +342,9 @@ class WpAtk extends App_Web
 		if ( strpos( $page, 'http://' ) === 0 || strpos( $page, 'https://' ) === 0 ) {
 			$url->setURL( $page );
 		} else {
+			if( $page === 'admin'){
+				$url->setBaseURL($url->wpAdminUrl);
+			}
 			$url->setPage( $page );
 		}
 
@@ -364,6 +380,10 @@ class WpAtk extends App_Web
 	 * @param string        $prefix Optional prefix for class name
 	 *
 	 * @return string|object Full, normalized class name or received object
+	 *
+	 * todo add namespace in a config file and check for different namespace there.
+	 * todo will allow to use addon in their own namespace by configuring composer.json accordingly.
+	 * todo otherwise, when using addon autocomplete field type in form will not work.
 	 */
 
 	public function normalizeClassName($name, $prefix = null)

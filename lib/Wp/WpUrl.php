@@ -1,27 +1,26 @@
 <?php
 
+/**
+ * Class Wp_WpUrl
+ * Set Base url value for Wordpress.
+ * Bypass atk parent init in order to avoid exception cause we are not using page manager.
+ */
 class Wp_WpUrl extends URL
 {
 
 	public $wpAdminAjaxUrl;
+	public $wpAdminUrl;
 
 	public function init()
 	{
+		//bypass parent::init()
 		AbstractModel::init();
 		$this->addStickyArguments();
 		$this->wpAdminAjaxUrl = admin_url( 'admin-ajax.php');
-		/*if (is_admin() ){*/
-			$this->setBaseURL( admin_url( 'admin-ajax.php') );
-		/*} else {
-			$this->setBaseURL( ajaxurl );
-		}*/
-	}
+		$this->wpAdminUrl = admin_url('admin.php');
 
-	/*public function setWpPage()
-	{
-		if( is_admin() ){
-			$url = $this->wpAdminAjaxUrl;
-		}
-		return $url;
-	}*/
+		//use ajax as default
+		$this->setBaseURL( $this->wpAdminAjaxUrl );
+
+	}
 }
