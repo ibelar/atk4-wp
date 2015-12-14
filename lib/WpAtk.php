@@ -279,19 +279,22 @@ class WpAtk extends App_Web
 	 *
 	 * Then shortcode are register as panels in order to get ajax action running smoothly.
 	 *
+	 * 2015-112-10 Enqueue shortcode js and css file after adding shortcode to app in order to load them after atk - js file.
+	 *
 	 * @param $key
 	 * @param $shortcode
 	 */
 	public function registerShortcode( $key, $shortcode ) {
 		$self = $this;
 		add_shortcode( $shortcode['name'], function ( $args ) use ( $key, $shortcode, $self ) {
+			$sc = $self->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
 			if ( isset($shortcode['js'])){
 				$this->enqueueCtrl->enqueueFiles( $shortcode['js'], 'js', ['start-atk4']);
 			}
 			if ( isset($shortcode['css'])){
 				$this->enqueueCtrl->enqueueFiles( $shortcode['css'], 'css');
 			}
-			$sc = $self->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
+
 			$scHtml = $self->getAppHtml();
 			$self->clearAppHtml();
 			$self->removeElement($sc->short_name);

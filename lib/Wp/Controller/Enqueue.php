@@ -112,7 +112,13 @@ class Wp_Controller_Enqueue extends AbstractController
 			if ( $type === 'js'){
 				foreach ( $files as $file){
 					//atkjs file need wp-init as a dependency.
-					wp_enqueue_script( $file, $this->api->locateURL('js',$file . '.js'), $required );
+					if (strpos($file, 'http') === 0) {
+						$source = $file;
+					} else {
+						$source = $this->api->locateURL('js',$file . '.js');
+					}
+
+					wp_enqueue_script( $file, $source , $required );
 				}
 			} else {
 				foreach ( $files as $file){
