@@ -75,7 +75,9 @@ class WpAtk extends App_Web
 	 */
 	public function sendHeaders() { }
 
-
+	/**
+	 * @param $path
+	 */
 	public function setConfigLocation( $path)
 	{
 		$this->config_location = $path;
@@ -94,7 +96,9 @@ class WpAtk extends App_Web
 		$this->add( $this->pathfinder_class );
 	}
 
-	/* Read config file and store it in $this->config. Use getConfig() to access */
+	/**
+	 * Read config file and store it in $this->config. Use getConfig() to access
+	 */
 
 	public function readConfig( $file = 'config.php' ) {
 		$orig_file = $file;
@@ -123,7 +127,11 @@ class WpAtk extends App_Web
 		return false;
 	}
 
-
+	/**
+	 * Call by Wordpress plugin main file.
+	 * Your Plugin Class file may overide this function
+	 * in order to setup your own WP plugin init.
+	 */
 	public function wpInit()
 	{
 		$this->initializeSession(true);
@@ -131,7 +139,12 @@ class WpAtk extends App_Web
 
 	/**
 	 * Plugin Entry point
-	 * Wordpress plugin call this function via bootstrap
+	 * Wordpress plugin file call this function in order to have
+	 * atk4 work under Wordpress.
+	 *
+	 * Will load panel and shortcode configuration file;
+	 * Setup proper action and filter for them;
+	 * Setup WP Ajax
 	 *
 	 * @throws
 	 */
