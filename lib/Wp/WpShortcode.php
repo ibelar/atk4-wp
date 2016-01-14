@@ -16,6 +16,9 @@ class Wp_WpShortcode extends Wp_WpPanel
 {
 	public $needAtkJs = false;
 
+	//Argument passed via shortcode
+	public $args = null;
+
 	public function init()
 	{
 		parent::init();

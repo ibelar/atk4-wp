@@ -90,66 +90,12 @@ class WpPathfinder extends PathFinder
 		                            ->setBasePath($wp_public_path)
 		                            ->setBaseURL($wp_public_url);
 
-
-		if (@$this->api->pm) {
-			// Add public location - assets, but only if
-			// we hav PageManager to identify it's location
-			if (is_dir($base_directory.'/public')) {
-				$this->public_location=$this->addLocation(array(
-					'public'=>'',
-					'js'=>'js',
-					'css'=>'css',
-				))
-				                            ->setBasePath($base_directory.'/public')
-				                            ->setBaseURL($this->api->pm->base_path);
-			} else {
-				$this->base_location
-					->setBaseURL($this->api->pm->base_path);
-				$this->public_location = $this->base_location;
-				$this->public_location->defineContents(array('js'=>'templates/js','css'=>'templates/css'));
-			}
-
-			if (basename($this->api->pm->base_path)=='public') {
-				$this->base_location
-					->setBaseURL(dirname($this->api->pm->base_path));
-			}
-		}
-
-		if ($this->api->hasMethod('addSharedLocations')) {
-			$this->api->addSharedLocations($this, $base_directory);
-		}
-
-		// Add shared locations
-		if (is_dir(dirname($base_directory).'/shared')) {
-			$this->shared_location=$this->addLocation(array(
-				'php'=>'lib',
-				'addons'=>'addons',
-				'template'=>$templates_folder,
-			))->setBasePath(dirname($base_directory).'/shared');
-		}
-
-
-
-		if (@$this->api->pm) {
-			if ($this->app->compat_42 && is_dir($this->public_location->base_path.'/atk4/public/atk4')) {
-				$this->atk_public=$this->public_location->addRelativeLocation('atk4/public/atk4');
-			} elseif (is_dir($this->public_location->base_path.'/atk4')) {
-				$this->atk_public=$this->public_location->addRelativeLocation('atk4');
-			} elseif (is_dir($base_directory.'/vendor/atk4/atk4/public/atk4')) {
-				$this->atk_public=$this->base_location->addRelativeLocation('vendor/atk4/atk4/public/atk4');
-			} elseif (is_dir($base_directory.'/../vendor/atk4/atk4/public/atk4')) {
-				$this->atk_public=$this->base_location->addRelativeLocation('../vendor/atk4/atk4/public/atk4');
-			} else {
-				echo $this->public_location;
-				throw $this->exception('Unable to locate public/atk4 folder', 'Migration');
-			}
-
-			$this->atk_public->defineContents(array(
-				'public'=>'.',
-				'js'=>'js',
-				'css'=>'css',
-			));
-		}
+		$this->atk_public = $this->wpPublicLocation->addRelativeLocation('vendor/atk4/atk4/public/atk4');
+		$this->atk_public->defineContents(array(
+			'public'=>'.',
+			'js'=>'js',
+			'css'=>'css',
+		));
 	}
 
 

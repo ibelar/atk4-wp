@@ -92,6 +92,9 @@ class WpAtk extends App_Web
 		// Loads all configuration files
 		$this->config_files = array_merge( $this->config_files, $this->wpConfigFiles);
 
+		$this->pm=$this->add($this->pagemanager_class, $this->pagemanager_options);
+		$this->pm->parseRequestedURL();
+
 		$this->readAllConfig();
 		$this->add( $this->pathfinder_class );
 	}

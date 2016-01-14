@@ -26,23 +26,18 @@ class Wp_Controller_Enqueue extends AbstractController
 	{
 		parent::init();
 
-
-		$this->registerAtkJsFiles( $this->atkJsFiles );
-
-		add_action('admin_enqueue_scripts', [&$this, 'enqueueAdminFiles']);
-
-		// check if we need to enqueue files in front end.
-		if ( ! is_admin() ){
-			$this->enqueueFrontFiles();
+		if ( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAdminFiles' ] );
+		} else {
+			add_action( 'wp_enqueue_scripts', [ $this, 'enqueueFrontFiles' ] );
 		}
-
-
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getAtkJsFiles() {
+	public function getAtkJsFiles()
+	{
 		return $this->atkJsFiles;
 	}
 
@@ -62,10 +57,12 @@ class Wp_Controller_Enqueue extends AbstractController
 
 	public function enqueueAdminFiles( $hook )
 	{
+
 		//Check if this is an atk panel.
 		// and enqueue atk file
 		$panel = $this->getAtkPanel( $hook );
 		if ( isset($panel) ){
+			$this->registerAtkJsFiles( $this->atkJsFiles );
 			//check if panel require specific js file.
 			if ( isset ($panel['js'])){
 				$this->atkJsFiles = array_merge($this->atkJsFiles, $panel['js'] );
@@ -96,6 +93,7 @@ class Wp_Controller_Enqueue extends AbstractController
 
 	public function enqueueFrontFiles()
 	{
+		$this->registerAtkJsFiles( $this->atkJsFiles );
 		if ( @$frontJsFiles = $this->api->getConfig('enqueue/front/js', null)){
 			$this->enqueueFiles($frontJsFiles, 'js');
 		}
