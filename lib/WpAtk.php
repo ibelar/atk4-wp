@@ -161,10 +161,11 @@ class WpAtk extends App_Web
 			} else {
 				//check if Wp page required an atk4 panel
 				add_action('parse_request', [$this, 'parseRequest']);
+				$this->loadShortcodes();
+				//enable Wp ajax front end action.
+				add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
 			}
-			$this->loadShortcodes();
-			//enable Wp ajax front end action.
-			add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+
 
 
 		} catch ( Exception $e ) {

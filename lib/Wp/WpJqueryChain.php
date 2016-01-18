@@ -29,7 +29,7 @@ class Wp_WpJqueryChain extends jQuery_Chain
 	 *
 	 * @return this
 	 */
-	function reload($arg = array(), $fn = null, $url = null, $interval = null) {
+	/*function reload($arg = array(), $fn = null, $url = null, $interval = null) {
 		if ($fn && $fn instanceof jQuery_Chain) {
 			$fn->_enclose();
 		}
@@ -39,5 +39,5 @@ class Wp_WpJqueryChain extends jQuery_Chain
 			//$url = $this->wpAdminAjaxUrl . '?cut_object=' . $obj->name;
 		}
 		return $this->univ()->_fn('reload', array($url, $arg, $fn, $interval));
-	}
+	}*/
 }
