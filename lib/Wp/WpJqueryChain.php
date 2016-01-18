@@ -12,7 +12,7 @@ class Wp_WpJqueryChain extends jQuery_Chain
 
 	public function init() {
 		parent::init();
-		$this->wpAdminAjaxUrl = admin_url( 'admin-ajax.php');
+		//$this->wpAdminAjaxUrl = admin_url( 'admin-ajax.php');
 	}
 
 	/**
