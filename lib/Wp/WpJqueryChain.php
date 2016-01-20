@@ -10,11 +10,39 @@ class Wp_WpJqueryChain extends jQuery_Chain
 {
 	public $wpAdminAjaxUrl;
 
-	public function init() {
+	public function init()
+	{
 		parent::init();
 		//$this->wpAdminAjaxUrl = admin_url( 'admin-ajax.php');
 	}
 
+	/**
+	 * Modified 2016-01-18: header_sent response true in WP. Needed to remove it for form to work. Header are handle by WP, so probably do not need to check.
+	 *
+	 * Send chain in response to form submit, button click or ajaxec() function for AJAX control output
+	 *
+	 * @return [type] [description]
+	 */
+	function execute()
+	{
+		if(isset($_POST['ajax_submit']) || $_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest'){
+			//if($this->api->jquery)$this->api->jquery->getJS($this->owner);
+
+			/*if(headers_sent($file,$line)){
+				echo "<br/>Direct output (echo or print) detected on $file:$line. <a target='_blank' "
+				     ."href='http://agiletoolkit.org/error/direct_output'>Use \$this->add('Text') instead</a>.<br/>";
+			}*/
+
+
+			$x=$this->api->template->get('document_ready');
+			if(is_array($x))$x=join('',$x);
+			echo $this->_render();
+			$this->api->hook('post-js-execute');
+			exit;
+		}else{
+			throw $this->exception('js()->..->execute() must be used in response to form submission or AJAX operation only');
+		}
+	}
 	/**
 	 * Reload object
 	 *
