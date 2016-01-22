@@ -6,7 +6,7 @@
  * Date: 2015-08-24
  * Time: 2:13 PM
  *
- * This controller is responsable for euqueue necessary atk file.
+ * This controller is responsable for enqueuing necessary atk file.
  *
  * If using an atk Panel in admin area of Wordpress, will load the necessary
  * atk js and css files.
@@ -16,6 +16,7 @@
  */
 class Wp_Controller_Enqueue extends AbstractController
 {
+	//todo see if we can use WP jquery ui core instead of our.
 	protected $atkJsFiles = ['jquery-ui-1-11-4.min', /*'wp-init',*/ 'start-atk4',
 		'ui.atk4_loader', 'ui.atk4_notify', 'atk4_univ_basic',
 		'atk4_univ_jui', 'wp-atk4_univ_ext', 'wp-atk4' ];

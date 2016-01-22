@@ -149,23 +149,29 @@ class WpAtk extends App_Web
 	 * Setup proper action and filter for them;
 	 * Setup WP Ajax
 	 *
+	 * Note: Loading panel and shortcode and adding wp_ajax action should be done
+	 * first in boot function. Trying to put this in if is_admin() statement will cause
+	 * ajax error.
+	 *
 	 * @throws
 	 */
 	public function boot()
 	{
 		try {
+			$this->panelCtrl->loadPanels();
+			$this->loadShortcodes();
+			//register ajax action for this plugin
+			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+			//enable Wp ajax front end action.
+			add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+
 			if ( is_admin() ) {
-				$this->panelCtrl->loadPanels();
-				//register ajax action for this plugin
-				add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+
 			} else {
 				//check if Wp page required an atk4 panel
-				add_action('parse_request', [$this, 'parseRequest']);
-				$this->loadShortcodes();
-				//enable Wp ajax front end action.
-				add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
-			}
+				//add_action('parse_request', [$this, 'parseRequest']);
 
+			}
 
 
 		} catch ( Exception $e ) {
