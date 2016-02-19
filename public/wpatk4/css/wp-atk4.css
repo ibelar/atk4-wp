@@ -1000,7 +1000,7 @@ input.ui-button {
     display: inline-block;
     font-weight: bold;
     line-height: 1.618;
-    padding: 0.5em 1em;
+    padding: 0.5em 1em 0.6em 1em;
     text-align: center;
     white-space: nowrap;
 }
