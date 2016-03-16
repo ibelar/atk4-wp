@@ -4,6 +4,9 @@
  * Created by abelair.
  * Date: 2016-02-19
  * Time: 9:49 AM
+ *
+ *
+ *
  */
 class Form_Field_WpUpload extends Form_Field
 {
@@ -19,7 +22,6 @@ class Form_Field_WpUpload extends Form_Field
 		$this->attr['type']   ='file';
 		$this->attr['class']  = 'inputfile';
 		$this->inputMessage = _('Upload file');
-		//$this->attr['accept'] = $this->stringifyAccept ( $this->options['accept']);
 
 		$max_post   = $this->convertToBytes(ini_get('post_max_size'))/2;
 		$max_upload = $this->convertToBytes(ini_get('upload_max_filesize'));
