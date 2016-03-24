@@ -125,10 +125,10 @@ class Wp_Controller_Panel extends AbstractController
 				$this->registerPanel( $key, $panel );
 			}
 		}
+		//load wp sub panel
 		if ( $panels = $this->getPanelsByType( 'wp-sub-panel')){
 			$this->registerWpSubPanel( $panels );
 		}
-		//add_action( 'wp_ajax_atkAjax', [ $this->app, 'wpAjaxExecute' ]);
 	}
 
 
@@ -284,6 +284,4 @@ class Wp_Controller_Panel extends AbstractController
 		}
 		return $relatedPanels;
 	}
-
-
 }
