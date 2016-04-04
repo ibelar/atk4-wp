@@ -39,7 +39,7 @@ class Wp_Controller_Widget extends AbstractController
 	/**
 	 * Register each widget within Wordpress.
 	 * Once register perform initialisation on them in order
-	 * for Wordpress widget class to adapt to atk.
+	 * for Wordpress widget class to work with atk.
 	 * @param $id
 	 * @param $widget
 	 */
