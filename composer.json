@@ -3,13 +3,12 @@
   "description": "Atk4 framework adapted for Wordpress",
   "license": "MIT",
   "require": {
-    "atk4\/atk4":"4.3.*"
+    "atk4\/atk4":"4.3.0"
   },
   "config": {
     "preferred-install": "dist",
     "autoloader-suffix": "atk4_wp_plugin"
   },
-  "minimum-stability": "dev",
   "autoload": {
       "psr-0": {
         "": "lib/"

@@ -1,0 +1,12 @@
+{Layout}
+    {Content}
+        {form_line}
+                <p>
+                <label for="{$field_name}" {field_mandatory}class="mandatory"{/}><span>{$field_caption}</span>{$after_label}</label>
+                {$above_field}{$cells_start}{$before_field}{$input_cell_start}{$before_input}{$field_input}{$icon}{$after_input}{$input_cell_stop}{$after_field}{$cells_stop}{$below_field}
+                {$field_hint}
+                </p>
+        {/}
+    {/Content}
+{$form_buttons}{$form_action}
+{/Layout}

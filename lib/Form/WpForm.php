@@ -28,6 +28,7 @@ class Form_WpForm extends Form
 			$this->formErrors[$field->short_name] = _('This is a mandatory field');
 	}
 
+
 	public function exitOnError()
 	{
 		if ($this->hasError()){

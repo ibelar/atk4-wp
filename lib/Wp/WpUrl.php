@@ -3,7 +3,7 @@
 /**
  * Class Wp_WpUrl
  * Set Base url value for Wordpress.
- * Bypass atk parent init in order to avoid exception cause we are not using page manager.
+ * Bypass atk parent init in order to avoid exception because we are not using page manager.
  */
 class Wp_WpUrl extends URL
 {

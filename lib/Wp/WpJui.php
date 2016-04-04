@@ -8,24 +8,21 @@
  */
 class Wp_WpJui extends jUI
 {
-	public $chain_class = 'Wp_WpJqueryChain';
+	//Only need for special testing
+	//public $chain_class = 'Wp_WpJqueryChain';
 
-	function addDefaultIncludes(){}
+	public function addDefaultIncludes(){}
 
-	function addInclude($file,$ext='.js')
+	public function addInclude($file,$ext='.js')
 	{
 		if (strpos( $file, 'jquery' ) === false ){
-			if(strpos($file,'http')===0){
+			if( strpos( $file, 'http') === 0 ){
 				parent::addOnReady('$.atk4.includeJS("'.$file.'")');
 				return $this;
 			}
-			$url=$this->api->locateURL('js',$file.$ext);
-
-
-			parent::addOnReady('$.atk4.includeJS("'.$url.'")');
+			$url = $this->app->locateURL( 'js', $file.$ext );
+			parent::addOnReady( '$.atk4.includeJS("'.$url.'")' );
 		}
-
 		return $this;
 	}
-
 }

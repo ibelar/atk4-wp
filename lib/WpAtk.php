@@ -9,6 +9,7 @@
 class WpAtk extends App_Web
 {
 
+	//The  name of the plugin
 	public $pluginName;
 
 
@@ -16,12 +17,14 @@ class WpAtk extends App_Web
 	public $enqueueCtrl;
 	//The panel controller.
 	public $panelCtrl;
+	//The Widget controller
+	public $widgetCtrl;
 
-	//the panel to load into wp .
+	//the current wp panel to load.
 	public $panel;
 
-	//config files
-	public $wpConfigFiles = [ 'config-panel', 'config-enqueue', 'config-shortcode'];
+	//default config files to read
+	public $wpConfigFiles = [ 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget'];
 
 	public $ajaxMode = false;
 
@@ -42,13 +45,14 @@ class WpAtk extends App_Web
 	public $appHtmlBuffer;
 
 
+
+
 	public function __construct($name, $configPath )
 	{
 		$this->pluginName = $name;
 		$this->config_location = $configPath;
 		parent::__construct( $name );
 	}
-
 
 	/**
 	 * Initialise Wp Atk4 component
@@ -61,8 +65,10 @@ class WpAtk extends App_Web
 	{
 		parent::init();
 		//$this->dbConnect();
+		$this->widgetCtrl  = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
 		$this->enqueueCtrl = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
 		$this->panelCtrl   = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
+
 		$this->add( 'Wp_WpJui' );
 		$this->template->trySet('action', $this->pluginName);
 
@@ -159,6 +165,7 @@ class WpAtk extends App_Web
 	{
 		try {
 			$this->panelCtrl->loadPanels();
+			$this->widgetCtrl->loadWidgets();
 			$this->loadShortcodes();
 			//register ajax action for this plugin
 			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
@@ -529,6 +536,19 @@ class WpAtk extends App_Web
 		}
 
 		return $url;
+	}
+
+	/**
+	 * It's ok to clone this app.
+	 * Widget for example will use a clone to render html views
+	 *
+	 * Without cloning, view define for widget will also be output in panel.
+	 * This way, widget use his own atk instance to generate it's own view.
+	 */
+	public function __clone()
+	{
+		$this->enqueueCtrl = null;
+		$this->panelCtrl   = null;
 	}
 
 }
