@@ -5,17 +5,17 @@
  *
  * Will load and register widget define in config-widget in Wordpress.
  * Widgets use a clone copy of WpAtk app ( widgetAtkApp )for defining their views
- * and output them.
+ * and form in order to output them.
  *
- * Without cloning, view define for widget would interfere with those
- * define for panel when WpAtk is render in admin mode because widget view would be add
- * to WpAtk automatically.
+ * Note: Without cloning, view define for widget would interfere with those
+ * define for panel when WpAtk is render in admin mode because widget view would be output
+ * by WpAtk automatically. Therefore, we need a copy of WpAtk to build widget view and form.
  *
  */
 class Wp_Controller_Widget extends AbstractController
 {
 	//Clone of this app for outputting html in views define for widget.
-	public $widgetAtkApp = null;
+	protected $widgetAtkApp = null;
 
 	public function init()
 	{
@@ -56,7 +56,7 @@ class Wp_Controller_Widget extends AbstractController
 	}
 
 	/**
-	 * Will return a singleton copy of WpAtk app use for widget display only.
+	 * Will return a singleton copy of WpAtk app use for widget display and form.
 	 */
 	public function getWidgetAtkApp()
 	{
