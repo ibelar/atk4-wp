@@ -22,15 +22,7 @@ class Wp_WpPanel extends AbstractView
 	}
 
 	function defaultTemplate(){
-		return array('page');
-		/*$page_name='page/'.strtolower($this->short_name);
-		// See if we can locate the page
-		try{
-			$p=$this->app->locate('templates',$page_name.'.html');
-		}catch(PathFinder_Exception $e){
-			return array('page');
-		}
-		return array($page_name,'_top');*/
+		return array('wp-panel');
 	}
 
 	function recursiveRender(){

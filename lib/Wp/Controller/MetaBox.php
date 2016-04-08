@@ -11,6 +11,8 @@ class Wp_Controller_MetaBox extends AbstractController
 	protected $metaBoxAtkApp;
 
 	public $metaBoxes = [];
+	public $metaDisplayCount = 0;
+
 
 	public function init()
 	{

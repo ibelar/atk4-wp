@@ -13,7 +13,7 @@ class WpAtk extends App_Web
 	public $pluginName;
 
 	//Whether initialized_layout is bypass or not.
-	public $isLayoutByPass = false;
+	public $isLayoutNeedInitialise = true;
 
 	//The enqueue controller.
 	public $enqueueCtrl;
@@ -269,6 +269,9 @@ class WpAtk extends App_Web
 	 * Defining a metaBox in config will load the metaBox and register this function to be
 	 * run when the metaBox needs to be display.
 	 *
+	 * Since meta box can be call multiple time, it is necessary to reset the content
+	 * after main is execute.
+	 *
 	 * @$post    Wp_Post //Contains the current post information
 	 * @$param   Array   //Argument passed into the metabox, contains argument set in config file.
 	 */
@@ -280,9 +283,10 @@ class WpAtk extends App_Web
 		//Make our post info available for our view.
 		$this->metaBox['post'] = $post;
 		$this->metaBox['args'] = $param[ 'args' ];
-		$this->isLayoutByPass = true;
+		$this->isLayoutNeedInitialise = false;
+		$this->metaBoxCtrl->metaDisplayCount ++;
 		$this->main();
-		$this->removeElement($this->panel['id']);
+		$this->resetContent();
 	}
 
 	/**
@@ -295,6 +299,20 @@ class WpAtk extends App_Web
 		$this->panel = $this->panelCtrl->getPanelUses( $_REQUEST['atkpanel'], false );
 		$this->main();
 		die();
+	}
+
+	/**
+	 * Reset this app and prepare for another output.
+	 * When multiple output of panel is required this will reset
+	 * the app in order to output only the necessary views and js chains.
+	 */
+	public function resetContent()
+	{
+		$this->removeElement($this->panel['id']);
+		$this->template->del('document_ready');
+		$this->js = null;
+		$this->js = [];
+
 	}
 
 	/**
@@ -388,6 +406,10 @@ class WpAtk extends App_Web
 		} else {
 			if( $page === 'admin'){
 				$url->setBaseURL($url->wpAdminUrl);
+			} else {
+				//add ajax call argument.
+				$arguments['action']   = $this->pluginName;
+				$arguments['atkpanel'] = $this->panel['id'];
 			}
 			$url->setPage( $page );
 		}
@@ -518,7 +540,7 @@ class WpAtk extends App_Web
 
 	public function initLayout( )
 	{
-		if( ! $this->isLayoutByPass ){
+		if( $this->isLayoutNeedInitialise ){
 			parent::initLayout();
 		}
 		$this->addLayout('Content');

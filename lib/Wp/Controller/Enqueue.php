@@ -19,7 +19,7 @@ class Wp_Controller_Enqueue extends AbstractController
 	//todo see if we can use WP jquery ui core instead of our.
 	protected $atkJsFiles = ['jquery-ui-1-11-4.min', /*'wp-init',*/ 'start-atk4',
 		'ui.atk4_loader', 'ui.atk4_notify', 'atk4_univ_basic',
-		'atk4_univ_jui', 'wp-atk4_univ_ext', 'wp-atk4' ];
+		'atk4_univ_jui', 'wp-atk4_univ_ext'/*, 'wp-atk4'*/ ];
 
 	protected $atkCssFiles = [ 'wp-atk4' ];
 

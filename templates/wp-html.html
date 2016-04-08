@@ -6,20 +6,10 @@
 
 </script>
 {Layout}
-    <div id="atk-wp-content" class="atk-wp-body atk-layout" data-atk-panel="{$panel}" data-atk-action="{$action}">
-        <div class="atk-layout-row">
-            <div class="atk-wrapper atk-padding-small atk-cells"></div>
-        </div>
-        <div class="atk-layout-row atk-layout-fluid">
-            <div class="atk-wrapper">{$Content}</div>
-        </div>
-        <!-- testin only -->
-        <div data-atk-panel="test1"></div>
-        <div data-atk-panel="test2"></div>
-    </div>
+    {$Content}
 {/}
 {Shortcode}
-<div id="atk-wp-content" data-atk-panel="{$panel}" data-atk-action="{$action}">
+<div>
         <div>{$Content}</div>
 </div>
 {/}
