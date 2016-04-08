@@ -5,7 +5,7 @@
  * Date: 2016-03-25
  * Time: 1:34 PM
  */
-class Wp_Widget_Field_Line extends Wp_Widget_Field
+class Wp_Custom_Field_Line extends Wp_Custom_Field
 {
 	public function getInput( $attr=array() )
 	{

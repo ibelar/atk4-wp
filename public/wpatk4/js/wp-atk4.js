@@ -8,6 +8,7 @@ $.extend($.atk4,{
         var self=this;
         var panel = $("#atk-wp-content").data('atkPanel');
         var ajaxAction = $("#atk-wp-content").data('atkAction');
+        var test   = $("#atk-wp-content").find('.child[atkPanel]');
 
         if($.isFunction(data)){
             callback=data;

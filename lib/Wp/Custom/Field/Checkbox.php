@@ -5,7 +5,7 @@
  * Date: 2016-03-25
  * Time: 1:38 PM
  */
-class Wp_Widget_Field_Checkbox extends Wp_Widget_Field
+class Wp_Custom_Field_Checkbox extends Wp_Custom_Field
 {
 	public $true_value=true;
 	public $false_value=false;

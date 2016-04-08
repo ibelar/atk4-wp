@@ -56,13 +56,13 @@ class Wp_Controller_Enqueue extends AbstractController
 	}
 
 
-	public function enqueueAdminFiles( $hook )
+	public function enqueueAdminFiles( $hook, $forceEnqueue = false )
 	{
 
 		//Check if this is an atk panel.
 		// and enqueue atk file
 		$panel = $this->getAtkPanel( $hook );
-		if ( isset($panel) ){
+		if ( isset($panel) || $forceEnqueue ){
 			$this->registerAtkJsFiles( $this->atkJsFiles );
 			//check if panel require specific js file.
 			if ( isset ($panel['js'])){
