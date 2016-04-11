@@ -302,14 +302,18 @@ class WpAtk extends App_Web
 	}
 
 	/**
-	 * Reset this app and prepare for another output.
+	 * Reset this app and prepare for subsequent output.
 	 * When multiple output of panel is required this will reset
 	 * the app in order to output only the necessary views and js chains.
+	 *
 	 */
 	public function resetContent()
 	{
+		//remove the actual panel
 		$this->removeElement($this->panel['id']);
+		//clear document_ready tag content.
 		$this->template->del('document_ready');
+		// clear js chain.
 		$this->js = null;
 		$this->js = [];
 
