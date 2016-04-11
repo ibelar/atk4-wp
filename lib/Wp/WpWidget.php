@@ -25,6 +25,10 @@
  */
 class Wp_WpWidget extends WP_Widget
 {
+	//allow to add hook
+	use Traits_Hookable;
+
+
 	//keep track of widget object instantiate
 	//public static $count = 0;
 
@@ -39,14 +43,13 @@ class Wp_WpWidget extends WP_Widget
 
 	public $widgetForm = null;
 
-	public $hooks = [];
+	//public $hooks = [];
 
 	public $instanceDefaults = [];
 
 
 	/**
-	 * Wp_WpWidget constructor.
-	 * Using static count var to generate different widget id.
+	 * Wp_WpWidget constructor
 	 */
 	public function __construct( )
 	{
@@ -101,7 +104,7 @@ class Wp_WpWidget extends WP_Widget
 		}
 		if(  isset ($this->atkWidget['fields']) && !empty($this->atkWidget['fields'] )){
 			if( !isset( $this->widgetForm )){
-				$this->addWidgetForm( 'Wp_Widget_Form');
+				$this->addWidgetForm( 'Form_WpWidget');
 			}
 			foreach( $this->atkWidget['fields'] as $name => $field ){
 				$f = $this->widgetForm->addField( $field['type'], $name );
@@ -181,8 +184,8 @@ class Wp_WpWidget extends WP_Widget
 	public function addWidgetForm( $className )
 	{
 		$this->widgetForm = $this->atkInstance->add( $className, 'wdg-form_' . $this->atkWidget['id'] );
-		if ( ! $this->widgetForm instanceof Wp_Widget_Form ) {
-			throw $this->atkInstance->exception(_('Form class need to be child of Wp_Widget_Form'));
+		if ( ! $this->widgetForm instanceof Form_WpWidget ) {
+			throw $this->atkInstance->exception(_('Form class need to be child of Form_WpWidget'));
 		}
 		return $this->widgetForm;
 	}
@@ -268,42 +271,11 @@ class Wp_WpWidget extends WP_Widget
 	 */
 	public function update( $new_instance, $old_instance )
 	{
-		//$instance = $old_instance;
 		//Compare key using the default one
 		//If using a checkbox, key will not be present in new_instance but will be in instanceDefaults.
 		foreach( $this->instanceDefaults as $key => $data ){
 			$instance[ $key ] = strip_tags( $new_instance[ $key ] );
 		}
 		return $instance;
-	}
-
-
-	/**
-	 * Call a hook spot.
-	 * @param $spot
-	 * @param null $args
-	 *
-	 * @return mixed|null
-	 */
-	private function hook( $spot, $args = null )
-	{
-		$result = null;
-		if (isset ($this->hooks[$spot] )) {
-			$hook = $this->hooks[$spot];
-			$result = call_user_func_array(	$hook, $args);
-		}
-		return $result;
-	}
-
-	/**
-	 * Ad a hook spot.
-	 * @param $hook
-	 * @param $callback
-	 */
-	private function addHook( $hook, $callback )
-	{
-		if ( method_exists( $callback[0], $callback[1] ) && is_callable( [ $callback[0], $callback[1] ])){
-			$this->hooks[ $hook ] = $callback;
-		}
 	}
 }

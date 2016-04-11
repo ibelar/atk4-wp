@@ -12,6 +12,8 @@ class WpAtk extends App_Web
 	//The  name of the plugin
 	public $pluginName;
 
+	//Whether initialized_layout is bypass or not.
+	public $isLayoutNeedInitialise = true;
 
 	//The enqueue controller.
 	public $enqueueCtrl;
@@ -19,12 +21,14 @@ class WpAtk extends App_Web
 	public $panelCtrl;
 	//The Widget controller
 	public $widgetCtrl;
+	//The Metabox controller
+	public $metaBoxCtrl;
 
-	//the current wp panel to load.
+	//the current wp view to output. ( Ex: admin panel, shortcode or metabox)
 	public $panel;
 
 	//default config files to read
-	public $wpConfigFiles = [ 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget'];
+	public $wpConfigFiles = [ 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox' ];
 
 	public $ajaxMode = false;
 
@@ -43,6 +47,9 @@ class WpAtk extends App_Web
 
 	/** will contains the app html output when using wp shortcode */
 	public $appHtmlBuffer;
+
+	//the metabox in use.
+	public $metaBox;
 
 
 
@@ -68,6 +75,7 @@ class WpAtk extends App_Web
 		$this->widgetCtrl  = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
 		$this->enqueueCtrl = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
 		$this->panelCtrl   = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
+		$this->metaBoxCtrl = $this->add( 'Wp_Controller_MetaBox', 'wpatk-mb');
 
 		$this->add( 'Wp_WpJui' );
 		$this->template->trySet('action', $this->pluginName);
@@ -166,6 +174,7 @@ class WpAtk extends App_Web
 		try {
 			$this->panelCtrl->loadPanels();
 			$this->widgetCtrl->loadWidgets();
+			$this->metaBoxCtrl->loadMetaBoxes();
 			$this->loadShortcodes();
 			//register ajax action for this plugin
 			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
@@ -239,8 +248,10 @@ class WpAtk extends App_Web
 
 	/*-------------------- END THEME SECTION ---------------------------------*/
 
+	/*--------------------- OUTPUT ENTRY POINT -------------------------------*/
+
 	/**
-	 * Call to $api->main() from register Wordpress action, like Panel.
+	 * Call to $app->main() from register Wordpress panel.
 	 *
 	 * Defining an admin panel in config will load the panel and register this function to be
 	 * run when the panel needs to be display.
@@ -253,8 +264,34 @@ class WpAtk extends App_Web
 	}
 
 	/**
+	 * Call to $app->main() from register Wordpress metaBox.
+	 *
+	 * Defining a metaBox in config will load the metaBox and register this function to be
+	 * run when the metaBox needs to be display.
+	 *
+	 * Since meta box can be call multiple time, it is necessary to reset the content
+	 * after main is execute.
+	 *
+	 * @$post    Wp_Post //Contains the current post information
+	 * @$param   Array   //Argument passed into the metabox, contains argument set in config file.
+	 */
+	public function wpMetaBoxExecute( WP_Post $post, array $param )
+	{
+		//set the view to output.
+		$this->panel['class'] = $this->metaBoxCtrl->getMetaBoxByKey( $param['id'] )['uses'];//$this->metaBox;
+		$this->panel['id']    = $param['id'];
+		//Make our post info available for our view.
+		$this->metaBox['post'] = $post;
+		$this->metaBox['args'] = $param[ 'args' ];
+		$this->isLayoutNeedInitialise = false;
+		$this->metaBoxCtrl->metaDisplayCount ++;
+		$this->main();
+		$this->resetContent();
+	}
+
+	/**
 	 * Call to $api->main() from register wordpress ajax action.
-	 * This is an overall catch ajax request for wordpress.
+	 * This is an overall catch ajax request for Wordpress.
 	 */
 	public function wpAjaxExecute()
 	{
@@ -265,26 +302,22 @@ class WpAtk extends App_Web
 	}
 
 	/**
-	 * Call to $api->main() from register wordpress ajax action.
-	 * This is an overall catch ajax request for wordpress.
+	 * Reset this app and prepare for subsequent output.
+	 * When multiple output of panel is required this will reset
+	 * the app in order to output only the necessary views and js chains.
+	 *
 	 */
-	/*public function wpAdminAjaxExecute()
+	public function resetContent()
 	{
-		$this->ajaxMode = true;
-		$this->panel = $this->panelCtrl->getPanelUses( $_REQUEST['atkpanel'], false );
-		$this->main();
-		die();
+		//remove the actual panel
+		$this->removeElement($this->panel['id']);
+		//clear document_ready tag content.
+		$this->template->del('document_ready');
+		// clear js chain.
+		$this->js = null;
+		$this->js = [];
+
 	}
-
-
-	public function wpFrontAjaxExecute()
-	{
-		$this->ajaxMode = true;
-		$this->panel = $this->panelCtrl->getPanelUses( $_REQUEST['atkpanel'], false );
-		$this->main();
-		die();
-	}*/
-
 
 	/**
 	 * Load shortcode setup in config file and register them within Wordpress.
@@ -377,6 +410,10 @@ class WpAtk extends App_Web
 		} else {
 			if( $page === 'admin'){
 				$url->setBaseURL($url->wpAdminUrl);
+			} else {
+				//add ajax call argument.
+				$arguments['action']   = $this->pluginName;
+				$arguments['atkpanel'] = $this->panel['id'];
 			}
 			$url->setPage( $page );
 		}
@@ -505,9 +542,11 @@ class WpAtk extends App_Web
 		$this->appHtmlBuffer = $this->template->render();
 	}
 
-	public function initLayout()
+	public function initLayout( )
 	{
-		parent::initLayout();
+		if( $this->isLayoutNeedInitialise ){
+			parent::initLayout();
+		}
 		$this->addLayout('Content');
 	}
 
@@ -517,11 +556,6 @@ class WpAtk extends App_Web
 	{
 		$layout = $this->layout ?: $this;
 		$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
-		/*if ( is_admin() ){
-			$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
-		} else {
-			$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
-		}*/
 	}
 
 	public function getWpPageUrl()

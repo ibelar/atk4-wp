@@ -4,7 +4,20 @@
  * This controller is responsible for loading and registering
  * all panels set in config file.
  *
+ * Panel can be defined as:
+ *      panel for Wp admin section page (config-panel)
+ *      shortcode (config-shortcode)
+ *      metaBox   (config-metabox)
+ *
+ * Panel are atk views that are echo within Wordpress section. Echo is done directly, using panel and metabox,
+ * or via html string using shortcode.
+ *
+ * Every panels defined will be registered in $panels array.
+ *
+ * Panels are register in order for ajax call to know how to load proper atk view to display.
+ * On Wp ajax request, the catch all ajax function will load proper panel registered and display it.
  */
+
 class Wp_Controller_Panel extends AbstractController
 {
 	// Panels that need to be registered within the app (Admin or Front)

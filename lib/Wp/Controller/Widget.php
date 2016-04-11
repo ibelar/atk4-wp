@@ -58,7 +58,7 @@ class Wp_Controller_Widget extends AbstractController
 	/**
 	 * Will return a singleton copy of WpAtk app use for widget display and form.
 	 */
-	public function getWidgetAtkApp()
+	private function getWidgetAtkApp()
 	{
 		if( !isset ($this->widgetAtkApp) ) {
 			$this->widgetAtkApp = clone $this->app;

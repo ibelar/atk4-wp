@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Adapt form field for Wordpress Widget.
+ * Adapt form field for Wordpress.
  * Add a property Id. By default set to $this->name but
  * id property will be set when form widget is display using
  * wordpress Widget function $widget->get_field_id( 'field_name' );
  */
-class Wp_Widget_Field extends Form_Field
+class Wp_Custom_Field extends Form_Field
 {
 
 	public $id;

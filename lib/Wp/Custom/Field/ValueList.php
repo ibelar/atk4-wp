@@ -5,7 +5,7 @@
  * Date: 2016-03-25
  * Time: 1:52 PM
  */
-class Wp_Widget_Field_ValueList extends Wp_Widget_Field
+class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 {
 	// array of available values
 	public $value_list = array();
