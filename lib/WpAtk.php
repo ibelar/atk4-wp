@@ -158,6 +158,7 @@ class WpAtk extends App_Web
 	public function wpInit()
 	{
 		$this->initializeSession(true);
+		$this->setWpNonce();
 	}
 
 	/**
@@ -316,6 +317,7 @@ class WpAtk extends App_Web
 		if( isset( $_GET['atkshortcode'])){
 			$this->stickyGet('atkshortcode');
 		}
+		check_ajax_referer( $this->pluginName );
 		$this->main();
 		die();
 	}
@@ -337,6 +339,14 @@ class WpAtk extends App_Web
 		$this->js = [];
 		$this->clearAppHtml();
 
+	}
+
+	/**
+	 * Implement Ajax security using Wp nonce by adding the nonce value to every ajax call.
+	 */
+	private function setWpNonce()
+	{
+		$this->sticky_get_arguments['_ajax_nonce'] = wp_create_nonce( $this->pluginName );
 	}
 
 	/**
