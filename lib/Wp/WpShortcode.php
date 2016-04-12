@@ -1,20 +1,14 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-09-30
- * Time: 9:39 AM
  *
- * Wp_Shortcode are Panel extension in order to setup wp ajax using the proper atk-panel value.
- * They are register within the panel controller on add_shortcut wp action
- * and behave like panel except that when app generate a shortcode
- * it will do it using getHtml() instead of regular main.
- *
+ * WpShortcode are WpPanel extension.
  *
  */
+
 class Wp_WpShortcode extends Wp_WpPanel
 {
-	public $needAtkJs = false;
+	//public $needAtkJs = false;
 
 	//Argument passed via shortcode
 	public $args = null;
@@ -22,10 +16,19 @@ class Wp_WpShortcode extends Wp_WpPanel
 	public function init()
 	{
 		parent::init();
+		$this->args = $this->owner->shortcode['args'];
 
-		if ( $this->needAtkJs ){
-			//setup atkjs file.
-			$this->app->enqueueCtrl->enqueueAtkJsInFront();
+		//normalize name for ajax call.
+		if( $this->app->ajaxMode && @$num = $_GET['atkwp_sc_num'] ){
+			if( $num > 1 ){
+				$this->short_name   = $this->short_name . '_' . $_GET['atkwp_sc_num'];
+				$this->name         = $this->name . '_' . $_GET['atkwp_sc_num'];
+			}
 		}
+	}
+
+	public function defaultTemplate()
+	{
+		return ['wp-front'];
 	}
 }

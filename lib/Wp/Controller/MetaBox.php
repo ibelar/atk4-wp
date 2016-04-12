@@ -1,15 +1,12 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-04-05
- * Time: 9:20 AM
+ * This controller is responsible for registering metabox.
+ *
  */
+
 class Wp_Controller_MetaBox extends AbstractController
 {
-	//the atk instance
-	protected $metaBoxAtkApp;
-
 	public $metaBoxes = [];
 	public $metaDisplayCount = 0;
 
@@ -43,9 +40,6 @@ class Wp_Controller_MetaBox extends AbstractController
 		add_action( 'add_meta_boxes', function() use ($key, $metabox ){
 			$metabox['key'] = $key;
 
-			$this->app->metaBox['class'] = $metabox['uses'];
-			$this->app->metaBox['id']    = $metabox['key'];
-
 			//Add atk4 js and css files using our key as panel hook
 			$this->app->enqueueCtrl->enqueueAdminFiles( $key );
 			$args = (isset($metabox['args']))? $metabox['args'] : null;
@@ -77,15 +71,4 @@ class Wp_Controller_MetaBox extends AbstractController
 			$box->savePost( $postId );
 		}
 	}
-
-	/**
-	 * Will return a singleton copy of WpAtk app use for metabox.
-	 */
-	/*private function getMetaBoxAtkApp()
-	{
-		if( !isset ($this->MetaBoxAtkApp) ) {
-			$this->MetaBoxAtkApp = clone $this->app;
-		}
-		return $this->MetaBoxAtkApp;
-	}*/
 }
