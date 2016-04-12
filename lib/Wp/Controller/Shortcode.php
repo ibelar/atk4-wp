@@ -25,12 +25,7 @@ class Wp_Controller_Shortcode extends AbstractController
 
 	/**
 	 * Register shortcode within wordpress
-	 *
-	 * When running a shortcode, the app will return the html value instead of echoing it.
-	 *
-	 * Then shortcode are register as panels in order to get ajax action running smoothly.
-	 *
-	 * 2015-112-10 Enqueue shortcode js and css file after adding shortcode to app in order to load them after atk - js file.
+	 * Add js and css file if need.
 	 *
 	 * @param $key
 	 * @param $shortcode
@@ -62,11 +57,23 @@ class Wp_Controller_Shortcode extends AbstractController
 
 	}
 
+	/**
+	 * Every time Wp need to output a shortcode, the number of instance output will be increase.
+	 * Keep track of the number of shortcode instance has been output by Wp.
+	 * @param $key
+	 * @param int $step
+	 */
 	public function increaseShortcodeInstance( $key, $step = 1 )
 	{
 		$this->shortcodes[$key]['number'] += $step;
 	}
 
+	/**
+	 * Get the instance number of a shortcode.
+	 * @param $key
+	 *
+	 * @return mixed
+	 */
 	public function getShortcodeInstance( $key )
 	{
 		return $this->shortcodes[$key]['number'];
