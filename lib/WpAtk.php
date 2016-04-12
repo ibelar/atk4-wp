@@ -24,6 +24,8 @@ class WpAtk extends App_Web
 	//The Metabox controller
 	public $metaBoxCtrl;
 
+	public $shortcodeCtrl;
+
 	//the current wp view to output. ( Ex: admin panel, shortcode or metabox)
 	public $panel;
 
@@ -48,8 +50,10 @@ class WpAtk extends App_Web
 	/** will contains the app html output when using wp shortcode */
 	public $appHtmlBuffer;
 
-	//the metabox in use.
+	//the metabox being execute.
 	public $metaBox;
+	//the shortcode being execute
+	public $shortcode;
 
 
 
@@ -72,10 +76,12 @@ class WpAtk extends App_Web
 	{
 		parent::init();
 		//$this->dbConnect();
-		$this->widgetCtrl  = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
-		$this->enqueueCtrl = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
-		$this->panelCtrl   = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
-		$this->metaBoxCtrl = $this->add( 'Wp_Controller_MetaBox', 'wpatk-mb');
+		$this->widgetCtrl       = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
+		$this->enqueueCtrl      = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
+		$this->panelCtrl        = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
+		$this->metaBoxCtrl      = $this->add( 'Wp_Controller_MetaBox', 'wpatk-mb');
+		$this->shortcodeCtrl    = $this->add( 'Wp_Controller_Shortcode', 'wpatk-sc');
+
 
 		$this->add( 'Wp_WpJui' );
 		$this->template->trySet('action', $this->pluginName);
@@ -159,13 +165,9 @@ class WpAtk extends App_Web
 	 * Wordpress plugin file call this function in order to have
 	 * atk4 work under Wordpress.
 	 *
-	 * Will load panel and shortcode configuration file;
-	 * Setup proper action and filter for them;
-	 * Setup WP Ajax
-	 *
-	 * Note: Loading panel and shortcode and adding wp_ajax action should be done
-	 * first in boot function. Trying to put this in if is_admin() statement will cause
-	 * ajax error.
+	 * Will load panel, metab box, widget and shortcode configuration file;
+	 * Setup proper Wp action for each of them;
+	 * Setup WP Ajax.
 	 *
 	 * @throws
 	 */
@@ -175,23 +177,13 @@ class WpAtk extends App_Web
 			$this->panelCtrl->loadPanels();
 			$this->widgetCtrl->loadWidgets();
 			$this->metaBoxCtrl->loadMetaBoxes();
-			$this->loadShortcodes();
+			$this->shortcodeCtrl->loadShortcodes();
 			//register ajax action for this plugin
 			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
 			//enable Wp ajax front end action.
 			add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
 
-			if ( is_admin() ) {
-
-			} else {
-				//check if Wp page required an atk4 panel
-				//add_action('parse_request', [$this, 'parseRequest']);
-
-			}
-
-
 		} catch ( Exception $e ) {
-			// Handles output of the exception
 			$this->caughtException( $e );
 		}
 
@@ -251,10 +243,8 @@ class WpAtk extends App_Web
 	/*--------------------- OUTPUT ENTRY POINT -------------------------------*/
 
 	/**
-	 * Call to $app->main() from register Wordpress panel.
+	 * Output Panel view in Wp.
 	 *
-	 * Defining an admin panel in config will load the panel and register this function to be
-	 * run when the panel needs to be display.
 	 */
 	public function wpAdminExecute()
 	{
@@ -264,13 +254,10 @@ class WpAtk extends App_Web
 	}
 
 	/**
-	 * Call to $app->main() from register Wordpress metaBox.
+	 * Output metabox view in Wp.
 	 *
-	 * Defining a metaBox in config will load the metaBox and register this function to be
-	 * run when the metaBox needs to be display.
-	 *
-	 * Since meta box can be call multiple time, it is necessary to reset the content
-	 * after main is execute.
+	 * Differnet metabox view may be output within the same admin page,
+	 * it is necessary to reset the content after main is execute.
 	 *
 	 * @$post    Wp_Post //Contains the current post information
 	 * @$param   Array   //Argument passed into the metabox, contains argument set in config file.
@@ -289,14 +276,46 @@ class WpAtk extends App_Web
 		$this->resetContent();
 	}
 
+
 	/**
-	 * Call to $api->main() from register wordpress ajax action.
-	 * This is an overall catch ajax request for Wordpress.
+	 * Output shortcode view in Wordpress.
+	 * Shortcode may come from anywhere in Wp front.
+	 * A shortcode view may be loaded x amount of time with other shortcode view that may also be loaded x amount of time.
+	 * The shortcode controller will need to keep track of the number output for each view.
+	 * @param $shortcode
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	public function wpShortcodeExecute( $shortcode, $args )
+	{
+		//Set app panel with proper shortcode class.
+		$this->panel['class'] = $shortcode['uses'];
+		$this->panel['id']    = $shortcode['key'];
+		//Shortcode class will retreive this arg on init()
+		$this->shortcode['args'] = $args;
+		//Tell Shortcode controller how many time this is output.
+		$this->shortcodeCtrl->increaseShortcodeInstance(  $shortcode['key'] );
+		//This will set proper ajax action for this shortcode instance.
+		$this->sticky_get_arguments['atkshortcode'] = $this->shortcodeCtrl->getShortcodeInstance(  $shortcode['key'] );
+		$this->isLayoutNeedInitialise = false;
+		//Shortcode are not echo and must return html
+		$html = $this->getAppHtml();
+		$this->resetContent();
+		return $html;
+	}
+
+	/**
+	 * Output ajax call in Wp.
+	 * This is an overall catch ajax request for Wordpress admin and front.
 	 */
 	public function wpAjaxExecute()
 	{
 		$this->ajaxMode = true;
 		$this->panel = $this->panelCtrl->getPanelUses( $_REQUEST['atkpanel'], false );
+		if( isset( $_GET['atkshortcode'])){
+			$this->stickyGet('atkshortcode');
+		}
 		$this->main();
 		die();
 	}
@@ -310,72 +329,15 @@ class WpAtk extends App_Web
 	public function resetContent()
 	{
 		//remove the actual panel
-		$this->removeElement($this->panel['id']);
+		$this->removeElement($this->page_object->short_name);
 		//clear document_ready tag content.
 		$this->template->del('document_ready');
 		// clear js chain.
 		$this->js = null;
 		$this->js = [];
+		$this->clearAppHtml();
 
 	}
-
-	/**
-	 * Load shortcode setup in config file and register them within Wordpress.
-	 *
-	 * @throws App_CLI
-	 * @throws BaseException
-	 */
-	public function loadShortcodes()
-	{
-		if ( $shortcodes = $this->getConfig( 'shortcode', null ) ) {
-			foreach ( $shortcodes as $key => $shortcode ) {
-				$this->registerShortcode( $key, $shortcode );
-			}
-		}
-	}
-
-	/**
-	 * Register shortcode within wordpress and setup closure function to call
-	 * when wordpress need to display a shortcode.
-	 *
-	 * When running a shortcode, the app will return the html value instead of echoing it.
-	 *
-	 * Then shortcode are register as panels in order to get ajax action running smoothly.
-	 *
-	 * 2015-112-10 Enqueue shortcode js and css file after adding shortcode to app in order to load them after atk - js file.
-	 *
-	 * @param $key
-	 * @param $shortcode
-	 */
-	public function registerShortcode( $key, $shortcode ) {
-		$self = $this;
-		add_shortcode( $shortcode['name'], function ( $args ) use ( $key, $shortcode, $self ) {
-			$sc = $self->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
-			if ( isset($shortcode['js'])){
-				$this->enqueueCtrl->enqueueFiles( $shortcode['js'], 'js', ['start-atk4']);
-			}
-			if ( isset($shortcode['css'])){
-				$this->enqueueCtrl->enqueueFiles( $shortcode['css'], 'css');
-			}
-
-			$scHtml = $self->getAppHtml();
-			$self->clearAppHtml();
-			$self->removeElement($sc->short_name);
-
-			return $scHtml;
-		});
-		//add this shortcode to our panel list.
-		//This will allow to get ajax working.
-		$this->app->panelCtrl->setPanels( $key, $shortcode );
-
-	}
-
-
-	/*public function renderShortcode ( $args )
-	{
-		$this->add( $shortcode['uses'], [ 'id' => $key, 'name'=> $shortcode['name'], 'needAtkJs' => $shortcode['atkjs'], 'args' => $args] );
-		return $this->getHtml();
-	}*/
 
 	/**
 	 * Generates URL for wordpress environment.
@@ -494,7 +456,7 @@ class WpAtk extends App_Web
 			return;
 		}
 		//remove shortcode layout prior to echo template output.
-		$this->template->del('Shortcode');
+		//$this->template->del('Shortcode');
 		echo $this->template->render();
 		$this->hook('post-render-output');
 	}
@@ -523,7 +485,7 @@ class WpAtk extends App_Web
 	public function getAppHtml()
 	{
 		$this->addHook('sc_render', [$this, 'setAppHtmlBuffer']);
-		$this->recursiveRender();
+		$this->main();
 		return $this->appHtmlBuffer;
 	}
 
@@ -538,7 +500,7 @@ class WpAtk extends App_Web
 	 */
 	public function setAppHtmlBuffer()
 	{
-		$this->template->del('Layout');
+		//$this->template->del('Layout');
 		$this->appHtmlBuffer = $this->template->render();
 	}
 

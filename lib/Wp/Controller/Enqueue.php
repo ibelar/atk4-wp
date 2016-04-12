@@ -1,10 +1,6 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-24
- * Time: 2:13 PM
  *
  * This controller is responsable for enqueuing necessary atk file.
  *
