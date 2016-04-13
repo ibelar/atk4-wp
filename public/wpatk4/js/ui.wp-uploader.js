@@ -1,12 +1,6 @@
-/**
- * Created by abelair on 2016-02-19.
+/*
+ * Js ui for Form_Field_Upload.
  */
-/* Welcome to Agile Toolkit JS framework. This file implements Uploader. */
-
-// The following HTML structure should be used:
-//
-// <input type=file>     <!-- binding to this element -->
-//
 
 $.widget("ui.wp_uploader", {
     options: {
@@ -39,9 +33,9 @@ $.widget("ui.wp_uploader", {
     _create: function(){
         var self=this;
 
-        this.panel  = $("#atk-wp-content").data('atkPanel');
+        //this.panel  = $("#atk-wp-content").data('atkPanel');
         //ajax action not to confuse with form action.
-        this.action = $("#atk-wp-content").data('atkAction');
+        //this.action = $("#atk-wp-content").data('atkAction');
 
         this.progressCss['border'] = this.options.borderSize + 'px' + ' ' + this.options.borderType + ' ' + this.options.borderColor;
         this.barCss['background-color'] = this.options.barColor;
@@ -90,8 +84,8 @@ $.widget("ui.wp_uploader", {
         {
             data.append(key, value);
         });
-        data.append( 'atkpanel', this.panel);
-        data.append( 'action', this.action);
+        //data.append( 'atkpanel', this.panel);
+        //data.append( 'action', this.action);
 
 
         $.ajax({

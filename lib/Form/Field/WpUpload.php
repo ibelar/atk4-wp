@@ -1,13 +1,30 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-02-19
- * Time: 9:49 AM
+ * Allow to upload file within Wordpress.
  *
+ * How to uses:
+ *  $f = $v->add('Form_WpStacked')->addClass('atk-padding-small');
+ *  $uploadField = $f->addField('Form_Field_WpUpload', 'file')->setCaption('');
+ *  $uploadField->addProgressBar('#dd9933')->setAcceptType( ['image/*'] )->addStyleClass( 'style-input' );
+ *  $uploadField->addHook( 'validate', [ $this, 'validateFile']);
+ *  $uploadField->setInputMessage(  _('Upload image file') );
  *
+ *  if( $f->isSubmitted()){
+ *      //call Wordpress media uploader.
+ *      $id = media_handle_upload( 0, 0 );
+ *		if( is_wp_error( $id )){
+ *			throw $this->exception( $id->get_error_message());
+ *		}
+ *  }
+ *
+ *  function validateFile( $field )
+ *  {
+ *      //Check if $_FILES is set and contains proper file type.
+ *  }
  *
  */
+
 class Form_Field_WpUpload extends Form_Field
 {
 
