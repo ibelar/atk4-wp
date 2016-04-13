@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-12-01
- * Time: 1:19 PM
+ * Wordpress term taxonomy table as an atk model
  */
 class Model_WpTermTaxonomy extends Model_Table
 {

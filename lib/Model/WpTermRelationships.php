@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-12-01
- * Time: 1:44 PM
+ * Wordpress term relationships table as an atk model
  */
 class Model_WpTermRelationships extends Model_Table
 {

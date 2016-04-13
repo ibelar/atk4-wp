@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-09-10
- * Time: 10:52 AM
+ * Some helper function.
  */
 class WpHelper
 {

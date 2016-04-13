@@ -1,9 +1,12 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-09-22
- * Time: 8:39 AM
+ * atk form extension.
+ *
+ * Field error are accumulated in $formErrors array
+ * When form is submitted, a call to $form->exitOnError() will display all errors to user
+ * and aborted form submission.
+ *
  */
 class Form_WpForm extends Form
 {

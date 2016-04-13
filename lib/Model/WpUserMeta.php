@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-02-15
- * Time: 1:17 PM
+ * Wordpress user meta table as an atk model
  */
 class Model_WpUserMeta extends Model_Table
 {

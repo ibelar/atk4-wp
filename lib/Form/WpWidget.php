@@ -3,7 +3,7 @@
 /**
  *  Use Custom form.
  *  Wp_Custom_Form does not contain <form> tag since Wp has already output it.
- *  Use of this form is simply a way to easily add field with a widget and continue using fonctionality of a Atk Form Class.
+ *  Use of this form is simply a way to easily add field within a widget and continue using field functionality of a Atk Form Class.
  */
 class Form_WpWidget extends Wp_Custom_Form
 {

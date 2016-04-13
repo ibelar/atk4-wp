@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-27
- * Time: 1:29 PM
+ * Simply using the stacked template with Form_WpForm
  */
 class Form_WpStacked extends Form_WpForm
 {

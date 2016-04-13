@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-02-15
- * Time: 1:12 PM
+ * Wordpress users table as an atk model
  */
 class Model_WpUsers extends Model_Table
 {

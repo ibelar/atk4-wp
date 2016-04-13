@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-03-25
- * Time: 1:35 PM
+ * Number field in Wordpress custom form.
  */
 class Wp_Custom_Field_Number extends Wp_Custom_Field_Line
 {

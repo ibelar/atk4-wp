@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2016-03-28
- * Time: 8:16 AM
+ * Date field in Wordpress custom form.
  */
 class Wp_Custom_Field_Date extends Wp_Custom_Field
 {

@@ -205,7 +205,7 @@ class Wp_Controller_Panel extends AbstractController
 	/**
 	 * This is the actual implementation of the panel.
 	 * Registring the add_menu_page action in Wordpress that will render the html for the panel.
-	 * When this panel menu is selected, It will run the function $this->wpExecute();
+	 * When this panel menu is selected, It will run the function $this->app->wpExecute();
 	 *
 	 * @param $key
 	 * @param $panel
@@ -221,7 +221,8 @@ class Wp_Controller_Panel extends AbstractController
 								$panel['capabilities'],
 								$panel['slug'],
 								[$this->app, 'wpAdminExecute'],
-								$iconUrl
+								$iconUrl,
+								$panel['position']
 							);
 		$this->registerPanelHook( $key, $hook );
 

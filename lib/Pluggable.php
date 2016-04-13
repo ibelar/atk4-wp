@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-09-08
- * Time: 3:35 PM
+ * Interface for creating Plugin using atk.
  */
 interface Pluggable
 {

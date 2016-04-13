@@ -2,7 +2,8 @@
 
 /**
  *
- * WpShortcode are WpPanel extension.
+ * WpShortcode
+ * Shortcode adapter between Wordpress and atk.
  *
  */
 

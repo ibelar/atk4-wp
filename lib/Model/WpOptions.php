@@ -1,14 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-09-10
- * Time: 10:42 AM
+ * Wordpress Options table as an atk model.
  */
 class Model_WpOptions extends Model_Table
 {
-	//public $table = '';
 
 	public function init()
 	{

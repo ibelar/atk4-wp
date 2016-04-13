@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-26
- * Time: 10:19 AM
+ * Adapt Agile Toolkit Jui to Wordpress
  */
 class Wp_WpJui extends jUI
 {

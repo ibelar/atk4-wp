@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-11
- * Time: 2:38 PM
+ * Adapt atk pathfinder to Wordpress.
  */
 class WpPathfinder extends PathFinder
 {

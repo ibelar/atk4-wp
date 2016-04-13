@@ -1,14 +1,9 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-26
- * Time: 10:21 AM
- * TODO This class is not be needed anymore.
- * TODO use only for special testing
- * Siteground error
- * Warning: Leaked 1 hashtable iterators in Unknown on line 0
+ *
+ * FOR TESTING ONLY
+ *
  */
 class Wp_WpJqueryChain extends jQuery_Chain
 {

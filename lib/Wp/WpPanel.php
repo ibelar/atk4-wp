@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-23
- * Time: 10:16 AM
+ * Wp Panel
+ * Base view for Wordpress Panel, metaBox and shortcode.
  */
 class Wp_WpPanel extends AbstractView
 {
@@ -18,7 +16,6 @@ class Wp_WpPanel extends AbstractView
 	{
 		$this->app->page_object=$this;
 		parent::init();
-		//$this->app->template->trySet('panel', $this->id);
 	}
 
 	function defaultTemplate()

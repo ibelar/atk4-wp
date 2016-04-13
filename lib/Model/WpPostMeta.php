@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-12-01
- * Time: 1:41 PM
+ * Wordpress Post Meta table as an atk model
  */
 class Model_WpPostMeta extends Model_Table
 {

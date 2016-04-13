@@ -1,11 +1,9 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: abelair
- * Date: 2015-08-11
- * Time: 9:41 AM
+ * Atk main application for Wordpress.
  */
+
 class WpAtk extends App_Web
 {
 
@@ -30,7 +28,7 @@ class WpAtk extends App_Web
 	public $panel;
 
 	//default config files to read
-	public $wpConfigFiles = [ 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox' ];
+	public $wpConfigFiles = [ 'config-wp', 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox' ];
 
 	public $ajaxMode = false;
 
@@ -75,7 +73,7 @@ class WpAtk extends App_Web
 	public function init()
 	{
 		parent::init();
-		//$this->dbConnect();
+		$this->setDsnConfig();
 		$this->widgetCtrl       = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
 		$this->enqueueCtrl      = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
 		$this->panelCtrl        = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
@@ -151,6 +149,17 @@ class WpAtk extends App_Web
 	}
 
 	/**
+	 * Check for dsn configuration in config and if not set
+	 * use Wordpress default.
+	 */
+	public function setDsnConfig()
+	{
+		if( ! $this->app->getConfig( 'dsn', null )){
+			$this->app->setConfig('dsn', 'mysql://'.DB_USER.':'.DB_PASSWORD.'@'.DB_HOST.'/'.DB_NAME);
+		}
+	}
+
+	/**
 	 * Call by Wordpress plugin main file.
 	 * Your Plugin Class file may overide this function
 	 * in order to setup your own WP plugin init.
@@ -179,6 +188,7 @@ class WpAtk extends App_Web
 			$this->widgetCtrl->loadWidgets();
 			$this->metaBoxCtrl->loadMetaBoxes();
 			$this->shortcodeCtrl->loadShortcodes();
+			add_action( 'init', [ $this, 'wpInit']);
 			//register ajax action for this plugin
 			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
 			//enable Wp ajax front end action.
@@ -324,7 +334,7 @@ class WpAtk extends App_Web
 
 	/**
 	 * Reset this app and prepare for subsequent output.
-	 * When multiple output of panel is required this will reset
+	 * When multiple output of panel is required, for metabox or shortcode, this will reset
 	 * the app in order to output only the necessary views and js chains.
 	 *
 	 */
@@ -342,7 +352,7 @@ class WpAtk extends App_Web
 	}
 
 	/**
-	 * Implement Ajax security using Wp nonce by adding the nonce value to every ajax call.
+	 * Implement Ajax security using Wp nonce by adding the nonce value to every ajax url.
 	 */
 	private function setWpNonce()
 	{

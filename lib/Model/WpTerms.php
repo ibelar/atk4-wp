@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Created by abelair.
- * Date: 2015-12-01
- * Time: 1:24 PM
+ * Wordpress term table as an atk model
  */
 class Model_WpTerms extends Model_Table
 {

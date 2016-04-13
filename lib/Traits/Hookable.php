@@ -5,12 +5,13 @@
  * Very similar to atk4 hook
  * Can be use in Wordpress Widget class or our own defined class.
  *
- * In use: WpWidget; WpMetaBox.
+ * Use in: WpWidget.
  *
  */
 trait Traits_Hookable
 {
 	public $hooks = [];
+
 	/**
 	 * Call a hook spot.
 	 * @param $spot
