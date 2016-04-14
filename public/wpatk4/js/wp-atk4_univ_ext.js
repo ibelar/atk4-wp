@@ -28,21 +28,38 @@ $.each({
         }
     },
     atkWpMessage: function(id, type, msg){
-        //var html = $('<div>', {class: "notice " + type }).append($('<p>').html( msg ));
-        var html;
+        var html, dest;
+
+        getDestination = function(){
+            var container = $('#' + id).parents('.atk-wp-body').find('.atkwp-notice');
+            if ( ! container.length ) {
+                container = $('#' + id).find('.atkwp-notice');
+            }
+            return container;
+        };
+
+
 
         switch ( type ){
             case 'success':
-                html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000; opacity: 0.8">\
-                    <div class="atk-swatch-green atk-cells atk-padding-small">\
+                html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000;">\
+                    <div class="atk-effect-success atk-cells atk-box-small">\
                       <div class="atk-cell atk-jackscrew"><i class="icon-info"></i>&nbsp;<span></span></div>\
                       <div class="atk-cell"><a href="javascript: void()" class="do-close"><i class="icon-cancel"></i></a></div>\
                     </div>\
                   </div>');
                 break;
             case 'error':
-                html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000;  opacity: 0.8">\
-                    <div class="atk-swatch-red atk-cells atk-padding-small">\
+                html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000;">\
+                    <div class="atk-effect-danger atk-cells atk-box-small">\
+                      <div class="atk-cell atk-jackscrew"><i class="icon-attention"></i>&nbsp;<span></span></div>\
+                      <div class="atk-cell"><a href="javascript: void()" class="do-close"><i class="icon-cancel"></i></a></div>\
+                    </div>\
+                  </div>');
+                break;
+            case 'warning':
+                html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000;">\
+                    <div class="atk-effect-warning atk-cells atk-box-small ">\
                       <div class="atk-cell atk-jackscrew"><i class="icon-attention"></i>&nbsp;<span></span></div>\
                       <div class="atk-cell"><a href="javascript: void()" class="do-close"><i class="icon-cancel"></i></a></div>\
                     </div>\
@@ -51,8 +68,8 @@ $.each({
         }
         html.find('span').text(msg);
         html.find('.do-close').click(function(e){e.preventDefault();html.remove();});
-        var dest = $('#' + id).parents('.atk-wp-body').find('.atkwp-notice');
-        if(dest.length){
+
+        if( dest = getDestination() ){
             html.prependTo(dest);
         }else{
             alert(msg);
