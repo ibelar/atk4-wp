@@ -62,7 +62,7 @@ class Wp_Controller_MetaBox extends AbstractController
 		$this->app->panelCtrl->setPanels( $key, $metabox );
 		$this->app->panelCtrl->registerPanelHook( $key , $key );
 		//Add save post action
-		add_action('save_post_'.$metabox['type'], [ $this, 'savePost']);
+		add_action('save_post_'.$metabox['type'], [ $this, 'savePostType'], 10, 3 );
 		//Add it to our list of metaBox.
 		$this->metaBoxes[ $key ] = $metabox;
 
@@ -75,11 +75,16 @@ class Wp_Controller_MetaBox extends AbstractController
 	 * In order to delegate the saving of metaBox field to the metaBox class, we
 	 * need to rebuild them within our app and call the savePost function.
 	 */
-	public function savePost( $postId )
+	public function savePostType( $postId, WP_Post $post, $isUpdating )
 	{
-		foreach ( $this->metaBoxes as $key => $metaBox ){
-			$box = $this->app->add( $metaBox['uses'], [ 'name' => $key, 'id' => $key ] );
-			$box->savePost( $postId );
+		//Add new post will trigger the save post hook and isUpdating will be false
+		// We do not need to add our metabox when adding new post only when updating them.
+		if ( $isUpdating ){
+			foreach ( $this->metaBoxes as $key => $metaBox ){
+				$box = $this->app->add( $metaBox['uses'], [ 'name' => $key, 'id' => $key ] );
+				$box->savePost( $postId );
+			}
 		}
+
 	}
 }

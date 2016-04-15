@@ -12,14 +12,15 @@
  * Licensed under MIT
  * =====================================================================*/
 /**
- * Metabox are Panel output to Wordpress.
+ * Metabox are small Panel output to WordPress.
  *
- * MetaBox are already include in a Wordpress form in order to collect
- * post meta. This means that adding a form to an atk4 view set as metabox required
- * a custom form (Form_WpMetaBox). This form has no form tag and field added to this form
- * are adapted to Wordpress field.
+ * WordPress output meta box html in post edit panel. Which mean that when our MetaBox output occur
+ * WordPress has already start outputting the html form tag.
+ * This means that adding a form to an atk4 view for a metabox required
+ * a custom form (Form_WpMetaBox). This custom or special form has no form tag but we can still add atk form field to it.
+ * Some field are adapted to Wordpress field.
  *
- * Adding a form also required a pre-render hook for setting the form field value for allowing
+ * Using an atk form also required a pre-render hook for setting the form field value for allowing
  * user to add field after the form is added.
  *
  */
@@ -47,6 +48,8 @@ class Wp_WpMetaBox extends Wp_WpPanel
 
 	/**
 	 * Added a form to this metaBox for adding meta data to Wp post.
+	 * Default to Form_WpMetaBox but you could also add your own form if they
+	 * are child of Form_WpMetaBox.
 	 *
 	 * @param null $form
 	 * @param null $option
