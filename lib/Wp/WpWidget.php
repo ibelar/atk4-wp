@@ -17,7 +17,7 @@
  * Build the necessary atk view and form to use with a widget.
  *
  * Your plugin should extends this class when creating widget.
- * Even if this class is a Wordpress Widget class, it has lots of similarity with atk framework.
+ * Even if this class is a Wordpress Widget class, it has similarity with the atk framework.
  *          $widget->addWidgetDisplay( $displayView ); //displayView being an atk abstractView
  *                                                       You can pass a class name or a view instance build directly using the atk instance
  *                                                        $v =  $widget->atkInstance->add('View');
@@ -26,6 +26,9 @@
  *                                                        Same as View, you can pass in a class name or a form instance build with the atk instance
  *          $widget->onDisplay( $callback )            // Run callback function when widget is about to be display.
  *                                                        the function will receive the atk view and form instance has parameter.
+ *                                                        This is a good place to run db query and set your atk view just before diplay.
+ *          $widget->onForm( $callback )                // Run callback function when widget form is about to be display.
+ *                                                        the function will receive the atk form and the instance field value has parameter.
  *                                                        This is a good place to run db query and set your atk view just before diplay.
  *
  * Displaying the widget is done via the widgetDisplay view build from an atk4 abstract view.
