@@ -75,7 +75,6 @@ Edit the composer.json file
 1- Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
 
 ```php
-<?php
 /**
  * @wordpress-plugin
  * Plugin Name:       YOUR_PLUGIN_NAME
@@ -84,24 +83,22 @@ Edit the composer.json file
  * Version:           1.0.0
  * Author:            YOUR_NAME
  */
- ?>
- ```
+```
  
+2- Still in plugin.php replace PlUGIN_NAMESPACE to your namespace
  
- 2- Still in plugin.php replace PlUGIN_NAMESPACE to your namespace
+```php
+//Rename using your namespace.
+namespace PLUGIN_NAMESPACE;
+```
  
- ```php
- //Rename using your namespace.
- namespace PLUGIN_NAMESPACE;
- ```
+3. Finally edit the $atk_plugin_name variable with your plugin name.
  
- 3. Finally edit the $atk_plugin_name variable with your plugin name.
+```php
+//Rename using your plugin name.
+$atk_plugin_name  = "PLUGIN_NAME";
+```
  
- ```php
- //Rename using your plugin name.
- $atk_plugin_name  = "PLUGIN_NAME";
- ```
-
 ##Create from scracth
 
 For those of you that like to start from scratch:
