@@ -212,57 +212,6 @@ class WpAtk extends App_Web
 
 	}
 
-	/*-------------------- THEME SECTION ---------------------------------*/
-
-	/** can be use as a theme page output  */
-
-	/**
-	 * Parse request and check if we need to preset a panel
-	 * When Wp running in front end, we need to parse request
-	 * and ckeck if the pagename correspond to a specific panel to be use
-	 * via the panel page_slug.
-	 * If a panel is required, it will then call preSetPanel
-	 * preSetPanel is called specially to load proper atk js and css file if needed.
-	 *
-	 * @param $query
-	 */
-	public function parseRequest( $query )
-	{
-
-		$panels = $this->panelCtrl->getPanels();
-		//let see if this page required one of our panel.
-		$pagename = $query->query_vars['pagename'] ;
-
-		foreach( $panels as $key => $panel){
-			if ( $pagename === $panel['page_slug']){
-				$this->panelCtrl->preSetPanel( $panel );
-			}
-		}
-
-	}
-
-
-	/**
-	 * Usually call from a theme template page where pagename is already defined.
-	 * Will setup app with proper panel to be display.
-	 *
-	 * Ex use from a theme template page
-	 *
-	 *   $pluginName->outputPanel( $pagename ); // $pagename is the actual page request
-	 *
-	 * if a panel is registered with that pagename (page_slug) value, it will be load
-	 * prior to echo ouptut
-	 *
-	 * @param $page
-	 */
-	public function outputPanel( $page )
-	{
-		$this->panel = $this->panelCtrl->getFrontPanelUses( $page );
-		$this->main();
-	}
-
-	/*-------------------- END THEME SECTION ---------------------------------*/
-
 	/*--------------------- OUTPUT ENTRY POINT -------------------------------*/
 
 	/**
@@ -578,5 +527,56 @@ class WpAtk extends App_Web
 		$this->enqueueCtrl = null;
 		$this->panelCtrl   = null;
 	}
+
+	/*-------------------- THEME SECTION ---------------------------------*/
+
+	/** can be use as a theme page output  */
+
+	/**
+	 * Parse request and check if we need to preset a panel
+	 * When Wp running in front end, we need to parse request
+	 * and ckeck if the pagename correspond to a specific panel to be use
+	 * via the panel page_slug.
+	 * If a panel is required, it will then call preSetPanel
+	 * preSetPanel is called specially to load proper atk js and css file if needed.
+	 *
+	 * @param $query
+	 */
+	public function parseRequest( $query )
+	{
+
+		$panels = $this->panelCtrl->getPanels();
+		//let see if this page required one of our panel.
+		$pagename = $query->query_vars['pagename'] ;
+
+		foreach( $panels as $key => $panel){
+			if ( $pagename === $panel['page_slug']){
+				$this->panelCtrl->preSetPanel( $panel );
+			}
+		}
+
+	}
+
+
+	/**
+	 * Usually call from a theme template page where pagename is already defined.
+	 * Will setup app with proper panel to be display.
+	 *
+	 * Ex use from a theme template page
+	 *
+	 *   $pluginName->outputPanel( $pagename ); // $pagename is the actual page request
+	 *
+	 * if a panel is registered with that pagename (page_slug) value, it will be load
+	 * prior to echo ouptut
+	 *
+	 * @param $page
+	 */
+	public function outputPanel( $page )
+	{
+		$this->panel = $this->panelCtrl->getFrontPanelUses( $page );
+		$this->main();
+	}
+
+	/*-------------------- END THEME SECTION ---------------------------------*/
 
 }
