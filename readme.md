@@ -72,7 +72,7 @@ Edit the composer.json file
 
 ###Edit the plugin file
 
-1. Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
+1- Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
 
 ```php
 /**
@@ -85,7 +85,8 @@ Edit the composer.json file
  */
  ```
  
- 2. Still in plugin.php replace PlUGIN_NAMESPACE to your namespace
+ 
+ 2- Still in plugin.php replace PlUGIN_NAMESPACE to your namespace
  
  ```php
  //Rename using your namespace.
