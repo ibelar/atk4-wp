@@ -84,6 +84,7 @@ Edit the composer.json file
  * Version:           1.0.0
  * Author:            YOUR_NAME
  */
+ ?>
  ```
  
  
