@@ -74,7 +74,7 @@ Edit the composer.json file
 
 1- Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
 
-```
+```php
 /**
  * @wordpress-plugin
  * Plugin Name:       YOUR_PLUGIN_NAME
