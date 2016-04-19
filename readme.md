@@ -7,16 +7,15 @@ It is now possible to use this great framework within Wordpress plugin developpm
 [For more information on Agile Toolkit: http://www.agiletoolkit.org] (http://www.agiletoolkit.org)
 
 With this interface, it is possible to create WordPress admin page, sub page, meta boxes, widget or shortcode using an Agile Toolkit
-view class and also benefit from Agile Toolkit way of handling view like: data display with db model, form submission, view reload and ajax call handling.
-
-##Note
+view class and also benefit from Agile Toolkit way of handling view like: data display with db model, form submission, view reload, model ORM and ajax call handling.
 
 
 #Getting Started
 
 This interface, along with Agile Toolkit framework (atk4) need to be install within your wp-content folder. 
 Each plugin using the atk4-wp interface should be created within the WordPress plugin directory as normal WordPress plugin do.
-The atk4-wp interface can be use for multiple plugins within the same site.
+
+The atk4-wp interface can be use for multiple plugins development within the same WordPress site.
 
 ##Requirement
 
@@ -38,7 +37,7 @@ Download the installer from getcomposer.org/download, execute it and follow the 
 
 ##Installation
 
-Download or clone this repository within your WordPress wp-content folder. Next, at the root of the atk4-wp folder type:
+Download or clone this repository within your WordPress wp-content folder. Using terminal at the root of the atk4-wp folder type:
 
 ```
 composer install
@@ -49,7 +48,7 @@ Composer will download and install the Agile Toolkit framework within the atk4-w
 
 #Creating a plugin
 
-You are now ready to use either the atk4wp sample plugin, start using an empty template or build one from scratch.
+You are now ready to use either the atk4wp sample plugin or start building your own plugin using the atk4wp-template.
 
 ##Using the sample plugin
 
@@ -62,17 +61,39 @@ You can download the sample plugin here:
 
 ##Start from a template
 
-This template will simply install basic directories structure and files that you can uses for developping a new WordPress plugin with Agile Tookit and this interface.
+This template will simply install basic directories structure and files that you can uses for developing a new WordPress plugin with Agile Tookit using atk4-wp.
 
 You can download the template here: 
 
-###Create your plugin namespace
+###1.Create a namespace for your plugin
 
-Edit the composer.json file 
+Open composer.json file. Locate the autoload section and replace PLUGIN_NAMESPACE with your namespace. 
+Make sure your namespace is unique in order to avoid conflict with other WordPress plugin and that your namespace does not contains any space.
+You can also add a name and a description to your plugin composer package.
 
-###Edit the plugin file
+```json
+{
+  "name": "Add your name here",
+  "description": "Add your description here",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "PLUGIN_NAMESPACE\\": "lib/"
+    }
+  }
+}
+```
 
-1- Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
+Tell composer about your changes by running the composer dump-autoload command using terminal at the root of your plugin directory. 
+This will create your autoload file needed for your plugin using your own namespace.
+
+```
+composer dump-autoload
+```
+
+###2. Edit plugin.php file
+
+Open the plugin.php file and replace the top section with proper name and description corresponding to your plugin.
 
 ```php
 /**
@@ -84,46 +105,78 @@ Edit the composer.json file
  * Author:            YOUR_NAME
  */
 ```
- 
-2- Still in plugin.php replace PlUGIN_NAMESPACE to your namespace
- 
+
+Still in plugin.php replace PLUGIN_NAMESPACE to your namespace
+
 ```php
 //Rename using your namespace.
 namespace PLUGIN_NAMESPACE;
 ```
- 
-3. Finally edit the $atk_plugin_name variable with your plugin name.
- 
+
+Finally edit the $atk_plugin_name variable with your plugin name.
+
 ```php
 //Rename using your plugin name.
 $atk_plugin_name  = "PLUGIN_NAME";
 ```
- 
-##Create from scracth
 
-For those of you that like to start from scratch:
+###3. Edit Plugin.php class
 
-1. Inside your WordPress plugin folder create a directory structure like this:
+This file class is located within the lib directory. This class must extends the WpAtk class and implement the Pluggable interface.
+Open the file and change the namespace value with your.
 
-``` ruby
-PluginName/
-+-- lib
-+-- public
-+-- templates
-+-- vendor
+```php
+//rename using your namespace.
+namespace PLUGIN_NAMESPACE;
 ```
+The Pluggable interface implement threes function that your Plugin class must define. Use these functions to define your plugin activation, deactivation and uninstall behavior. 
 
-2. Create your composer.json file inside your main plugin directory.
+```php
+public function activatePlugin(){}
+public function deactivatePlugin(){}
+public function uninstallPlugin(){}
+```
+###4. Create WordPress components.
 
-```json
+At this point, you can start building the WordPress component: panel, meta boxes, widget or shortcode for the plugin using one of the config-{component} file. 
+For a better understanding of each component configuration, it might be a good idea to take a look at the atk4wp-sample plugin or look at each configuration file explanation.
+
+##Note on Class loading
+
+For properly loading each class within your plugin namespace, make sure you are using the namespace directive inside each class definition.
+
+```php
+namespace my_plugin\Model;
+class Event extends \Model_Table
 {
-  "name": "Add your name here",
-  "description": "Add your description here",
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "YOUR_NAMESPACE\\": "lib/"
-    }
-  }
 }
 ```
+To add a class element that belong to your plugin namespace.
+Example: adding a model class locate in MyPlugin/lib/Model/Event.php where Event class use `namespace my_plugin\Model;` directive.
+
+```php
+$this->add('my_plugin\Model\Event');
+```
+
+Use the backlash '\' for extending class using an atk4 or atk4-wp class. (outside of your namespace).
+
+```php
+class myClass extends \View{}
+```
+
+You will also need to use namespace qualifier for model using field reference like hasOne() or hasMany().
+
+```php
+namespace my_plugin\Model;
+class Event extends \Model_Table
+{
+    $this->hasOne('my_plugin\Model\User');
+    $this->hasMany('my_plugin\Model\EventDetail');
+}
+```
+
+#License
+
+Copyright (c) 2016 Alain Belair. MIT Licensed,
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
