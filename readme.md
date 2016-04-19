@@ -63,7 +63,7 @@ You can download the sample plugin here:
 
 This template will simply install basic directories structure and files that you can uses for developing a new WordPress plugin with Agile Tookit using atk4-wp.
 
-You can download the template here: 
+You can download the template here: [http://www.test] 
 
 ###1.Create a namespace for your plugin
 
