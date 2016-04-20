@@ -1,14 +1,29 @@
 #Welcome
 
 Welcome to Agile Toolkit for WordPress interface: atk4-wp. 
-This interface enable the use of Agile Toolkit framework within WordPress. 
-It is now possible to use this great framework within Wordpress plugin developpment.
+This interface enable the use of Agile Toolkit framework within WordPress.
+ 
+For those of you familiar with the framework, it is now possible to use this great framework for Wordpress plugin developpment.
+
+If you are not familiar with Agile Toolkit, this framework is real easy to learn. I know, I was able to learned it!
 
 [For more information on Agile Toolkit: http://www.agiletoolkit.org] (http://www.agiletoolkit.org)
 
-With this interface, it is possible to create WordPress admin page, sub page, meta boxes, widget or shortcode using an Agile Toolkit
-view class and also benefit from Agile Toolkit way of handling view like: data display with db model, form submission, view reload, model ORM and ajax call handling.
+#Benefits
 
+With this interface, it is possible to create many WordPress components like: admin page, sub page, meta boxes, widget or shortcode using an Agile Toolkit
+view. 
+
+* use many of Agile Toolkit predefine views like: header, button, lister, tabs, grid, form, crud, popover and more;
+  * allow to easily create the UI of a WordPress admin page;  
+* view data binding with db model;
+  * just associate model with view and let the template engine display model data automatically;
+* out of the box ajax in WordPress;
+  * form submission using ajax;
+  * view reload using ajax;
+  * javascript binding to any view element with jQuery;
+* data model with active record pattern and ORM;
+* and many more...
 
 #Getting Started
 
