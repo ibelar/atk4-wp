@@ -46,7 +46,7 @@ composer install
 Composer will download and install the Agile Toolkit framework within the atk4-wp/vendor directory.
 
 
-#How to add WordPress component to your plugin usging this interface.
+#How to add WordPress component to your plugin.
 
 WordPress components are added to your plugin via configuration file, each component having it's own configuration:
 
