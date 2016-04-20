@@ -29,7 +29,7 @@
  *                                                        This is a good place to run db query and set your atk view just before diplay.
  *          $widget->onForm( $callback )                // Run callback function when widget form is about to be display.
  *                                                        the function will receive the atk form and the instance field value has parameter.
- *                                                        This is a good place to run db query and set your atk view just before diplay.
+ *                                                        This is a good place to run db query and set your atk view just before display.
  *
  * Displaying the widget is done via the widgetDisplay view build from an atk4 abstract view.
  *          - you may set the widgetDisplay via the addWidgetDisplay() function in your child class or via
@@ -51,14 +51,11 @@ class Wp_WpWidget extends WP_Widget
 	// the widget configuration and option
 	public $atkWidget;
 
-	// the wpatk view need for displayin this widget.
+	//the wpatk view need for displaying this widget.
 	public $widgetDisplay = null;
 	public $widgetDisplayTitle = '';
 
 	public $widgetForm = null;
-
-	//public $hooks = [];
-
 	public $instanceDefaults = [];
 
 
@@ -206,8 +203,8 @@ class Wp_WpWidget extends WP_Widget
 
 	/**
 	 * Add form hook to our widget.
-	 * This hook will be run prior to display our widget form.
-	 * It will allow to setup your form prior to displaying it.
+	 * This hook will be run prior to display the widget form.
+	 * It will allow to setup the form prior to displaying it.
 	 *
 	 * Ex: $this->onForm( [$this, 'beforeForm']);
 	 *
