@@ -5,20 +5,20 @@ This interface enable the use of Agile Toolkit framework within WordPress.
  
 For those of you familiar with the framework, it is now possible to use this great framework for Wordpress plugin developpment.
 
-If you are not familiar with Agile Toolkit, this framework is real easy to learn. I know, I was able to learned it!
+If you are not familiar with Agile Toolkit, this framework is really easy to learn. I know, I was able to learned it!
 
 [For more information on Agile Toolkit: http://www.agiletoolkit.org] (http://www.agiletoolkit.org)
 
 #Benefits
 
-With this interface, it is possible to create many WordPress components like: admin page, sub page, meta boxes, widget or shortcode using an Agile Toolkit
-view. 
+With this interface, it is possible to create many WordPress components like: admin page, sub page, meta boxes, widget or shortcode using the Agile Toolkit
+framework. 
 
 * use many of Agile Toolkit predefine views like: header, button, lister, tabs, grid, form, crud, popover and more;
-  * allow to easily create the UI of a WordPress admin page;  
+  * easily create the UI of a WordPress admin page;  
 * view data binding with db model;
-  * just associate model with view and let the template engine display model data automatically;
-* out of the box ajax in WordPress;
+  * associate model with view and let the template engine display the model data automatically;
+* out-of-the-box ajax in WordPress;
   * form submission using ajax;
   * view reload using ajax;
   * javascript binding to any view element with jQuery;
