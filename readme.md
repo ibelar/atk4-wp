@@ -46,7 +46,7 @@ composer install
 Composer will download and install the Agile Toolkit framework within the atk4-wp/vendor directory.
 
 
-#Creating a WordPress plugin
+#How to add WordPress component to your plugin usging this interface.
 
 WordPress components are added to your plugin via configuration file, each component having it's own configuration:
 
@@ -61,14 +61,14 @@ WordPress components are added to your plugin via configuration file, each compo
   * Example of a [Shortcode configuration](https://github.com/ibelar/atk4wp-sample/blob/master/config-shortcode.php) from the sample plugin;
 
 Adding a component to your plugin usually require to add the component definition via the component configuration options.
-The component options are required by WordPress to build the component itself inside WordPress but also define the Agile Toolkit view class needed to display the component, via the 'uses' option.
+The component options are required by WordPress to build the component itself inside WordPress but also to define the Agile Toolkit view class needed to display the component. This class is define via the 'uses' option.
 
-Depending on the component type, the Agile Toolkit view class define for the component 'uses' option need to extends the proper interface class:
+Depending on the component type, the Agile Toolkit view class define by the component 'uses' option need to extends the proper interface class:
 
-* The class define in 'uses' option for panel must extends WpPanel;
-* The class define in 'uses' option for meta box must extends WpMetaBox;
-* The class define in 'uses' option for shortcode must extends WpShortcode;
-* The class define in 'uses' option for widget must extends WpWidget;
+* The class define by 'uses' option for panel must extends WpPanel;
+* The class define by 'uses' option for meta box must extends WpMetaBox;
+* The class define by 'uses' option for shortcode must extends WpShortcode;
+* The class define by 'uses' option for widget must extends WpWidget;
 
 Except for the WpWidget class, all others interfaces classes are children of Agile Toolkit AbstractView. 
 Therefore, you can treat them as a regular Agile Toolkit view class; like you would do in a normal Agile Toolkit application.
@@ -82,21 +82,26 @@ $config['panel']['event'] =  [  'type'  => 'panel',
                                 ];
 ```
 
-Then in MyPlugin/lib/Panel folder define the Event class:
+Then in MyPlugin/lib/Panel folder define MyPanel class:
 
 ```php
 namespace my_plugin\Panel;
 class MyPanel extends \Wp_WpPanel {}
 ```
-##Note on WpWidget
+##Note on WpWidget Class
 
-The WpWidget class is not a children of an Agile Toolkit AbstractView simply because WordPress required that widget use the WordPress Widget class for defining their widgets. 
-In order to be able to set the widget display using an Agile Toolkit view, the interface will add an Agile Toolkit view using the addWidgetDisplay('View') function.
-You may pass a regular Agile Toolkit view class to the function or define your own. 
-You may also set the onDisplay( $callback ) function hook to your widget. This callback will be call prior to display the widget in WordPress and will receive the Agile Toolkit view instance, the one define with addWidgetDisplay(), and a copy of the widget instance field value, if defined.
-This is usefull for setting up the view prior to display it in WordPress, by calling the database or any other action need to set it up.
+This class is not a children of an Agile Toolkit AbstractView, simply because WordPress required that widgets must extends their widget class. 
 
-Example of a widget class:
+###Widget display and onDisplay callback
+
+In order to be able to set the widget display using an Agile Toolkit view, you will add it using the addWidgetDisplay('View') function.
+You may pass a regular Agile Toolkit view class to the function or define your own.
+
+You may also set the onDisplay( $callback ) function hook for the widget. This callback will be call prior to output the widget in WordPress giving a chance to setup the view.
+The callback function will receive the Agile Toolkit view instance, the one define with addWidgetDisplay(), and a copy of the widget instance field value, if defined, as parameters.
+This is useful for setting up the view prior to display it in WordPress.
+
+Setting up a widget display in a WpWidget class:
 
 ```php
 namespace my_plugin\Widget;
@@ -118,7 +123,44 @@ class MyWidget extends \Wp_WpWidget
 }
 ```
 
-You are now ready to use either the [atk4wp-sample](https://github.com/ibelar/atk4wp-sample) plugin or start building your own plugin using the [atk4wp-template](https://github.com/ibelar/atk4wp-template).
+###Widget Form and onForm callback
+
+Widget can also display form input element within the widget admin area of WordPress. (Appearance/Widgets). Form add to widgets need to extends Form_WpWidget class.
+This is a special Agile Toolkit form adapted for widget display. Form are added via the addForm('Form_WpWidget') function. This function will also return the newly added form instance and this form instance can be use for adding field to the form using the addField() function.
+
+Furthermore, it is also possible to setup a callback function just prior of outputting the form in WordPress admin area with the onForm(callback) function. 
+The callback function will receive the Agile Toolkit form instance, the one define with addForm(), and a copy of the widget instance field value.
+
+Field added to the form may also have default value by using the setInstanceDefaults() function by passing an array of field_id=>value pair to the function. 
+Note that field input value added to the form is automatically save within WordPress option table when user click the widget 'Save' button.
+
+```php
+namespace my_plugin\Widget;
+class MyWidget extends \Wp_WpWidget
+{
+    public function init()
+    	{
+    		parent::init();
+    		//inject the atk form
+    		$f = $this->addForm('Form_WpWidget');
+    		$f->addField('line', 'title');
+    		//setup the display callback
+    		$this->onForm( [$this, 'beforeDisplayForm']);
+    	    //set widget field default value
+    	    $this->setInstanceDefaults( ['title'=> 'My Default Title'] );
+    	}
+    public function beforeDisplayForm( $atkForm, $instance  )
+	{
+	    //setup the atk form...
+	}
+}
+```
+#Atk4-wp Plugin Sample and Template
+
+To study this interface or jump start development of your plugin you can use either:
+ 
+ * The [atk4wp-sample](https://github.com/ibelar/atk4wp-sample) plugin;
+ * The [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin;
 
 ##Using the sample plugin
 
@@ -129,9 +171,9 @@ It is a good sample to show you how to integrate Agile Toolkit views within Word
 More information on the sample here: [atk4wp-sample](https://github.com/ibelar/atk4wp-sample)
 
 
-##Start from a template
+##Starting from the template
 
-This template will simply install minimum files needed to start building a new WordPress plugin with Agile Tookit using atk4-wp.
+The template will simply install minimum files needed to start building a new WordPress plugin with Agile Tookit using atk4-wp.
 
 More information on the template here: [atk4wp-template](https://github.com/ibelar/atk4wp-template)
 
