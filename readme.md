@@ -46,7 +46,77 @@ composer install
 Composer will download and install the Agile Toolkit framework within the atk4-wp/vendor directory.
 
 
-#Creating a plugin
+#Creating a WordPress plugin
+
+WordPress components are added to your plugin via configuration file, each component having it's own configuration:
+
+* Panels uses config-panel.php file;
+..* Panel are WordPress admin page accessible via admin menu and sub-menu;
+..* Example of [Panel configuration](https://github.com/ibelar/atk4wp-sample/blob/master/config-panel.php) from the sample plugin;
+* Meta boxes uses config-metabox.php file;
+..* Example of [Meta boxes configuration](https://github.com/ibelar/atk4wp-sample/blob/master/config-metabox.php) from the sample plugin;
+* Widgets uses config-widget.php file;
+..* Example of [Widget configuration](https://github.com/ibelar/atk4wp-sample/blob/master/config-widget.php) from the sample plugin;
+* Shortcodes uses config-shortcode.php file;
+..* Example of [Shortcode configuration](https://github.com/ibelar/atk4wp-sample/blob/master/config-shortcode.php) from the sample plugin;
+
+Adding a component to your plugin usually require to add the component definition via the component configuration options.
+The component options are required by WordPress to build the component itself inside WordPress but also define the Agile Toolkit view class needed to display the component, via the 'uses' option.
+
+Depending on the component type, the Agile Toolkit view class define for the component 'uses' option need to extends the proper interface class:
+
+* The class define in 'uses' option for panel must extends WpPanel;
+* The class define in 'uses' option for meta box must extends WpMetaBox;
+* The class define in 'uses' option for shortcode must extends WpShortcode;
+* The class define in 'uses' option for widget must extends WpWidget;
+
+Except for the WpWidget class, all others interfaces classes are children of Agile Toolkit AbstractView. 
+Therefore, you can treat them as a regular Agile Toolkit view class; like you would do in a normal Agile Toolkit application.
+
+Example of a panel 'uses' configuration option:
+
+```php
+$config['panel']['event'] =  [  'type'  => 'panel',
+                                'uses'  => 'my_plugin\Panel\MyPanel',
+                                //other panel option...
+                                ];
+```
+
+Then in MyPlugin/lib/Panel folder define the Event class:
+
+```php
+namespace my_plugin\Panel;
+class MyPanel extends \Wp_WpPanel {}
+```
+##Note on WpWidget
+
+The WpWidget class is not a children of an Agile Toolkit AbstractView simply because WordPress required that widget use the WordPress Widget class for defining their widgets. 
+In order to be able to set the widget display using an Agile Toolkit view, the interface will add an atk view using the addWidgetDisplay('View') function.
+You may pass a regular Agile Toolkit view class to the function or define your own. 
+You may also set the onDisplay( $callback ) function hook to your widget. This callback will be call prior to display the widget in WordPress and will receive the view instance, the one define with addWidgetDisplay(), and a copy of the widget instance field value, if define.
+This is usefull for setting up you view prior to display it in WordPress, by calling the database or any other action need to setup the widget view.
+
+Example of setting up your widget class:
+
+```php
+namespace my_plugin\Widget;
+class MyWidget extends \Wp_WpWidget
+{
+    public function init()
+    	{
+    		parent::init();
+    		//inject the atk view
+    		$this->addWidgetDisplay('View');
+    		//setup the display callback
+    		$this->onDisplay( [$this, 'beforeDisplayWidget']);
+    	}
+    public function beforeDisplayWidget( $atkView, $instance  )
+	{
+	    //setup the atk view...
+		$atkView->setModel('my_plugin\Model\MyModel');
+	}
+}
+```
 
 You are now ready to use either the [atk4wp-sample](https://github.com/ibelar/atk4wp-sample) plugin or start building your own plugin using the [atk4wp-template](https://github.com/ibelar/atk4wp-template).
 
