@@ -102,6 +102,8 @@ Each plugin define will run as an instance of the interface, or the Atk4 framewo
 
 ##plugin.php file and the Plugin Class
 
+###plugin.php
+
 Each plugin required to properly setup the plugin.php file, located at the root of your plugin directory and the Plugin Class, located within within the lib directory. 
 The plugin.php file will register your plugin within WordPress.
 
@@ -124,7 +126,21 @@ $atk_plugin_name  = "PLUGIN_NAME";
 $atk_plugin_classname = __NAMESPACE__."\\Plugin";
 $$atk_plugin_name = new $atk_plugin_classname( $atk_plugin_name, plugin_dir_path( __FILE__ ) );
 ```
-The Plugin class will create the Atk4 instance and therefore must extends the atk4-wp interface and implement Pluggable.
+
+After properly creating the Plugin instance plugin.php will call the boot() function to start things up in WP.
+
+```php
+if ( ! is_null( $$atk_plugin_name)) {
+	register_activation_hook(__FILE__, [ $$atk_plugin_name, 'activatePlugin']);
+	register_deactivation_hook(__FILE__, [ $$atk_plugin_name, 'deactivatePlugin']);
+	$$atk_plugin_name->boot();
+}
+```
+
+###Plugin Class
+
+The Plugin class is responsible for properly creating the Atk4 instance within WordPress and therefore must extends the atk4-wp interface and also implement Pluggable.
+It will also load and create all register WordPress component set in configuration files via the boot() function.
 
 ```php
 //rename using your namespace.
@@ -145,8 +161,7 @@ class Plugin extends \WpAtk implements \Pluggable
 }
 ```
 
-
-For proper class loading within WordPress, 
+For more information on plugin.php file and Plugin class, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
 
 #License
 
