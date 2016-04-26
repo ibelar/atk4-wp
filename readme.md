@@ -82,6 +82,71 @@ The template will simply install minimum files needed to start building a new Wo
 
 More information on using the template here: [atk4wp-template](https://github.com/ibelar/atk4wp-template)
 
+#WordPress components manage by Atk4
+
+Wordpress components managed by Atk4 class like admin pages or panels, widgets, meta boxes and shortcode are added using configuration options within your plugin configuration files.
+For example, adding an admin page within WordPress that is managed by an Atk4 View is done by setting the proper options for panel in config-panel. 
+In this configuration file, you would simply set the usual WordPress admin page options but also specify the Atk4 class that will be use to display that page in WordPress.
+
+When your plugin start, it will automatically load WordPress components define in configuration, add it within WordPress and set the proper Atk4 class to manage the component.
+You can then use this Atk4 class to add others views, model, controller etc, as you would for a regular Agile toolkit application.
+
+For more information on WordPress components and their configuration, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
+
+#WordPress Plugin using the interface.
+
+##Multiple plugins
+
+You can use the same interface for more than one plugins within the same WordPress installation. That is why the Atk4-wp interface has been placed within the wp-content folder.
+Each plugin define will run as an instance of the interface, or the Atk4 framework, in order to allow for creating multiple plugins.
+
+##plugin.php file and the Plugin Class
+
+Each plugin required to properly setup the plugin.php file, located at the root of your plugin directory and the Plugin Class, located within within the lib directory. 
+The plugin.php file will register your plugin within WordPress.
+
+```
+wp-content
+└───plugins
+    ├───MyPlugin
+    │   │   plugin.php
+    │   │───lib   
+    │   │   |   Plugin.php
+```
+
+Inside the plugin.php file, you need to setup the name and namespace of your plugin. The plugin.php file is responsible for creating an instance of the Atk framework. It also assign a dynamic variable name to the instance.
+
+```php
+//Rename using your namespace.
+namespace PLUGIN_NAMESPACE;
+//Rename using your plugin name.
+$atk_plugin_name  = "PLUGIN_NAME";
+$atk_plugin_classname = __NAMESPACE__."\\Plugin";
+$$atk_plugin_name = new $atk_plugin_classname( $atk_plugin_name, plugin_dir_path( __FILE__ ) );
+```
+The Plugin class will create the Atk4 instance and therefore must extends the atk4-wp interface and implement Pluggable.
+
+```php
+//rename using your namespace.
+namespace PLUGIN_NAMESPACE;
+class Plugin extends \WpAtk implements \Pluggable
+{
+	public function init()
+	{
+		parent::init();
+		$this->dbConnect();
+	}
+	public function activatePlugin()
+	{}
+	public function deactivatePlugin()
+	{}
+	public function uninstallPlugin()
+	{}
+}
+```
+
+
+For proper class loading within WordPress, 
 
 #License
 
