@@ -111,15 +111,15 @@ Below is the recommend directory structure for your plugin. You should start by 
 /wp-content
 └───/plugins
     ├───/MyPlugin
-    │   │───plugin.php
-    │   │───/lib   
-    │   │   │───Plugin.php
-    │   │───/public
-    │   │   │───/css
-    │   │   │───/images
-    │   │   │───/js             
-    │   │───/templates 
-    │   │───/vendor  
+        │───plugin.php
+        │───/lib   
+        │   │───Plugin.php
+        │───/public
+        │   │───/css
+        │   │───/images
+        │   │───/js             
+        │───/templates 
+        │───/vendor  
 ```
 
 The plugin.php file must be located at the root of your plugin directory. This file is responsible for properly setup your plugin in WordPress and create the Atk4 application instance.
