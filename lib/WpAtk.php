@@ -262,13 +262,16 @@ class WpAtk extends App_Web
 	 */
 	public function wpShortcodeExecute($shortcode, $args)
 	{
+		//Tell Shortcode controller how many time this is output.
+		$this->shortcodeCtrl->increaseShortcodeInstance($shortcode['key']);
 		//Set app panel with proper shortcode class.
 		$this->panel['class'] = $shortcode['uses'];
 		$this->panel['id']    = $shortcode['key'];
+		//Because resetContent() will erase the element name, we need to generate our own name for html id attribute
+		$this->panel['name']  = $this->shortcodeCtrl->normalizeShortCodeName($shortcode['key']);
 		//Shortcode class will retreive this arg on init()
 		$this->shortcode['args'] = $args;
-		//Tell Shortcode controller how many time this is output.
-		$this->shortcodeCtrl->increaseShortcodeInstance($shortcode['key']);
+
 		//This will set proper ajax action for this shortcode instance.
 		$this->sticky_get_arguments['atkshortcode'] = $this->shortcodeCtrl->getShortcodeInstance($shortcode['key']);
 		$this->isLayoutNeedInitialise = false;
@@ -502,7 +505,11 @@ class WpAtk extends App_Web
 	public function layout_Content()
 	{
 		$layout = $this->layout ?: $this;
-		$this->page_object = $layout->add($this->panel['class'], ['name' => $this->panel['id'], 'id' => $this->panel['id']]);
+		//add our panel as our page object. If panel['name'] is not defined, use panel['id'] as name.
+		$this->page_object = $layout->add(
+			$this->panel['class'],
+			['name' => isset($this->panel['name']) ? $this->panel['name'] : $this->panel['id'], 'id' => $this->panel['id']]
+		);
 	}
 
 	public function getWpPageUrl()

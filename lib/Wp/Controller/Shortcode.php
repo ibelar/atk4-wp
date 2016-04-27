@@ -21,8 +21,9 @@ class Wp_Controller_Shortcode extends AbstractController
 {
 
 	public $shortcodes = [];
+
 	/**
-	 * Load metaBoxes define in our config file.
+	 * Load Shortcode define in our config file.
 	 */
 	public function loadShortcodes()
 	{
@@ -66,6 +67,29 @@ class Wp_Controller_Shortcode extends AbstractController
 		$this->app->panelCtrl->registerPanelHook($key, $key);
 		$this->shortcodes[$key] = $shortcode;
 
+	}
+
+	/**
+	 * Will normalize shortcode name for html id attribute output.
+	 * If more than one shortcode is set to be display on a page
+	 * this will set the attribute id by adding '_N' where n is the current number of
+	 * the shortcode.
+	 *
+	 * Needed for proper ajax action to work within the shortcode.
+	 *
+	 * @param $key
+	 *
+	 * @return null|string
+	 */
+	public function normalizeShortCodeName($key)
+	{
+		$name = null;
+		if ($this->shortcodes[$key]['number'] > 1) {
+			$name = $key.'_'.$this->shortcodes[$key]['number'];
+		} else {
+			$name = $key ;
+		}
+		return $name;
 	}
 
 	/**

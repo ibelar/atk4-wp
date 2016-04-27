@@ -17,6 +17,7 @@
  * When form is submitted, a call to $form->exitOnError() will display all errors to user
  * and aborted form submission.
  *
+ * 2016-04-27: Move $form->exitOnError() to post-validate hook. No need to explicitly call it.
  */
 class Form_WpForm extends Form
 {
@@ -27,7 +28,7 @@ class Form_WpForm extends Form
 	{
 		parent::init();
 		$this->addHook('post-validate', function() {
-			$this->performValidation();
+			$this->exitOnError();
 		});
 	}
 
@@ -54,7 +55,7 @@ class Form_WpForm extends Form
 	public function exitOnError()
 	{
 		if ($this->hasError()) {
-			$this->_displayErrors();
+			$this->displayErrors();
 		}
 	}
 
@@ -65,24 +66,23 @@ class Form_WpForm extends Form
 
 	public function displayFormErrors()
 	{
-		$this->_displayErrors();
+		$this->displayErrors();
 	}
 
 	/**
 	 * Manually call hook validate on each field for backward compatibility in 4.3.2
 	 * @throws BaseException
 	 */
-	public function performValidation()
+	/*public function performValidation()
 	{
-		foreach( $this->elements as $x=>$field ){
-			if($field instanceof \Form_Field){
+		foreach ($this->elements as $x=>$field) {
+			if ($field instanceof \Form_Field) {
 				$field->hook('validate');
 			}
 		}
+	}*/
 
-	}
-
-	private function _displayErrors()
+	private function displayErrors()
 	{
 		$js=array();
 		foreach ($this->formErrors as $field => $msg) {
