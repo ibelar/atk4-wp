@@ -25,10 +25,10 @@ class WpPathfinder extends PathFinder
 
 	public function init()
 	{
-		$this->api->pathfinder=$this;
+		$this->app->pathfinder = $this;
 
 		$this->addDefaultLocations();
-		$this->addPluginLocations( $this->app->config_location);
+		$this->addPluginLocations($this->app->config_location);
 
 		$this->_initialized = true;
 	}
@@ -53,15 +53,15 @@ class WpPathfinder extends PathFinder
 		// url to atk4-wp public files
 		// need to remove site url from url, otherwise, atk4 will output it twice.
 		$wp_public_url = content_url().'/atk4-wp/public';
-		$wp_public_url = str_replace( site_url(), '', $wp_public_url);
+		$wp_public_url = str_replace(site_url(), '', $wp_public_url);
 
-		$templates_folder=array('template','templates');
+		$templates_folder = array('template','templates');
 
 		if ($this->app->compat_42 && is_dir($base_directory.'/templates/default')) {
-			$templates_folder='templates/default';
+			$templates_folder = 'templates/default';
 		}
 
-		$this->base_location=$this->addLocation(array(
+		$this->base_location = $this->addLocation(array(
 			'php'=>'lib',
 			'page'=>'page',
 			'tests'=>'tests',
@@ -73,30 +73,26 @@ class WpPathfinder extends PathFinder
 
 
 
-		$this->atk_location=$this->addLocation(array(
+		$this->atk_location = $this->addLocation(array(
 			'php'=>'lib',
 			'template'=>$templates_folder,
 			'tests'=>'tests',
 			'mail'=>'mail',
-		))
-		                         ->setBasePath($atk_base_path)
-		;
+		))->setBasePath($atk_base_path);
 
-		$this->public_location=$this->addLocation(array(
+		$this->public_location = $this->addLocation(array(
 			'public'=>'',
 			'js'=>'js',
 			'css'=>'css',
-		))
-		                            ->setBasePath($atk_base_path.'/public/atk4')
-		                            ->setBaseURL($atk_public_url);
+		))->setBasePath($atk_base_path.'/public/atk4')
+		  ->setBaseURL($atk_public_url);
 
-		$this->wpPublicLocation=$this->addLocation(array(
+		$this->wpPublicLocation = $this->addLocation(array(
 			'public'=> '',
 			'js'=> [ 'js', 'wpatk4/js' ],
 			'css'=> ['css', 'wpatk4/css']
-		))
-		                            ->setBasePath($wp_public_path)
-		                            ->setBaseURL($wp_public_url);
+		))->setBasePath($wp_public_path)
+		  ->setBaseURL($wp_public_url);
 
 		$this->atk_public = $this->wpPublicLocation->addRelativeLocation('vendor/atk4/atk4/public/atk4');
 		$this->atk_public->defineContents(array(
@@ -114,9 +110,9 @@ class WpPathfinder extends PathFinder
 	 *
 	 * @param $pluginPath
 	 */
-	public function addPluginLocations( $pluginPath )
+	public function addPluginLocations($pluginPath)
 	{
-		$templates_folder=array('template','templates');
+		$templates_folder = array('template','templates');
 
 		//path to plugin public directory
 		$pluginPublicPath = $pluginPath . 'public';
@@ -133,15 +129,13 @@ class WpPathfinder extends PathFinder
 			'mail'=>'mail',
 			'logs'=>'logs',
 			'dbupdates'=>'doc/dbupdates',
-		))
-		                                   ->setBasePath($pluginPath);
+		))->setBasePath($pluginPath);
 
 		$this->pluginPublicLocation = $this->addLocation(array(
 			'public'=> '',
 			'js'=> [ 'js' ],
 			'css'=>'css',
-		))
-		                             ->setBasePath($pluginPublicPath)
-		                             ->setBaseURL($pluginPublicUrl);
+		))->setBasePath($pluginPublicPath)
+		  ->setBaseURL($pluginPublicUrl);
 	}
 }

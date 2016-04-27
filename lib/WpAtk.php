@@ -40,7 +40,7 @@ class WpAtk extends App_Web
 	public $panel;
 
 	//default config files to read
-	public $wpConfigFiles = [ 'config-wp', 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox' ];
+	public $wpConfigFiles = ['config-wp', 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox'];
 
 	public $ajaxMode = false;
 
@@ -52,10 +52,10 @@ class WpAtk extends App_Web
 	public $page_class='Page';
 
 	/** List of pages which are routed into namespace */
-	public $namespace_routes=array();
+	public $namespace_routes = array();
 
 	/** Object for a custom layout, introduced in 4.3 */
-	public $layout=null;
+	public $layout = null;
 
 	/** will contains the app html output when using wp shortcode */
 	public $appHtmlBuffer;
@@ -68,11 +68,11 @@ class WpAtk extends App_Web
 
 
 
-	public function __construct($name, $configPath )
+	public function __construct($name, $configPath)
 	{
 		$this->pluginName = $name;
 		$this->config_location = $configPath;
-		parent::__construct( $name );
+		parent::__construct($name);
 	}
 
 	/**
@@ -86,14 +86,14 @@ class WpAtk extends App_Web
 	{
 		parent::init();
 		$this->setDsnConfig();
-		$this->widgetCtrl       = $this->add( 'Wp_Controller_Widget', 'wpatk-wdg');
-		$this->enqueueCtrl      = $this->add( 'Wp_Controller_Enqueue', 'wpatk-enq' );
-		$this->panelCtrl        = $this->add( 'Wp_Controller_Panel', 'wpatk-pan' );
-		$this->metaBoxCtrl      = $this->add( 'Wp_Controller_MetaBox', 'wpatk-mb');
-		$this->shortcodeCtrl    = $this->add( 'Wp_Controller_Shortcode', 'wpatk-sc');
+		$this->widgetCtrl       = $this->add('Wp_Controller_Widget', 'wpatk-wdg');
+		$this->enqueueCtrl      = $this->add('Wp_Controller_Enqueue', 'wpatk-enq');
+		$this->panelCtrl        = $this->add('Wp_Controller_Panel', 'wpatk-pan');
+		$this->metaBoxCtrl      = $this->add('Wp_Controller_MetaBox', 'wpatk-mb');
+		$this->shortcodeCtrl    = $this->add('Wp_Controller_Shortcode', 'wpatk-sc');
 
 
-		$this->add( 'Wp_WpJui' );
+		$this->add('Wp_WpJui');
 		$this->template->trySet('action', $this->pluginName);
 
 	}
@@ -103,12 +103,12 @@ class WpAtk extends App_Web
 	 * Header are sent by Wordpress.
 	 * Leave empty.
 	 */
-	public function sendHeaders() { }
+	public function sendHeaders() {}
 
 	/**
 	 * @param $path
 	 */
-	public function setConfigLocation( $path)
+	public function setConfigLocation($path)
 	{
 		$this->config_location = $path;
 	}
@@ -117,42 +117,43 @@ class WpAtk extends App_Web
 	 * Override _beforeInit for Wordpress
 	 * Setup our own Pathfinder class for wordpress.
 	 */
-	public function _beforeInit() {
+	public function _beforeInit()
+	{
 		$this->pathfinder_class = 'WpPathfinder';
 		// Loads all configuration files
-		$this->config_files = array_merge( $this->config_files, $this->wpConfigFiles);
+		$this->config_files = array_merge($this->config_files, $this->wpConfigFiles);
 
-		$this->pm=$this->add($this->pagemanager_class, $this->pagemanager_options);
+		$this->pm = $this->add($this->pagemanager_class, $this->pagemanager_options);
 		$this->pm->parseRequestedURL();
 
 		$this->readAllConfig();
-		$this->add( $this->pathfinder_class );
+		$this->add($this->pathfinder_class);
 	}
 
 	/**
 	 * Read config file and store it in $this->config. Use getConfig() to access
 	 */
 
-	public function readConfig( $file = 'config.php' ) {
+	public function readConfig($file = 'config.php') {
 		$orig_file = $file;
 
-		if ( strpos( $file, '.php' ) != strlen( $file ) - 4 ) {
+		if (strpos( $file, '.php') != strlen($file) - 4) {
 			$file .= '.php';
 		}
 
-		if ( strpos( $file, '/' ) === false ) {
+		if (strpos($file, '/') === false) {
 			$file = $this->config_location . '/' . $file;
 		}
 
-		if ( file_exists( $file ) ) {
+		if (file_exists($file)) {
 			// some tricky thing to make config be read in some cases it could not in simple way
 			unset( $config );
 
-			$config =& $this->config;
+			$config = &$this->config;
 			$this->config_files_loaded[] = $file;
 			include $file;
 
-			unset( $config );
+			unset($config);
 
 			return true;
 		}
@@ -166,7 +167,7 @@ class WpAtk extends App_Web
 	 */
 	public function setDsnConfig()
 	{
-		if( ! $this->app->getConfig( 'dsn', null )){
+		if (!$this->app->getConfig('dsn', null)) {
 			$this->app->setConfig('dsn', 'mysql://'.DB_USER.':'.DB_PASSWORD.'@'.DB_HOST.'/'.DB_NAME);
 		}
 	}
@@ -200,14 +201,14 @@ class WpAtk extends App_Web
 			$this->widgetCtrl->loadWidgets();
 			$this->metaBoxCtrl->loadMetaBoxes();
 			$this->shortcodeCtrl->loadShortcodes();
-			add_action( 'init', [ $this, 'wpInit']);
+			add_action('init', [$this, 'wpInit']);
 			//register ajax action for this plugin
-			add_action( "wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+			add_action("wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute']);
 			//enable Wp ajax front end action.
-			add_action( "wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute'] );
+			add_action("wp_ajax_nopriv_{$this->pluginName}", [$this, 'wpAjaxExecute']);
 
-		} catch ( Exception $e ) {
-			$this->caughtException( $e );
+		} catch (Exception $e) {
+			$this->caughtException($e);
 		}
 
 	}
@@ -221,7 +222,7 @@ class WpAtk extends App_Web
 	public function wpAdminExecute()
 	{
 		global $hook_suffix;
-		$this->panel = $this->panelCtrl->getPanelUses( $hook_suffix );
+		$this->panel = $this->panelCtrl->getPanelUses($hook_suffix);
 		$this->main();
 	}
 
@@ -234,14 +235,14 @@ class WpAtk extends App_Web
 	 * @$post    Wp_Post //Contains the current post information
 	 * @$param   Array   //Argument passed into the metabox, contains argument set in config file.
 	 */
-	public function wpMetaBoxExecute( WP_Post $post, array $param )
+	public function wpMetaBoxExecute(WP_Post $post, array $param)
 	{
 		//set the view to output.
-		$this->panel['class'] = $this->metaBoxCtrl->getMetaBoxByKey( $param['id'] )['uses'];//$this->metaBox;
+		$this->panel['class'] = $this->metaBoxCtrl->getMetaBoxByKey($param['id'])['uses'];//$this->metaBox;
 		$this->panel['id']    = $param['id'];
 		//Make our post info available for our view.
 		$this->metaBox['post'] = $post;
-		$this->metaBox['args'] = $param[ 'args' ];
+		$this->metaBox['args'] = $param['args'];
 		$this->isLayoutNeedInitialise = false;
 		$this->metaBoxCtrl->metaDisplayCount ++;
 		$this->main();
@@ -259,7 +260,7 @@ class WpAtk extends App_Web
 	 *
 	 * @return mixed
 	 */
-	public function wpShortcodeExecute( $shortcode, $args )
+	public function wpShortcodeExecute($shortcode, $args)
 	{
 		//Set app panel with proper shortcode class.
 		$this->panel['class'] = $shortcode['uses'];
@@ -267,9 +268,9 @@ class WpAtk extends App_Web
 		//Shortcode class will retreive this arg on init()
 		$this->shortcode['args'] = $args;
 		//Tell Shortcode controller how many time this is output.
-		$this->shortcodeCtrl->increaseShortcodeInstance(  $shortcode['key'] );
+		$this->shortcodeCtrl->increaseShortcodeInstance($shortcode['key']);
 		//This will set proper ajax action for this shortcode instance.
-		$this->sticky_get_arguments['atkshortcode'] = $this->shortcodeCtrl->getShortcodeInstance(  $shortcode['key'] );
+		$this->sticky_get_arguments['atkshortcode'] = $this->shortcodeCtrl->getShortcodeInstance($shortcode['key']);
 		$this->isLayoutNeedInitialise = false;
 		//Shortcode are not echo and must return html
 		$html = $this->getAppHtml();
@@ -284,11 +285,11 @@ class WpAtk extends App_Web
 	public function wpAjaxExecute()
 	{
 		$this->ajaxMode = true;
-		$this->panel = $this->panelCtrl->getPanelUses( $_REQUEST['atkpanel'], false );
-		if( isset( $_GET['atkshortcode'])){
+		$this->panel = $this->panelCtrl->getPanelUses($_REQUEST['atkpanel'], false);
+		if (isset($_GET['atkshortcode'])) {
 			$this->stickyGet('atkshortcode');
 		}
-		check_ajax_referer( $this->pluginName );
+		check_ajax_referer($this->pluginName);
 		$this->main();
 		die();
 	}
@@ -317,7 +318,7 @@ class WpAtk extends App_Web
 	 */
 	private function setWpNonce()
 	{
-		$this->sticky_get_arguments['_ajax_nonce'] = wp_create_nonce( $this->pluginName );
+		$this->sticky_get_arguments['_ajax_nonce'] = wp_create_nonce($this->pluginName);
 	}
 
 	/**
@@ -344,40 +345,39 @@ class WpAtk extends App_Web
 	 * @throws BaseException
 	 * @internal param $ [type] $page      [description]
 	 */
-	public function url( $page = null, $arguments = array() )
+	public function url($page = null, $arguments = array())
 	{
-		$url = $this->add( 'Wp_WpUrl' );
-		unset( $this->elements[ $url->short_name ] );   // garbage collect URLs
-		if ( strpos( $page, 'http://' ) === 0 || strpos( $page, 'https://' ) === 0 ) {
-			$url->setURL( $page );
+		$url = $this->add('Wp_WpUrl');
+		unset($this->elements[ $url->short_name ]);   // garbage collect URLs
+		if (strpos($page, 'http://') === 0 || strpos($page, 'https://') === 0) {
+			$url->setURL($page);
 		} else {
-			if( $page === 'admin'){
+			if ($page === 'admin') {
 				$url->setBaseURL($url->wpAdminUrl);
 			} else {
 				//add ajax call argument.
 				$arguments['action']   = $this->pluginName;
 				$arguments['atkpanel'] = $this->panel['id'];
 			}
-			$url->setPage( $page );
+			$url->setPage($page);
 		}
-
 		return $url->setArguments( $arguments );
 	}
 
 
-	public function locatePublicUrl( $file )
+	public function locatePublicUrl($file)
 	{
 		try {
 			//remove unnecessary / for public url
 			return preg_replace('#/+#','/', $this->locateUrl('public', $file));
 		} catch (Exception $e) {
-			$this->caughtException( $e );
+			$this->caughtException($e);
 		}
 	}
 
 	public function getPanelSlug()
 	{
-		return $this->panelCtrl->getPanelSlugByKey( $this->panel['id']);
+		return $this->panelCtrl->getPanelSlugByKey($this->panel['id']);
 	}
 
 	/**
@@ -404,8 +404,8 @@ class WpAtk extends App_Web
 
 		$app_namespace = (new \ReflectionObject($this))->getNamespaceName();
 		//check if class need to be load as is when using our own namespace.
-		if ( strpos( $name, $app_namespace ) === false ){
-			$name = parent::normalizeClassName( $name, $prefix );
+		if (strpos($name, $app_namespace) === false) {
+			$name = parent::normalizeClassName($name, $prefix);
 		}
 		return $name;
 	}
@@ -425,15 +425,17 @@ class WpAtk extends App_Web
 	public function render()
 	{
 		$this->hook('pre-js-collection');
-		if(isset($this->app->jquery) && $this->app->jquery)$this->app->jquery->getJS($this);
+		if (isset($this->app->jquery) && $this->app->jquery) {
+			$this->app->jquery->getJS($this);
+		}
 
-		if(!($this->template)){
+		if (!($this->template)) {
 			throw new BaseException("You should specify template for API object");
 		}
 
 		$this->hook('pre-render-output');
 		//check if we need to return html for shortcode instead of regular echo.
-		if ( $this->hook('sc_render')){
+		if ($this->hook('sc_render')) {
 			return;
 		}
 		//remove shortcode layout prior to echo template output.
@@ -442,13 +444,15 @@ class WpAtk extends App_Web
 		$this->hook('post-render-output');
 	}
 
-	public function outputDebug( $msg, $shift=0 )
+	public function outputDebug($msg, $shift=0)
 	{
-		if( $msg instanceof DB ){
+		if ($msg instanceof DB) {
 			$this->js(true)->univ()->dialogOK('SQL Debug', $shift);
 			return;
 		}
-		if($this->hook('output-debug',array($msg,$shift)))return true;
+		if ($this->hook('output-debug', array($msg,$shift))) {
+			return true;
+		}
 		echo "<font color=blue>",$msg,"</font><br>";
 	}
 
@@ -485,9 +489,9 @@ class WpAtk extends App_Web
 		$this->appHtmlBuffer = $this->template->render();
 	}
 
-	public function initLayout( )
+	public function initLayout()
 	{
-		if( $this->isLayoutNeedInitialise ){
+		if ($this->isLayoutNeedInitialise) {
 			parent::initLayout();
 		}
 		$this->addLayout('Content');
@@ -498,7 +502,7 @@ class WpAtk extends App_Web
 	public function layout_Content()
 	{
 		$layout = $this->layout ?: $this;
-		$this->page_object = $layout->add($this->panel['class'], [ 'name' => $this->panel['id'], 'id' => $this->panel['id']]);
+		$this->page_object = $layout->add($this->panel['class'], ['name' => $this->panel['id'], 'id' => $this->panel['id']]);
 	}
 
 	public function getWpPageUrl()
@@ -506,10 +510,10 @@ class WpAtk extends App_Web
 		global $post;
 
 		$url = '';
-		if ( is_home() ){
+		if (is_home()) {
 			$url = site_url();
 		} else {
-			$url = get_permalink( $post->ID );
+			$url = get_permalink($post->ID);
 		}
 
 		return $url;
@@ -542,16 +546,16 @@ class WpAtk extends App_Web
 	 *
 	 * @param $query
 	 */
-	public function parseRequest( $query )
+	public function parseRequest($query)
 	{
 
 		$panels = $this->panelCtrl->getPanels();
 		//let see if this page required one of our panel.
 		$pagename = $query->query_vars['pagename'] ;
 
-		foreach( $panels as $key => $panel){
-			if ( $pagename === $panel['page_slug']){
-				$this->panelCtrl->preSetPanel( $panel );
+		foreach ($panels as $key => $panel) {
+			if ($pagename === $panel['page_slug']) {
+				$this->panelCtrl->preSetPanel($panel);
 			}
 		}
 
@@ -571,9 +575,9 @@ class WpAtk extends App_Web
 	 *
 	 * @param $page
 	 */
-	public function outputPanel( $page )
+	public function outputPanel($page)
 	{
-		$this->panel = $this->panelCtrl->getFrontPanelUses( $page );
+		$this->panel = $this->panelCtrl->getFrontPanelUses($page);
 		$this->main();
 	}
 

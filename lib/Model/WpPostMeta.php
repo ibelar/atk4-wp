@@ -28,11 +28,11 @@ class Model_WpPostMeta extends Model_Table
 		$this->hasOne('WpPosts', 'post_id');
 	}
 
-	public function getMetaValue ( $postId, $key )
+	public function getMetaValue($postId, $key)
 	{
-		$this->addCondition( 'post_id', $postId );
-		$value = $this->tryLoadBy( 'meta_key', $key )->get('meta_value');
-		return maybe_unserialize( $value );
+		$this->addCondition('post_id', $postId);
+		$value = $this->tryLoadBy('meta_key', $key)->get('meta_value');
+		return maybe_unserialize($value);
 	}
 
 	/*public function saveOptionValue ( $option, $value )

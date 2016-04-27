@@ -72,44 +72,44 @@ class Form_Field_WpUpload extends Form_Field
 
 	}
 
-	public function addProgressBar( $color = null, $borderSize= null, $borderColor=null, $borderType=null)
+	public function addProgressBar($color = null, $borderSize= null, $borderColor=null, $borderType=null)
 	{
 		$holder = $this->add('View', 'pg', 'below_field')->addClass('progress-bar');
 		$holder->add('View', 'pg-d')->addClass('bar');
 		$this->options['progress'] = $holder->name;
-		if( isset ($color )){
+		if (isset($color)) {
 			$this->options['barColor'] = $color;
 		}
-		if( isset ($borderSize )){
+		if (isset($borderSize)) {
 			$this->options['borderSize'] = $borderSize;
 		}
-		if( isset ($borderColor )){
+		if (isset($borderColor)) {
 			$this->options['borderColor'] = $borderColor;
 		}
-		if( isset ($borderType )){
+		if (isset($borderType)) {
 			$this->options['borderType'] = $borderType;
 		}
 		return $this;
 	}
 
-	public function setAcceptType ( Array $type )
+	public function setAcceptType(Array $type)
 	{
-		$this->attr['accept'] = $this->stringifyAccept ( $type );
+		$this->attr['accept'] = $this->stringifyAccept($type);
 		return $this;
 	}
 
 	/**
 	 * @param $class
 	 */
-	public function addStyleClass( $class )
+	public function addStyleClass($class)
 	{
 		$this->attr['class'] .= ' '.$class;
 		return $this;
 	}
 
-	public function setInputMessage( $msg = null )
+	public function setInputMessage($msg = null)
 	{
-		if( isset ($msg)){
+		if (isset($msg)) {
 			$this->inputMessage = $msg;
 		}
 		return $this;
@@ -120,7 +120,7 @@ class Form_Field_WpUpload extends Form_Field
 		return $this;
 	}
 
-	private function stringifyAccept( $accepts )
+	private function stringifyAccept($accepts)
 	{
 		return implode(',', $accepts);
 	}

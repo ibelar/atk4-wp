@@ -25,7 +25,7 @@ class Wp_Custom_Form extends Form_Basic
 {
 	public $fieldCSSDefaultClass = '';
 	public $fieldCssSpecialClasses = [];
-	public $customFieldType  = [];
+	public $customFieldType = [];
 
 
 	/**
@@ -49,7 +49,7 @@ class Wp_Custom_Form extends Form_Basic
 	 * @return mixed
 	 * @throws BaseException
 	 */
-	public function addField( $type, $options = null, $caption = null, $attr = null )
+	public function addField($type, $options = null, $caption = null, $attr = null)
 	{
 		//return parent::addField( $type, $options, $caption, $attr )->addClass( $this->fieldClassName );
 
@@ -60,7 +60,6 @@ class Wp_Custom_Form extends Form_Basic
 			// using callback on a sub-view
 			$insert_into = $type;
 			list(,$type,$options,$caption,$attr)=func_get_args();
-
 		}
 
 		if ($options === null) {
@@ -100,35 +99,35 @@ class Wp_Custom_Form extends Form_Basic
 			case 'timepickr':    $class = 'TimePicker';   break;
 			default:             $class = $type;
 		}
-		if ( in_array( $type, $this->customFieldType )) {
-			$class = $this->api->normalizeClassName($class, 'Wp_Custom_Field');
+		if (in_array($type, $this->customFieldType)) {
+			$class = $this->app->normalizeClassName($class, 'Wp_Custom_Field');
 		} else {
 			//revert to default class type
-			$class = $this->api->normalizeClassName($class, 'Form_Field');
+			$class = $this->app->normalizeClassName($class, 'Form_Field');
 		}
 
 
 		if ($insert_into === $this) {
-			$template=$this->template->cloneRegion('form_line');
+			$template = $this->template->cloneRegion('form_line');
 			$field = $this->add($class, $options, null, $template);
 		} else {
 			if ($insert_into->template->hasTag($name)) {
-				$template=$this->template->cloneRegion('field_input');
-				$options['show_input_only']=true;
+				$template = $this->template->cloneRegion('field_input');
+				$options['show_input_only'] = true;
 				$field = $insert_into->add($class, $options, $name);
 			} else {
-				$template=$this->template->cloneRegion('form_line');
+				$template = $this->template->cloneRegion('form_line');
 				$field = $insert_into->add($class, $options, null, $template);
 			}
 
 			// Keep Reference, for $form->getElement().
-			$this->elements[$options['name']]=$field;
+			$this->elements[$options['name']] = $field;
 		}
 
-		if( key_exists( $type, $this->fieldCssSpecialClasses )){
-			$field->addClass( $this->fieldCssSpecialClasses[$type]);
+		if (key_exists($type, $this->fieldCssSpecialClasses)) {
+			$field->addClass($this->fieldCssSpecialClasses[$type]);
 		} else {
-			$field->addClass( $this->fieldCSSDefaultClass );
+			$field->addClass($this->fieldCSSDefaultClass);
 		}
 
 
@@ -136,24 +135,23 @@ class Wp_Custom_Form extends Form_Basic
 		$field->setForm($this);
 		$field->template->trySet('field_type', strtolower($type));
 
-		if($attr) {
-			if($this->app->compat) {
+		if ($attr) {
+			if ($this->app->compat) {
 				$field->setAttr($attr);
-			}else{
+			} else {
 				throw $this->exception('4th argument to addField is obsolete');
 			}
 		}
-
 		return $field;
-
 	}
 
-	protected function getChunks(){
+	protected function getChunks()
+	{
 		// commonly replaceable chunks
 		$this->grabTemplateChunk('form_comment');
 		$this->grabTemplateChunk('form_separator');
 		$this->grabTemplateChunk('form_line');      // template for form line, must contain field_caption,field_input,field_error
-		if($this->template->is_set('hidden_form_line'))
+		if ($this->template->is_set('hidden_form_line'))
 			$this->grabTemplateChunk('hidden_form_line');
 		$this->grabTemplateChunk('field_error');    // template for error code, must contain field_error_str
 		$this->grabTemplateChunk('field_mandatory');// template for marking mandatory fields
@@ -161,12 +159,11 @@ class Wp_Custom_Form extends Form_Basic
 		// other grabbing will be done by field themselves as you will add them
 		// to the form. They will try to look into this template, and if you
 		// don't have apropriate templates for them, they will use default ones.
-		$this->template_chunks['form']=$this->template;
+		$this->template_chunks['form'] = $this->template;
 		$this->template_chunks['form']->del('Content');
 		$this->template_chunks['form']->del('form_buttons');
 		$this->template_chunks['form']->trySet('form_name',$this->name.'_form');
 		//$this->template_chunks['form']->set('form_action',$this->api->url(null,array('submit'=>$this->name)));
-
 		return $this;
 	}
 }

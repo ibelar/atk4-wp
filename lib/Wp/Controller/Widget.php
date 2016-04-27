@@ -40,9 +40,9 @@ class Wp_Controller_Widget extends AbstractController
 	public function loadWidgets()
 	{
 		$widgets = $this->app->getConfig('widget', null);
-		if( isset($widgets)){
-			foreach( $widgets as $key => $widget ){
-				$this->registerWidget( $key, $widget );
+		if (isset($widgets)) {
+			foreach ($widgets as $key => $widget) {
+				$this->registerWidget($key, $widget);
 			}
 		}
 	}
@@ -54,15 +54,15 @@ class Wp_Controller_Widget extends AbstractController
 	 * @param $id
 	 * @param $widget
 	 */
-	public function registerWidget( $id, $widget )
+	public function registerWidget($id, $widget)
 	{
-		add_action( 'widgets_init', function() use ($id, $widget) {
+		add_action('widgets_init', function() use ($id, $widget) {
 			global $wp_widget_factory;
-			register_widget( $widget['uses'] );
+			register_widget($widget['uses']);
 			//get latest create widget in widget factory
 			$wdg = end($wp_widget_factory->widgets);
 			// pre init latest widget.
-			$wdg->beforeInit( $id, $widget, $this->getWidgetAtkApp() );
+			$wdg->beforeInit($id, $widget, $this->getWidgetAtkApp());
 		});
 	}
 
@@ -71,7 +71,7 @@ class Wp_Controller_Widget extends AbstractController
 	 */
 	private function getWidgetAtkApp()
 	{
-		if( !isset ($this->widgetAtkApp) ) {
+		if (!isset($this->widgetAtkApp)) {
 			$this->widgetAtkApp = clone $this->app;
 		}
 		return $this->widgetAtkApp;

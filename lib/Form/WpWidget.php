@@ -28,7 +28,7 @@ class Form_WpWidget extends Wp_Custom_Form
 		$this->js_widget = null;
 	}
 
-	public function defaultTemplate( )
+	public function defaultTemplate()
 	{
 		return ['custom/widget-form'];
 	}

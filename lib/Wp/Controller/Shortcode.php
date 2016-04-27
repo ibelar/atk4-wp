@@ -28,8 +28,8 @@ class Wp_Controller_Shortcode extends AbstractController
 	{
 		$shortcodes = $this->app->getConfig('shortcode', null);
 		if( isset( $shortcodes )){
-			foreach( $shortcodes as $key => $shortcode ){
-				$this->registerShortcode( $key, $shortcode );
+			foreach ($shortcodes as $key => $shortcode) {
+				$this->registerShortcode($key, $shortcode);
 			}
 		}
 	}
@@ -41,29 +41,29 @@ class Wp_Controller_Shortcode extends AbstractController
 	 * @param $key
 	 * @param $shortcode
 	 */
-	public function registerShortcode( $key, $shortcode )
+	public function registerShortcode($key, $shortcode)
 	{
 		$shortcode['key'] = $key;
 		$shortcode['number'] = 0;
 		$app = $this->app;
-		add_shortcode( $shortcode['name'], function ( $args ) use ( $key, $shortcode, $app ) {
-			if ( $shortcode['atkjs'] ){
+		add_shortcode($shortcode['name'], function($args) use ($key, $shortcode, $app) {
+			if ($shortcode['atkjs']) {
 				$app->enqueueCtrl->enqueueAtkJsInFront();
 			}
-			if ( isset($shortcode['js'])){
-				$app->enqueueCtrl->enqueueFiles( $shortcode['js'], 'js', ['start-atk4']);
+			if (isset($shortcode['js'])) {
+				$app->enqueueCtrl->enqueueFiles($shortcode['js'], 'js', ['start-atk4']);
 			}
-			if ( isset($shortcode['css'])){
-				$app->enqueueCtrl->enqueueFiles( $shortcode['css'], 'css');
+			if (isset($shortcode['css'])) {
+				$app->enqueueCtrl->enqueueFiles($shortcode['css'], 'css');
 			}
-			return $app->wpShortcodeExecute( $shortcode, $args );
+			return $app->wpShortcodeExecute($shortcode, $args);
 		});
 
 
 		//add this shortcode to our panel list.
 		//This will allow to get ajax working.
-		$this->app->panelCtrl->setPanels( $key, $shortcode );
-		$this->app->panelCtrl->registerPanelHook( $key , $key );
+		$this->app->panelCtrl->setPanels($key, $shortcode);
+		$this->app->panelCtrl->registerPanelHook($key, $key);
 		$this->shortcodes[$key] = $shortcode;
 
 	}
@@ -74,7 +74,7 @@ class Wp_Controller_Shortcode extends AbstractController
 	 * @param $key
 	 * @param int $step
 	 */
-	public function increaseShortcodeInstance( $key, $step = 1 )
+	public function increaseShortcodeInstance($key, $step = 1)
 	{
 		$this->shortcodes[$key]['number'] += $step;
 	}
@@ -85,7 +85,7 @@ class Wp_Controller_Shortcode extends AbstractController
 	 *
 	 * @return mixed
 	 */
-	public function getShortcodeInstance( $key )
+	public function getShortcodeInstance($key)
 	{
 		return $this->shortcodes[$key]['number'];
 	}

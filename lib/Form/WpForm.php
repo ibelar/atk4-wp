@@ -23,28 +23,37 @@ class Form_WpForm extends Form
 
 	public $formErrors = array();
 
-	public function addMandatoryField( $type, $option=null, $caption=null, $attr=null )
+	public function init()
 	{
-		return $this->makeFieldMandatory( $this->addField($type, $option, $caption, $attr) );
+		parent::init();
+		$this->addHook('post-validate', function() {
+			$this->performValidation();
+		});
 	}
 
-	protected function makeFieldMandatory( $field )
+	public function addMandatoryField($type, $option=null, $caption=null, $attr=null)
 	{
-		$field->addHook( 'validate', [$this, 'validateMandatory']);
+		return $this->makeFieldMandatory($this->addField($type, $option, $caption, $attr));
+	}
+
+	protected function makeFieldMandatory($field)
+	{
+		$field->addHook('validate', [$this, 'validateMandatory']);
 		return $field;
 	}
 
 	public function validateMandatory($field)
 	{
 		$value = trim($field->get());
-		if($value==="" || is_null($value))
+		if ($value==="" || is_null($value)) {
 			$this->formErrors[$field->short_name] = _('This is a mandatory field');
+		}
 	}
 
 
 	public function exitOnError()
 	{
-		if ($this->hasError()){
+		if ($this->hasError()) {
 			$this->_displayErrors();
 		}
 	}
@@ -59,11 +68,25 @@ class Form_WpForm extends Form
 		$this->_displayErrors();
 	}
 
+	/**
+	 * Manually call hook validate on each field for backward compatibility in 4.3.2
+	 * @throws BaseException
+	 */
+	public function performValidation()
+	{
+		foreach( $this->elements as $x=>$field ){
+			if($field instanceof \Form_Field){
+				$field->hook('validate');
+			}
+		}
+
+	}
+
 	private function _displayErrors()
 	{
 		$js=array();
-		foreach ($this->formErrors as $field => $msg){
-			$js[] = $this->js(true)->atk4_form('fieldError',$field,$msg);
+		foreach ($this->formErrors as $field => $msg) {
+			$js[] = $this->js(true)->atk4_form('fieldError', $field, $msg);
 		}
 		$this->js(null,$js)->execute();
 	}

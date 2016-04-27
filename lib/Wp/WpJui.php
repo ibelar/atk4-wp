@@ -21,10 +21,10 @@ class Wp_WpJui extends jUI
 
 	public function addDefaultIncludes(){}
 
-	public function addInclude($file,$ext='.js')
+	public function addInclude($file, $ext='.js')
 	{
-		if (strpos( $file, 'jquery' ) === false ){
-			if( strpos( $file, 'http') === 0 ){
+		if (strpos($file, 'jquery') === false) {
+			if (strpos($file, 'http') === 0) {
 				parent::addOnReady('$.atk4.includeJS("'.$file.'")');
 				return $this;
 			}
