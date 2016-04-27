@@ -3,7 +3,7 @@
   "description": "Interface for adapting Agile Toolkit framework to work under WordPress",
   "license": "MIT",
   "require": {
-    "atk4\/atk4":"4.3.2"
+    "atk4/atk4":"dev-master"
   },
   "config": {
     "preferred-install": "dist",
