@@ -51,6 +51,16 @@ class Form_WpForm extends Form
 		}
 	}
 
+	/**
+	 * Allow to set an error from field by calling
+	 *  $field->form->setFormError()
+	 * @param $field
+	 * @param $error
+	 */
+	public function setFormError( $fieldName, $error )
+	{
+		$this->formErrors[$fieldName] = $error;
+	}
 
 	public function exitOnError()
 	{
