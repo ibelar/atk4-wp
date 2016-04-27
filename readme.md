@@ -150,9 +150,9 @@ $$atk_plugin_name = new $atk_plugin_classname( $atk_plugin_name, plugin_dir_path
 When WordPress start, it register the plugin and use the application instance boot() method to register each components set in configuration.
 
 ```php
-if ( ! is_null( $$atk_plugin_name)) {
-	register_activation_hook(__FILE__, [ $$atk_plugin_name, 'activatePlugin']);
-	register_deactivation_hook(__FILE__, [ $$atk_plugin_name, 'deactivatePlugin']);
+if (!is_null($$atk_plugin_name)) {
+	register_activation_hook(__FILE__, [$$atk_plugin_name, 'activatePlugin']);
+	register_deactivation_hook(__FILE__, [$$atk_plugin_name, 'deactivatePlugin']);
 	$$atk_plugin_name->boot();
 }
 ```

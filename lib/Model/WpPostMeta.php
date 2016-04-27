@@ -13,7 +13,7 @@
 /**
  * Wordpress Post Meta table as an atk model
  */
-class Model_WpPostMeta extends Model_Table
+class Model_WpPostMeta extends SQL_Model
 {
 	public function init()
 	{

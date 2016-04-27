@@ -15,7 +15,7 @@
  *
  */
 
-class Model_WpPosts extends Model_Table
+class Model_WpPosts extends SQL_Model
 {
 	public function init()
 	{

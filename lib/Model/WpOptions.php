@@ -13,7 +13,7 @@
 /**
  * Wordpress Options table as an atk model.
  */
-class Model_WpOptions extends Model_Table
+class Model_WpOptions extends SQL_Model
 {
 
 	public function init()
