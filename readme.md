@@ -124,13 +124,15 @@ Below is the recommend directory structure for your plugin. You should start by 
 
 The plugin.php file must be located at the root of your plugin directory. This file is responsible for properly setup your plugin in WordPress and create the Atk4 application instance.
 
-The lib directory must contain the Plugin.php class file. This class file must extends the interface application class. 
+The Plugin.php class file must be located within the lib directory. This class file must extends the interface application class (WpAtk). This is like your main Agile Toolkit application class file.
 
-The lib directory should also contain other Agile Toolkit classes that you define for your plugin, preferably in their proper directory as well.
+The lib directory should also contains others Agile Toolkit classes defined for your plugin, like Panel, Meta Boxes, Views, Form etc, preferably in their own directory as well.
 
-The templates directory should contain all your template files for views.
+The templates directory should contains necessary templates files for your plugin custom views.
 
-The public directory should contain css, js and images directory needed for your plugin.
+The public directory should contains css, js and images directory and files needed for your plugin.
+
+Configuration files, required for creating WordPress components, are placed directly under your plugin root directory.
 
 
 ###plugin.php
@@ -144,7 +146,7 @@ namespace PLUGIN_NAMESPACE;
 //Rename using your plugin name.
 $atk_plugin_name  = "PLUGIN_NAME";
 $atk_plugin_classname = __NAMESPACE__."\\Plugin";
-$$atk_plugin_name = new $atk_plugin_classname( $atk_plugin_name, plugin_dir_path( __FILE__ ) );
+$$atk_plugin_name = new $atk_plugin_classname($atk_plugin_name, plugin_dir_path( __FILE__ ));
 ```
 
 When WordPress start, it register the plugin and use the application instance boot() method to register each components set in configuration.
@@ -180,7 +182,7 @@ class Plugin extends \WpAtk implements \Pluggable
 }
 ```
 
-For more information on plugin.php file and Plugin class, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
+For more information on plugin.php file and the Plugin class, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
 
 #License
 
