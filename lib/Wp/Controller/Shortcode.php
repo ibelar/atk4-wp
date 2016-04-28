@@ -23,6 +23,13 @@ class Wp_Controller_Shortcode extends AbstractController
 	public $shortcodes = [];
 
 	/**
+	 * @return array
+	 */
+	public function getShortcodes() {
+		return $this->shortcodes;
+	}
+
+	/**
 	 * Load Shortcode define in our config file.
 	 */
 	public function loadShortcodes()
