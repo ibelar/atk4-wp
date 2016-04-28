@@ -38,7 +38,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return Model
 	 */
-	function setModel($m)
+	public function setModel($m)
 	{
 		$ret = parent::setModel($m);
 		$this->setValueList(array());
@@ -52,7 +52,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return $this
 	 */
-	function setValueList($list)
+	public function setValueList($list)
 	{
 		$this->value_list = $list;
 		return $this;
@@ -67,7 +67,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return $this
 	 */
-	function setEmptyText($text = UNDEFINED)
+	public function setEmptyText($text = UNDEFINED)
 	{
 		$this->empty_text = $text === null ? $this->default_empty_text : $text;
 		return $this;
@@ -78,7 +78,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return boolean
 	 */
-	function validate()
+	public function validate()
 	{
 		if (!$this->value) {
 			return parent::validate();
@@ -108,7 +108,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return array
 	 */
-	function getValueList()
+	public function getValueList()
 	{
 		// add model data rows in value list
 		if ($this->model) {
@@ -134,7 +134,7 @@ class Wp_Custom_Field_ValueList extends Wp_Custom_Field
 	 *
 	 * @return void
 	 */
-	function normalize()
+	public function normalize()
 	{
 		$data = $this->get();
 		if (is_array($data)) {

@@ -13,7 +13,7 @@
 /**
  * Wordpress Options table as an atk model.
  */
-class Model_WpOptions extends Model_Table
+class Model_WpOptions extends SQL_Model
 {
 
 	public function init()
@@ -27,19 +27,17 @@ class Model_WpOptions extends Model_Table
 		$this->addField('autoload');
 	}
 
-	public function getOptionValue ( $option )
+	public function getOptionValue($option)
 	{
-		/*$this->addCondition( 'name', $option );
-		$value = $this->loadAny()->get( 'value');*/
-		$value = $this->tryLoadBy( 'name', $option)->get('value');
-		return maybe_unserialize( $value );
+		$value = $this->tryLoadBy('name', $option)->get('value');
+		return maybe_unserialize($value);
 	}
 
-	public function saveOptionValue ( $option, $value )
+	public function saveOptionValue($option, $value)
 	{
-		$this->tryLoadBy( 'name', $option);
-		$this->set( 'value', maybe_serialize($value));
-		$this->set( 'name', $option );
+		$this->tryLoadBy('name', $option);
+		$this->set('value', maybe_serialize($value));
+		$this->set('name', $option);
 		$this->save();
 	}
 }

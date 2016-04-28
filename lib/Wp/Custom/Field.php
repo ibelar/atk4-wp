@@ -24,7 +24,6 @@ class Wp_Custom_Field extends Form_Field
 	public function init()
 	{
 		parent::init();
-
 		$this->id = $this->name;
 	}
 
@@ -35,7 +34,7 @@ class Wp_Custom_Field extends Form_Field
 	 *
 	 * @return string
 	 */
-	public function getInput($attr=array())
+	public function getInput($attr = array())
 	{
 		// This function returns HTML tag for the input field. Derived classes
 		// should inherit this and add new properties if needed

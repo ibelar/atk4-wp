@@ -13,7 +13,7 @@
 /**
  * Wordpress users table as an atk model
  */
-class Model_WpUsers extends Model_Table
+class Model_WpUsers extends SQL_Model
 {
 	public function init()
 	{

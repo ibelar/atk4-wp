@@ -62,9 +62,9 @@ class Wp_WpWidget extends WP_Widget
 	/**
 	 * Wp_WpWidget constructor
 	 */
-	public function __construct( )
+	public function __construct()
 	{
-		parent::__construct( 'atk4', '', [] );
+		parent::__construct('atk4', '', []);
 	}
 
 	/**
@@ -75,7 +75,7 @@ class Wp_WpWidget extends WP_Widget
 	 * @param $widget       //The widget configuration as set in config-widget
 	 * @param $atkInstance  //A clone of WpAtk application
 	 */
-	public function beforeInit( $id, $widget, $atkInstance )
+	public function beforeInit($id, $widget, $atkInstance)
 	{
 		//make sure our id_base is unique
 		$this->id_base      = $atkInstance->name . '_wdg_' . $id;
@@ -86,7 +86,7 @@ class Wp_WpWidget extends WP_Widget
 		//Add the id value to our widget definition.
 		$this->atkWidget['id'] = $id;
 		// The atk instance to build view and form.
-		$this->setAtkInstance( $atkInstance );
+		$this->setAtkInstance($atkInstance);
 		$this->init();
 	}
 
@@ -102,31 +102,31 @@ class Wp_WpWidget extends WP_Widget
 		$this->control_options  = wp_parse_args( $this->atkWidget['widget_control_ops'], array('id_base' => $this->id_base) );
 
 		//setup widget display
-		if( isset ($this->atkWidget['display']['uses']) && !empty($this->atkWidget['display']['uses']) ){
-			$this->addWidgetDisplay( $this->atkWidget['display']['uses']);
+		if (isset($this->atkWidget['display']['uses']) && !empty($this->atkWidget['display']['uses'])) {
+			$this->addWidgetDisplay($this->atkWidget['display']['uses']);
 		}
-		if(  isset ($this->atkWidget['display']['title']) && !empty($this->atkWidget['display']['title'])  ){
-			$this->setWidgetDisplayTitle( $this->atkWidget['display']['title'] );
+		if (isset($this->atkWidget['display']['title']) && !empty($this->atkWidget['display']['title'])) {
+			$this->setWidgetDisplayTitle($this->atkWidget['display']['title']);
 		}
 
 		//setup widget form and field
-		if(  isset ($this->atkWidget['form']['uses']) && !empty($this->atkWidget['form']['uses']) ){
-			$this->addWidgetForm( $this->atkWidget['form']['uses']);
+		if (isset($this->atkWidget['form']['uses']) && !empty($this->atkWidget['form']['uses'])) {
+			$this->addWidgetForm($this->atkWidget['form']['uses']);
 		}
-		if(  isset ($this->atkWidget['fields']) && !empty($this->atkWidget['fields'] )){
-			if( !isset( $this->widgetForm )){
-				$this->addWidgetForm( 'Form_WpWidget');
+		if (isset($this->atkWidget['fields']) && !empty($this->atkWidget['fields'])) {
+			if (!isset($this->widgetForm)) {
+				$this->addWidgetForm('Form_WpWidget');
 			}
-			foreach( $this->atkWidget['fields'] as $name => $field ){
-				$f = $this->widgetForm->addField( $field['type'], $name );
-				if( isset ($field['caption'])){
-					$f->setCaption( $field['caption'] );
+			foreach ($this->atkWidget['fields'] as $name => $field) {
+				$f = $this->widgetForm->addField($field['type'], $name);
+				if (isset($field['caption'])) {
+					$f->setCaption($field['caption']);
 				}
-				if (isset ($field['list'])){
-					$f->setValueList( $field['list'] );
+				if (isset($field['list'])) {
+					$f->setValueList($field['list']);
 				}
 				//$fieldDefault = isset( $field['default'] )? $field['default'] : '';
-				$this->instanceDefaults[$name] = isset( $field['default'] )? $field['default'] : '';
+				$this->instanceDefaults[$name] = isset($field['default'])? $field['default'] : '';
 			}
 		}
 	}
@@ -135,12 +135,12 @@ class Wp_WpWidget extends WP_Widget
 	 * Set the atkInstance managing this widget.
 	 * @param $atkInstance
 	 */
-	public function setAtkInstance( $atkInstance )
+	public function setAtkInstance($atkInstance)
 	{
 		$this->atkInstance = $atkInstance;
 	}
 
-	public function setInstanceDefaults( Array $defaults )
+	public function setInstanceDefaults(Array $defaults)
 	{
 		$this->instanceDefaults = $defaults;
 	}
@@ -153,11 +153,11 @@ class Wp_WpWidget extends WP_Widget
 	 *
 	 * @return null
 	 */
-	public function addWidgetDisplay( $className, $displayTitle = null )
+	public function addWidgetDisplay($className, $displayTitle = null)
 	{
-		$this->widgetDisplay = $this->atkInstance->add( $className, 'wdg-view_' . $this->atkWidget['id'] );
-		if( isset ($displayTitle )){
-			$this->setWidgetDisplayTitle( $displayTitle );
+		$this->widgetDisplay = $this->atkInstance->add($className, 'wdg-view_' . $this->atkWidget['id'] );
+		if (isset($displayTitle)) {
+			$this->setWidgetDisplayTitle($displayTitle);
 		}
 		return $this->widgetDisplay;
 	}
@@ -169,7 +169,7 @@ class Wp_WpWidget extends WP_Widget
 	 *
 	 * @param $displayTitle
 	 */
-	public function setWidgetDisplayTitle( $displayTitle )
+	public function setWidgetDisplayTitle($displayTitle)
 	{
 		$this->widgetDisplayTitle = $displayTitle;
 	}
@@ -186,16 +186,16 @@ class Wp_WpWidget extends WP_Widget
 	 *
 	 * @param $callback
 	 */
-	public function onDisplay( $callback = null )
+	public function onDisplay($callback = null)
 	{
-		$this->addHook( 'onDisplay', $callback );
+		$this->addHook('onDisplay', $callback);
 	}
 
 
-	public function addWidgetForm( $className )
+	public function addWidgetForm($className)
 	{
-		$this->widgetForm = $this->atkInstance->add( $className, 'wdg-form_' . $this->atkWidget['id'] );
-		if ( ! $this->widgetForm instanceof Form_WpWidget ) {
+		$this->widgetForm = $this->atkInstance->add($className, 'wdg-form_' . $this->atkWidget['id']);
+		if (!$this->widgetForm instanceof Form_WpWidget) {
 			throw $this->atkInstance->exception(_('Form class need to be child of Form_WpWidget'));
 		}
 		return $this->widgetForm;
@@ -212,9 +212,9 @@ class Wp_WpWidget extends WP_Widget
 	 *
 	 * @param $callback
 	 */
-	public function onForm( $callback = null )
+	public function onForm($callback = null)
 	{
-		$this->addHook( 'onForm', $callback );
+		$this->addHook('onForm', $callback);
 	}
 
 
@@ -227,13 +227,13 @@ class Wp_WpWidget extends WP_Widget
 	public function widget($args, $instance)
 	{
 
-		$this->hook( 'onDisplay', [$this->widgetDisplay, $instance] );
+		$this->hook('onDisplay', [$this->widgetDisplay, $instance]);
 		echo $args['before_widget'];
 
-		$title = apply_filters( 'widget_title', $this->widgetDisplayTitle );
-		if ( !empty( $title ) ) { echo $args['before_title'] . $title . $args['after_title']; };
+		$title = apply_filters('widget_title', $this->widgetDisplayTitle);
+		if (!empty( $title )) { echo $args['before_title'] . $title . $args['after_title']; };
 
-		if( isset( $this->widgetDisplay)) {
+		if (isset($this->widgetDisplay)) {
 			echo $this->widgetDisplay->getHtml();
 		} else {
 			echo '<p> The widget class display is not set; Class: '. get_class($this) .'</p>';
@@ -249,19 +249,19 @@ class Wp_WpWidget extends WP_Widget
 	 * @param array $instance       //the form instance
 	 * @return string|void
 	 */
-	public function form( $instance )
+	public function form($instance)
 	{
-		$instance = wp_parse_args( (array) $instance, $this->instanceDefaults );
-		$this->hook( 'onForm', [$this->widgetForm, $instance] );
-		if( isset( $this->widgetForm )){
-			foreach($this->widgetForm->elements as $x => $field){
-				if($field instanceof \Form_Field){
-					$field->name = $this->get_field_name( $field->short_name );
-					$field->id = $this->get_field_id( $field->short_name );
-					$field->set( $instance[ $field->short_name ]);
+		$instance = wp_parse_args((array)$instance, $this->instanceDefaults);
+		$this->hook('onForm', [$this->widgetForm, $instance]);
+		if (isset($this->widgetForm)) {
+			foreach ($this->widgetForm->elements as $x => $field) {
+				if ($field instanceof \Form_Field) {
+					$field->name = $this->get_field_name($field->short_name);
+					$field->id = $this->get_field_id($field->short_name);
+					$field->set($instance[$field->short_name]);
 				}
 			}
-			$html = $this->widgetForm->getHTML( false, false );
+			$html = $this->widgetForm->getHTML(false, false);
 			//IMPORTANT: Ounce we have our html, we need to remove previous content in our template form
 			//Otherwise, the output gets append in render() function and form line will be
 			//display twice.
@@ -280,12 +280,12 @@ class Wp_WpWidget extends WP_Widget
 	 *
 	 * @return mixed
 	 */
-	public function update( $new_instance, $old_instance )
+	public function update($new_instance, $old_instance)
 	{
 		//Compare key using the default one
 		//If using a checkbox, key will not be present in new_instance but will be in instanceDefaults.
-		foreach( $this->instanceDefaults as $key => $data ){
-			$instance[ $key ] = strip_tags( $new_instance[ $key ] );
+		foreach ($this->instanceDefaults as $key => $data) {
+			$instance[$key] = strip_tags($new_instance[$key]);
 		}
 		return $instance;
 	}

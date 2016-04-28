@@ -26,16 +26,16 @@ class WpHelper
 	public static function getPageId()
 	{
 		global $post;
-		if( is_home() ){
+		if (is_home()) {
 			return 'home';
 		} else {
 			return $post->ID;
 		}
 	}
 
-	public static function getWpOption ( $option )
+	public static function getWpOption($option)
 	{
-		return get_option( $option );
+		return get_option($option);
 	}
 
 

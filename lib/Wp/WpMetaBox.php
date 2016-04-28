@@ -59,14 +59,14 @@ class Wp_WpMetaBox extends Wp_WpPanel
 	 * @return AbstractObject|null
 	 * @throws BaseException
 	 */
-	public function addForm( $form = null, $option = null, $spot = null, $template = null )
+	public function addForm($form = null, $option = null, $spot = null, $template = null)
 	{
-		if( !isset ($form)){
+		if (!isset ($form)) {
 			$form = 'Form_WpMetaBox';
 		}
-		$this->form = $this->add( $form, $option, $spot, $template);
+		$this->form = $this->add($form, $option, $spot, $template);
 		//Since we do not know which field will be added, delay the setting of field
-		$this->app->addHook('pre-render', [ $this, 'setFormField']);
+		$this->app->addHook('pre-render', [$this, 'setFormField']);
 		return $this->form;
 	}
 
@@ -74,12 +74,12 @@ class Wp_WpMetaBox extends Wp_WpPanel
 	 * Called from the action hook added by the MetaBox controller.
 	 * @param $postId
 	 */
-	public function savePost( $postId )
+	public function savePost($postId)
 	{
-		if( isset ($this->form )){
-			foreach($this->form->elements as $x => $field){
-				if($field instanceof \Form_Field){
-					update_post_meta( $postId, $field->name, strip_tags( $_POST[ $field->name ]));
+		if (isset($this->form)) {
+			foreach ($this->form->elements as $x => $field) {
+				if ($field instanceof \Form_Field) {
+					update_post_meta($postId, $field->name, strip_tags($_POST[$field->name]));
 				}
 			}
 		}
@@ -90,10 +90,10 @@ class Wp_WpMetaBox extends Wp_WpPanel
 	 */
 	public function setFormField()
 	{
-		if( isset ($this->form ) && isset( $this->post ) ){
-			foreach($this->form->elements as $x => $field){
-				if($field instanceof \Form_Field){
-					$field->set( get_post_meta( $this->post->ID, $field->name, true ));
+		if (isset($this->form) && isset($this->post)) {
+			foreach ($this->form->elements as $x => $field) {
+				if ($field instanceof \Form_Field) {
+					$field->set(get_post_meta($this->post->ID, $field->name, true));
 				}
 			}
 		}

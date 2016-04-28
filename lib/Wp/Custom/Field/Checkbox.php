@@ -16,31 +16,36 @@
  */
 class Wp_Custom_Field_Checkbox extends Wp_Custom_Field
 {
-	public $true_value=true;
-	public $false_value=false;
-	function init(){
+	public $true_value = true;
+	public $false_value = false;
+
+	public function init()
+	{
 		parent::init();
-		$this->default_value='';
+		$this->default_value = '';
 	}
-	function setValues($true,$false){
+	public function setValues($true, $false)
+	{
 		$this->true_value = $true;
 		$this->false_value = $false;
 		return $this;
 	}
-	function setValueList($list){
 
+	public function setValueList($list)
+	{
 		// Model must convert it properly
 		return $this;
 
-
 		/* otherwise type("boolean")->enum(array("Y","N")) won't work */
-		if (count($list) != 2){
+		if (count($list) != 2) {
 			throw $this->exception("Invalid value list for Checkbox");
 		}
 		$this->setValues(array_shift($list), array_shift($list));
 		return $this;
 	}
-	function getInput($attr=array()){
+
+	public function getInput($attr = array())
+	{
 		$this->template->trySet('field_caption','');
 		$this->template->tryDel('label_container');
 
@@ -54,10 +59,12 @@ class Wp_Custom_Field_Checkbox extends Wp_Custom_Field
 			),$attr
 		)).$label;
 	}
-	function loadPOST(){
-		if(isset($_POST[$this->name])){
+
+	public function loadPOST()
+	{
+		if (isset($_POST[$this->name])) {
 			$this->set($this->true_value);
-		}else{
+		} else {
 			$this->set($this->false_value);
 		}
 	}

@@ -29,10 +29,10 @@ trait Traits_Hookable
 	 *
 	 * @return mixed|null
 	 */
-	public function hook( $spot, $args = null )
+	public function hook($spot, $args=null)
 	{
 		$result = null;
-		if (isset ($this->hooks[$spot] )) {
+		if (isset($this->hooks[$spot])) {
 			$hook = $this->hooks[$spot];
 			$result = call_user_func_array(	$hook, $args);
 		}
@@ -44,10 +44,10 @@ trait Traits_Hookable
 	 * @param $hook
 	 * @param $callback
 	 */
-	public function addHook( $hook, $callback )
+	public function addHook($hook, $callback)
 	{
-		if ( method_exists( $callback[0], $callback[1] ) && is_callable( [ $callback[0], $callback[1] ])){
-			$this->hooks[ $hook ] = $callback;
+		if (method_exists($callback[0], $callback[1]) && is_callable([$callback[0], $callback[1]])){
+			$this->hooks[$hook] = $callback;
 		}
 	}
 }

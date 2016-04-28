@@ -27,7 +27,7 @@ class Form_WpMetaBox extends Wp_Custom_Form
 		$this->js_widget = null;
 	}
 
-	public function defaultTemplate( )
+	public function defaultTemplate()
 	{
 		return ['custom/metabox-form'];
 	}

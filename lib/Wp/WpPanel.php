@@ -25,7 +25,7 @@ class Wp_WpPanel extends AbstractView
 
 	public function init()
 	{
-		$this->app->page_object=$this;
+		$this->app->page_object = $this;
 		parent::init();
 	}
 
@@ -36,9 +36,9 @@ class Wp_WpPanel extends AbstractView
 
 	function recursiveRender()
 	{
-		if(isset($_GET['cut_page']) && !isset($_GET['cut_object']) && !isset($_GET['cut_region']))
-			$_GET['cut_object']=$this->short_name;
-
+		if (isset($_GET['cut_page']) && !isset($_GET['cut_object']) && !isset($_GET['cut_region'])) {
+			$_GET['cut_object'] = $this->short_name;
+		}
 		parent::recursiveRender();
 	}
 }

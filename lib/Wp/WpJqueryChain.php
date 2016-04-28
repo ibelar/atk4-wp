@@ -31,7 +31,7 @@ class Wp_WpJqueryChain extends jQuery_Chain
 	{
 		$previousExtension = $this->strExtension;
 		//$newExtension = "";
-		if( isset( $arguments ) && !empty( $arguments ) ) {
+		if (isset($arguments) && !empty($arguments)) {
 			$a2 = $this->_flattern_objects($arguments, true);
 			//$this->strExtension .= ".{$name}({$a2})";
 			$newExtension = ".{$name}({$a2})";

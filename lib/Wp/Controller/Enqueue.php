@@ -28,16 +28,16 @@ class Wp_Controller_Enqueue extends AbstractController
 		'ui.atk4_loader', 'ui.atk4_notify', 'atk4_univ_basic',
 		'atk4_univ_jui', 'wp-atk4_univ_ext'/*, 'wp-atk4'*/ ];
 
-	protected $atkCssFiles = [ 'wp-atk4' ];
+	protected $atkCssFiles = ['wp-atk4'];
 
 	public function init()
 	{
 		parent::init();
 
-		if ( is_admin() ) {
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueueAdminFiles' ] );
+		if (is_admin()) {
+			add_action('admin_enqueue_scripts', [$this, 'enqueueAdminFiles']);
 		} else {
-			add_action( 'wp_enqueue_scripts', [ $this, 'enqueueFrontFiles' ] );
+			add_action('wp_enqueue_scripts', [$this, 'enqueueFrontFiles']);
 		}
 	}
 
@@ -49,102 +49,102 @@ class Wp_Controller_Enqueue extends AbstractController
 		return $this->atkJsFiles;
 	}
 
-	public function registerAtkJsFiles ( $files )
+	public function registerAtkJsFiles($files)
 	{
 		//Register wp-init as a dependency
 		// This ensure that wp-init will be load first when atkjs files are needed.
-		wp_enqueue_script('wp-init', $this->api->locateURL('js', 'wp-init.js'), ['jquery']);
+		wp_enqueue_script('wp-init', $this->app->locateURL('js', 'wp-init.js'), ['jquery']);
 
 		//register remaining files.
-		foreach ( $files as $file){
+		foreach ($files as $file) {
 			//atkjs file need wp-init as a dependency.
-			wp_register_script( $file, $this->api->locateURL('js',$file . '.js'), ['wp-init'] );
+			wp_register_script($file, $this->app->locateURL('js', $file.'.js'), ['wp-init']);
 		}
 	}
 
 
-	public function enqueueAdminFiles( $hook, $forceEnqueue = false )
+	public function enqueueAdminFiles($hook, $forceEnqueue = false)
 	{
 
 		//Check if this is an atk panel.
 		// and enqueue atk file
-		$panel = $this->getAtkPanel( $hook );
-		if ( isset($panel) || $forceEnqueue ){
-			$this->registerAtkJsFiles( $this->atkJsFiles );
+		$panel = $this->getAtkPanel($hook);
+		if (isset($panel) || $forceEnqueue) {
+			$this->registerAtkJsFiles($this->atkJsFiles);
 			//check if panel require specific js file.
-			if ( isset ($panel['js'])){
-				$this->atkJsFiles = array_merge($this->atkJsFiles, $panel['js'] );
+			if (isset ($panel['js'])) {
+				$this->atkJsFiles = array_merge($this->atkJsFiles, $panel['js']);
 			}
 
-			if ( @$userJsFiles = $this->api->getConfig('enqueue/admin/js', null)){
-				$this->atkJsFiles = array_merge($this->atkJsFiles, $userJsFiles );
+			if (@$userJsFiles = $this->app->getConfig('enqueue/admin/js', null)) {
+				$this->atkJsFiles = array_merge($this->atkJsFiles, $userJsFiles);
 			}
-			$this->enqueueFiles( $this->atkJsFiles,  'js');
+			$this->enqueueFiles($this->atkJsFiles, 'js');
 
-			if ( isset ($panel['css'])){
-				$this->atkCssFiles = array_merge($this->atkCssFiles, $panel['css'] );
+			if (isset ($panel['css'])) {
+				$this->atkCssFiles = array_merge($this->atkCssFiles, $panel['css']);
 			}
 
-			if ( @$userCssFiles = $this->api->getConfig('enqueue/admin/css', null)){
-				$this->atkCssFiles = array_merge($this->atkCssFiles, $userCssFiles );
+			if (@$userCssFiles = $this->app->getConfig('enqueue/admin/css', null)) {
+				$this->atkCssFiles = array_merge($this->atkCssFiles, $userCssFiles);
 			}
-			$this->enqueueFiles( $this->atkCssFiles,  'css');
+			$this->enqueueFiles($this->atkCssFiles, 'css');
 		}
 
 	}
 
 	public function enqueueAtkJsInFront()
 	{
-		$this->enqueueFiles( $this->atkJsFiles,  'js');
-		$this->enqueueFiles( $this->atkCssFiles,  'css');
+		$this->enqueueFiles($this->atkJsFiles, 'js');
+		$this->enqueueFiles($this->atkCssFiles, 'css');
 	}
 
 	public function enqueueFrontFiles()
 	{
-		$this->registerAtkJsFiles( $this->atkJsFiles );
-		if ( @$frontJsFiles = $this->api->getConfig('enqueue/front/js', null)){
+		$this->registerAtkJsFiles($this->atkJsFiles);
+		if (@$frontJsFiles = $this->app->getConfig('enqueue/front/js', null)) {
 			$this->enqueueFiles($frontJsFiles, 'js');
 		}
-		if (@$frontCssFiles = $this->api->getConfig('enqueue/front/css', null)){
+		if (@$frontCssFiles = $this->app->getConfig('enqueue/front/css', null)) {
 			$this->enqueueFiles($frontCssFiles, 'css');
 		}
 	}
 
-	public function enqueueFiles( $files, $type, $required = null )
+	public function enqueueFiles($files, $type, $required = null)
 	{
 		if (!isset($required))
 			$required = ['wp-init'];
 		try {
-			if ( $type === 'js'){
-				foreach ( $files as $file){
+			if ($type === 'js') {
+				foreach ($files as $file) {
 					//atkjs file need wp-init as a dependency.
 					if (strpos($file, 'http') === 0) {
 						$source = $file;
 					} else {
-						$source = $this->api->locateURL('js',$file . '.js');
+						$source = $this->app->locateURL('js', $file.'.js');
 					}
 
-					wp_enqueue_script( $file, $source , $required );
+					wp_enqueue_script($file, $source, $required);
 				}
 			} else {
-				foreach ( $files as $file){
-					wp_enqueue_style( $file, $this->api->locateURL('css',$file . '.css') );
+				foreach ($files as $file) {
+					wp_enqueue_style($file, $this->app->locateURL('css', $file.'.css'));
 				}
 			}
 		} catch (Exception $e) {
 			// Handles output of the exception
-			$this->api->caughtException($e);
+			$this->app->caughtException($e);
 		}
 
 	}
 
-	public function isAtkPanel ($hook )
+	public function isAtkPanel($hook)
 	{
-		return $this->app->panelCtrl->isAtkPanel( $hook );
+		return $this->app->panelCtrl->isAtkPanel($hook);
 	}
 
-	public function getAtkPanel ($hook )
+	public function getAtkPanel($hook)
 	{
-		return $this->app->panelCtrl->getAtkPanel ( $hook );
+		return $this->app->panelCtrl->getAtkPanel($hook);
 	}
 }

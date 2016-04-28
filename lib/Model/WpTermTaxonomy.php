@@ -13,7 +13,7 @@
 /**
  * Wordpress term taxonomy table as an atk model
  */
-class Model_WpTermTaxonomy extends Model_Table
+class Model_WpTermTaxonomy extends SQL_Model
 {
 	public function init()
 	{

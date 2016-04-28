@@ -21,15 +21,16 @@ class Wp_Controller_Shortcode extends AbstractController
 {
 
 	public $shortcodes = [];
+
 	/**
-	 * Load metaBoxes define in our config file.
+	 * Load Shortcode define in our config file.
 	 */
 	public function loadShortcodes()
 	{
 		$shortcodes = $this->app->getConfig('shortcode', null);
 		if( isset( $shortcodes )){
-			foreach( $shortcodes as $key => $shortcode ){
-				$this->registerShortcode( $key, $shortcode );
+			foreach ($shortcodes as $key => $shortcode) {
+				$this->registerShortcode($key, $shortcode);
 			}
 		}
 	}
@@ -41,31 +42,54 @@ class Wp_Controller_Shortcode extends AbstractController
 	 * @param $key
 	 * @param $shortcode
 	 */
-	public function registerShortcode( $key, $shortcode )
+	public function registerShortcode($key, $shortcode)
 	{
 		$shortcode['key'] = $key;
 		$shortcode['number'] = 0;
 		$app = $this->app;
-		add_shortcode( $shortcode['name'], function ( $args ) use ( $key, $shortcode, $app ) {
-			if ( $shortcode['atkjs'] ){
+		add_shortcode($shortcode['name'], function($args) use ($key, $shortcode, $app) {
+			if ($shortcode['atkjs']) {
 				$app->enqueueCtrl->enqueueAtkJsInFront();
 			}
-			if ( isset($shortcode['js'])){
-				$app->enqueueCtrl->enqueueFiles( $shortcode['js'], 'js', ['start-atk4']);
+			if (isset($shortcode['js'])) {
+				$app->enqueueCtrl->enqueueFiles($shortcode['js'], 'js', ['start-atk4']);
 			}
-			if ( isset($shortcode['css'])){
-				$app->enqueueCtrl->enqueueFiles( $shortcode['css'], 'css');
+			if (isset($shortcode['css'])) {
+				$app->enqueueCtrl->enqueueFiles($shortcode['css'], 'css');
 			}
-			return $app->wpShortcodeExecute( $shortcode, $args );
+			return $app->wpShortcodeExecute($shortcode, $args);
 		});
 
 
 		//add this shortcode to our panel list.
 		//This will allow to get ajax working.
-		$this->app->panelCtrl->setPanels( $key, $shortcode );
-		$this->app->panelCtrl->registerPanelHook( $key , $key );
+		$this->app->panelCtrl->setPanels($key, $shortcode);
+		$this->app->panelCtrl->registerPanelHook($key, $key);
 		$this->shortcodes[$key] = $shortcode;
 
+	}
+
+	/**
+	 * Will normalize shortcode name for html id attribute output.
+	 * If more than one shortcode is set to be display on a page
+	 * this will set the attribute id by adding '_N' where n is the current number of
+	 * the shortcode.
+	 *
+	 * Needed for proper ajax action to work within the shortcode.
+	 *
+	 * @param $key
+	 *
+	 * @return null|string
+	 */
+	public function normalizeShortCodeName($key)
+	{
+		$name = null;
+		if ($this->shortcodes[$key]['number'] > 1) {
+			$name = $key.'_'.$this->shortcodes[$key]['number'];
+		} else {
+			$name = $key ;
+		}
+		return $name;
 	}
 
 	/**
@@ -74,7 +98,7 @@ class Wp_Controller_Shortcode extends AbstractController
 	 * @param $key
 	 * @param int $step
 	 */
-	public function increaseShortcodeInstance( $key, $step = 1 )
+	public function increaseShortcodeInstance($key, $step = 1)
 	{
 		$this->shortcodes[$key]['number'] += $step;
 	}
@@ -85,7 +109,7 @@ class Wp_Controller_Shortcode extends AbstractController
 	 *
 	 * @return mixed
 	 */
-	public function getShortcodeInstance( $key )
+	public function getShortcodeInstance($key)
 	{
 		return $this->shortcodes[$key]['number'];
 	}

@@ -13,7 +13,7 @@
 /**
  * Wordpress term table as an atk model
  */
-class Model_WpTerms extends Model_Table
+class Model_WpTerms extends SQL_Model
 {
 	public function init()
 	{

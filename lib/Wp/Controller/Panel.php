@@ -68,14 +68,14 @@ class Wp_Controller_Panel extends AbstractController
 	 *
 	 * @internal param array $panels
 	 */
-	public function setPanels( $key, $panel )
+	public function setPanels($key, $panel)
 	{
-		$this->panels[ $key ] = $panel;
+		$this->panels[$key] = $panel;
 	}
 
-	public function getPanelSlugByKey( $key )
+	public function getPanelSlugByKey($key)
 	{
-		return $this->panels[ $key ]['slug'];
+		return $this->panels[$key]['slug'];
 	}
 
 	/**
@@ -84,30 +84,30 @@ class Wp_Controller_Panel extends AbstractController
 	 *
 	 * @return mixed
 	 */
-	public function getPanelParentSlugByKey( $key )
+	public function getPanelParentSlugByKey($key)
 	{
-		return $this->panels[ $key ]['slug'];
+		return $this->panels[$key]['slug'];
 	}
 
-	public function getPanelClassByKey( $key )
+	public function getPanelClassByKey($key)
 	{
-		return $this->panels[ $key ]['uses'];
+		return $this->panels[$key]['uses'];
 	}
 
-	public function getPanelUses ( $panelId = null, $isHook = true )
+	public function getPanelUses($panelId = null, $isHook = true)
 	{
 		$response = array();
-		if ( !isset($panelId) )
-			throw $this->exception( 'Cannot identify panel.');
-		if ( $isHook ){
-			foreach ( $this->panels as $key => $panel ) {
-				if ( $panel['hook'] === $panelId ) {
+		if (!isset($panelId))
+			throw $this->exception('Cannot identify panel.');
+		if ($isHook) {
+			foreach ($this->panels as $key => $panel) {
+				if ($panel['hook'] === $panelId) {
 					$response['class'] = $panel['uses'];
 					$response['id']    = $key;
 				}
 			}
 		} else {
-			foreach ( $this->panels as $key => $panel ) {
+			foreach ($this->panels as $key => $panel) {
 				if ( $key === $panelId ) {
 					$response['class'] = $panel['uses'];
 					$response['id']    = $key;
@@ -117,10 +117,10 @@ class Wp_Controller_Panel extends AbstractController
 		return $response;
 	}
 
-	public function getFrontPanelUses( $page_slug )
+	public function getFrontPanelUses($page_slug)
 	{
-		foreach ( $this->panels as $key => $panel ) {
-			if ( $panel['page_slug'] === $page_slug ) {
+		foreach ($this->panels as $key => $panel) {
+			if ($panel['page_slug'] === $page_slug) {
 				$response['class'] = $panel['uses'];
 				$response['id']    = $key;
 			}
@@ -129,9 +129,9 @@ class Wp_Controller_Panel extends AbstractController
 	}
 
 
-	public function registerPanelHook( $key, $hook )
+	public function registerPanelHook($key, $hook)
 	{
-		$this->panels[ $key ]['hook'] = $hook;
+		$this->panels[$key]['hook'] = $hook;
 	}
 
 
@@ -144,14 +144,14 @@ class Wp_Controller_Panel extends AbstractController
 	public function loadPanels()
 	{
 		//start by loading our main panel
-		if ( $panels = $this->getPanelsByType( 'panel' )) {
-			foreach ( $panels as $key => $panel ) {
-				$this->registerPanel( $key, $panel );
+		if ($panels = $this->getPanelsByType('panel')) {
+			foreach ($panels as $key => $panel) {
+				$this->registerPanel($key, $panel);
 			}
 		}
 		//load wp sub panel
-		if ( $panels = $this->getPanelsByType( 'wp-sub-panel')){
-			$this->registerWpSubPanel( $panels );
+		if ($panels = $this->getPanelsByType( 'wp-sub-panel')) {
+			$this->registerWpSubPanel($panels);
 		}
 	}
 
@@ -161,9 +161,9 @@ class Wp_Controller_Panel extends AbstractController
 	 * Will also load atkjs file if panel require's it.
 	 * @param $panel
 	 */
-	public function preSetPanel( $panel )
+	public function preSetPanel($panel)
 	{
-		if ( $panel['atkjs']){
+		if ($panel['atkjs']) {
 			$this->app->enqueueCtrl->enqueueAtkJsInFront();
 		}
 	}
@@ -180,16 +180,16 @@ class Wp_Controller_Panel extends AbstractController
 	 * @throws AbstractObject
 	 * @throws BaseException
 	 */
-	public function registerPanel( $key, $panel )
+	public function registerPanel($key, $panel)
 	{
 		//check if panel has sub panel
-		$subPanels = $this->getSubPanels( $key );
-		add_action( 'admin_menu', function () use ( $key, $panel, $subPanels ) {
+		$subPanels = $this->getSubPanels($key);
+		add_action('admin_menu', function () use ($key, $panel, $subPanels) {
 
-			$this->createPanelMenu( $key, $panel );
-			if ( isset( $subPanels ) && ! empty( $subPanels ) ) {
-				foreach ( $subPanels as $key => $subPanel ) {
-					$this->createSubPanelMenu( $key, $subPanel );
+			$this->createPanelMenu($key, $panel);
+			if ( isset($subPanels) && ! empty($subPanels)) {
+				foreach ($subPanels as $key => $subPanel) {
+					$this->createSubPanelMenu($key, $subPanel);
 				}
 			}
 
@@ -204,11 +204,11 @@ class Wp_Controller_Panel extends AbstractController
 		}*/
 	}
 
-	public function registerWpSubPanel( $wpPanels )
+	public function registerWpSubPanel($wpPanels)
 	{
-		add_action('admin_menu', function () use ( $wpPanels ){
-			foreach ( $wpPanels as $key => $wpPanel ) {
-				$this->createSubPanelMenu( $key, $wpPanel );
+		add_action('admin_menu', function () use ($wpPanels) {
+			foreach ($wpPanels as $key => $wpPanel) {
+				$this->createSubPanelMenu($key, $wpPanel);
 			}
 		});
 	}
@@ -221,38 +221,38 @@ class Wp_Controller_Panel extends AbstractController
 	 * @param $key
 	 * @param $panel
 	 */
-	public function createPanelMenu( $key, $panel )
+	public function createPanelMenu($key, $panel)
 	{
 		$iconUrl = null;
-		if ( isset ( $panel['icon'] ) && ! empty ( $panel['icon'] ) ) {
-			$iconUrl = $this->app->locatePublicUrl( $panel['icon'] );
+		if (isset($panel['icon']) && !empty($panel['icon'])) {
+			$iconUrl = $this->app->locatePublicUrl($panel['icon']);
 		}
-		$hook = add_menu_page(  $panel['page'],
-								$panel['menu'],
-								$panel['capabilities'],
-								$panel['slug'],
-								[$this->app, 'wpAdminExecute'],
-								$iconUrl,
-								$panel['position']
+		$hook = add_menu_page($panel['page'],
+							  $panel['menu'],
+							  $panel['capabilities'],
+							  $panel['slug'],
+							  [$this->app, 'wpAdminExecute'],
+							  $iconUrl,
+							  $panel['position']
 							);
-		$this->registerPanelHook( $key, $hook );
+		$this->registerPanelHook($key, $hook);
 
 	}
 
-	public function createSubPanelMenu( $key, $panel )
+	public function createSubPanelMenu($key, $panel)
 	{
 
-		$hook = add_submenu_page( $this->getPanelParent( $panel ) ,
+		$hook = add_submenu_page($this->getPanelParent($panel) ,
 			$panel['page'],
 			$panel['menu'],
 			$panel['capabilities'],
 			$panel['slug'],
 			[$this->app, 'wpAdminExecute']
 		);
-		$this->registerPanelHook( $key, $hook );
+		$this->registerPanelHook($key, $hook);
 	}
 
-	public function isAtkPanel( $hook )
+	public function isAtkPanel($hook)
 	{
 		$panels = $this->getPanels();
 		foreach ($panels as $panel) {
@@ -262,7 +262,7 @@ class Wp_Controller_Panel extends AbstractController
 		return false;
 	}
 
-	public function getAtkPanel( $hook )
+	public function getAtkPanel($hook)
 	{
 		$panels = $this->getPanels();
 		foreach ($panels as $panel) {
@@ -272,21 +272,21 @@ class Wp_Controller_Panel extends AbstractController
 		return null;
 	}
 
-	private function getPanelParent ( $panel )
+	private function getPanelParent($panel)
 	{
-		if ( $panel['type'] === 'sub-panel'){
-			$parentSlug = $this->getPanelParentSlugByKey( $panel['parent']);
+		if ($panel['type'] === 'sub-panel') {
+			$parentSlug = $this->getPanelParentSlugByKey($panel['parent']);
 		}
-		if ( $panel['type'] === 'wp-sub-panel'){
+		if ($panel['type'] === 'wp-sub-panel') {
 			$parentSlug = $panel['parent'];
 		}
 		return $parentSlug;
 	}
 
-	private function getPanelsByType( $type )
+	private function getPanelsByType($type)
 	{
-		return array_filter( $this->panels, function ($panel) use ($type ){
-			if( $panel['type'] === $type) return $panel ;
+		return array_filter($this->panels, function($panel) use ($type) {
+			if ($panel['type'] === $type) return $panel;
 		});
 	}
 
@@ -296,14 +296,14 @@ class Wp_Controller_Panel extends AbstractController
 	 *
 	 * @return array
 	 */
-	private function getSubPanels( $panelKey )
+	private function getSubPanels($panelKey)
 	{
 		$relatedPanels = array();
 		$subPanels = $this->getPanelsByType('sub-panel');
-		if ($subPanels){
-			foreach($subPanels as $key => $subPanel) {
-				if ( $subPanel['parent'] === $panelKey ){
-					$relatedPanels[ $key ] = $subPanel;
+		if ($subPanels) {
+			foreach ($subPanels as $key => $subPanel) {
+				if ($subPanel['parent'] === $panelKey) {
+					$relatedPanels[$key] = $subPanel;
 				}
 			}
 		}
