@@ -80,6 +80,13 @@ class WpPathfinder extends PathFinder
 			'mail'=>'mail',
 		))->setBasePath($atk_base_path);
 
+		$this->wpPublicLocation = $this->addLocation(array(
+			'public'=> '',
+			'js'=> [ 'js', 'wpatk4/js' ],
+			'css'=> ['css', 'wpatk4/css']
+		))->setBasePath($wp_public_path)
+		                               ->setBaseURL($wp_public_url);
+
 		$this->public_location = $this->addLocation(array(
 			'public'=>'',
 			'js'=>'js',
@@ -87,12 +94,7 @@ class WpPathfinder extends PathFinder
 		))->setBasePath($atk_base_path.'/public/atk4')
 		  ->setBaseURL($atk_public_url);
 
-		$this->wpPublicLocation = $this->addLocation(array(
-			'public'=> '',
-			'js'=> [ 'js', 'wpatk4/js' ],
-			'css'=> ['css', 'wpatk4/css']
-		))->setBasePath($wp_public_path)
-		  ->setBaseURL($wp_public_url);
+
 
 		$this->atk_public = $this->wpPublicLocation->addRelativeLocation('vendor/atk4/atk4/public/atk4');
 		$this->atk_public->defineContents(array(

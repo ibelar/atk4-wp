@@ -24,9 +24,11 @@
 class Wp_Controller_Enqueue extends AbstractController
 {
 	//todo see if we can use WP jquery ui core instead of our.
-	protected $atkJsFiles = ['jquery-ui-1-11-4.min', 'start-atk4',
+	/*protected $atkJsFiles = ['jquery-ui-1-11-4.min', 'start-atk4',
 		'ui.atk4_loader', 'ui.atk4_notify', 'atk4_univ_basic',
-		'atk4_univ_jui', 'wp-atk4_univ_ext'/*, 'wp-atk4'*/ ];
+		'atk4_univ_jui', 'wp-atk4_univ_ext' ];*/
+
+	protected $atkJsFiles = ['jquery-ui-1-11-4.min', 'wp-atk4-bundle-jquery.min' ];
 
 	protected $atkCssFiles = ['wp-atk4'];
 
@@ -53,12 +55,12 @@ class Wp_Controller_Enqueue extends AbstractController
 	{
 		//Register wp-init as a dependency
 		// This ensure that wp-init will be load first when atkjs files are needed.
-		wp_enqueue_script('wp-init', $this->app->locateURL('js', 'wp-init.js'), ['jquery']);
+		//wp_enqueue_script('wp-init', $this->app->locateURL('js', 'wp-init.js'), ['jquery']);
 
-		//register remaining files.
+		//register files.
 		foreach ($files as $file) {
 			//atkjs file need wp-init as a dependency.
-			wp_register_script($file, $this->app->locateURL('js', $file.'.js'), ['wp-init']);
+			wp_register_script($file, $this->app->locateURL('js', $file.'.js'), ['jquery']);
 		}
 	}
 
@@ -113,9 +115,14 @@ class Wp_Controller_Enqueue extends AbstractController
 	public function enqueueFiles($files, $type, $required = null)
 	{
 		if (!isset($required))
-			$required = ['wp-init'];
+			$required = ['jquery'];
 		try {
 			if ($type === 'js') {
+				//if decide to load jquery ui already register with WP then we need to add each module one by one...
+				/*
+				wp_enqueue_script('jquery-ui-core');
+				wp_enqueue_script('jquery-ui-datepicker');
+				*/
 				foreach ($files as $file) {
 					//atkjs file need wp-init as a dependency.
 					if (strpos($file, 'http') === 0) {
