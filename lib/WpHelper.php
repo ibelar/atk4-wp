@@ -16,6 +16,8 @@
  */
 class WpHelper
 {
+	static $jQueryVar = 'jQuery';
+	static $jQueryBundle = 'wp-atk4-bundle-jquery.min';
 
 	public static function getDbPrefix()
 	{
@@ -36,6 +38,16 @@ class WpHelper
 	public static function getWpOption($option)
 	{
 		return get_option($option);
+	}
+
+	public static function getJQueryVar()
+	{
+		return self::$jQueryVar;
+	}
+
+	public static function getJQueryBundle()
+	{
+		return self::$jQueryBundle;
 	}
 
 

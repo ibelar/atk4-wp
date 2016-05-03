@@ -13,7 +13,7 @@
  * Js ui for Form_Field_Upload.
  */
 
-$.widget("ui.wp_uploader", {
+jQuery.widget("ui.wp_uploader", {
     options: {
         'multiple': 1,
         'fileSizeErrorMsg': 'File is too big.',
@@ -47,7 +47,7 @@ $.widget("ui.wp_uploader", {
         this.progressCss['border'] = this.options.borderSize + 'px' + ' ' + this.options.borderType + ' ' + this.options.borderColor;
         this.barCss['background-color'] = this.options.barColor;
 
-        this.progressBar = $("#" + this.options.progress).css(this.progressCss);
+        this.progressBar = jQuery("#" + this.options.progress).css(this.progressCss);
         this.bar = this.progressBar.children('div').css(this.barCss);
         this.progressBar.hide();
 
@@ -55,7 +55,7 @@ $.widget("ui.wp_uploader", {
             this.options.form="#"+closest('form').parent().attr('id');
         }
         this.name = this.element.attr('id');
-        this.clientErrorTemplate = $(this.options.form).find('.client-error-template');
+        this.clientErrorTemplate = jQuery(this.options.form).find('.client-error-template');
 
         this.element.change(function( e ){
             self.clearClientError();
@@ -63,7 +63,7 @@ $.widget("ui.wp_uploader", {
             if( error ){
                 self.clientError( error );
             } else if ( e.target.files.length > 0 ){
-                var label	 = $(this).parent().find('div.input-message');//$(this).next( 'label' );
+                var label	 = jQuery(this).parent().find('div.input-message');//jQuery(this).next( 'label' );
                 //todo change label when using multiple files
                 label.find('span').html(e.target.files[0].name);
                 self.upload( e );
@@ -78,7 +78,7 @@ $.widget("ui.wp_uploader", {
 
     upload: function( event ){
         var self = this;
-        var form_wrapper = $(this.options.form);
+        var form_wrapper = jQuery(this.options.form);
         var form = form_wrapper.find('form');
         var url  = form.attr('action');
 
@@ -87,14 +87,14 @@ $.widget("ui.wp_uploader", {
 
         var data = new FormData();
         var files = event.target.files;
-        $.each(files, function(key, value)
+        jQuery.each(files, function(key, value)
         {
             data.append(key, value);
         });
         //need to pass at least one argument.
         data.append( 'name', this.name );
 
-        $.ajax({
+        jQuery.ajax({
             xhr: function() {
                 var xhr = new window.XMLHttpRequest();
 
@@ -137,7 +137,7 @@ $.widget("ui.wp_uploader", {
     hasFileError: function( files ){
         var self = this;
         var error = false;
-        $.each(files, function(key, file)
+        jQuery.each(files, function(key, file)
         {
             if ( parseInt(file.size) > parseInt( self.options.maxSize ) ){
                 error = self.options.fileSizeErrorMsg;
