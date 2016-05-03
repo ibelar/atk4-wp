@@ -23,13 +23,20 @@
  */
 class Wp_Controller_Enqueue extends AbstractController
 {
-	//todo see if we can use WP jquery ui core instead of our.
-	/*protected $atkJsFiles = ['jquery-ui-1-11-4.min', 'start-atk4',
-		'ui.atk4_loader', 'ui.atk4_notify', 'atk4_univ_basic',
-		'atk4_univ_jui', 'wp-atk4_univ_ext' ];*/
+	//atk4 is built for easily using jQuery ui from js chain.
+	//we have no choice of loading them all.
+	//wish we could have a one pass load instead of loading them one by one.
+	protected $jQueryUiComponents = ['core', 'widget', 'accordion',
+									'button', 'autocomplete', 'datepicker',
+									'dialog', 'draggable', 'droppable', 'menu',
+									'mouse', 'position', 'progressbar', 'selectable',
+									'resizable', 'selectmenu', 'sortable', 'slider',
+									'spinner', 'tooltip', 'tabs'];
 
-	protected $atkJsFiles = ['jquery-ui-1-11-4.min', 'wp-atk4-bundle-jquery.min' ];
+	//bundle all atk4 js file together and use jquery var instead of '$'
+	protected $atkJsFiles = ['wp-atk4-bundle-jquery.min' ];
 
+	//the css file to load.
 	protected $atkCssFiles = ['wp-atk4'];
 
 	public function init()
@@ -60,7 +67,7 @@ class Wp_Controller_Enqueue extends AbstractController
 		//register files.
 		foreach ($files as $file) {
 			//atkjs file need wp-init as a dependency.
-			wp_register_script($file, $this->app->locateURL('js', $file.'.js'), ['jquery']);
+			wp_register_script($file, $this->app->locateURL('js', $file.'.js'), ['jquery', 'jquery-ui-core']);
 		}
 	}
 
@@ -72,16 +79,18 @@ class Wp_Controller_Enqueue extends AbstractController
 		// and enqueue atk file
 		$panel = $this->getAtkPanel($hook);
 		if (isset($panel) || $forceEnqueue) {
-			$this->registerAtkJsFiles($this->atkJsFiles);
 			//check if panel require specific js file.
 			if (isset ($panel['js'])) {
 				$this->atkJsFiles = array_merge($this->atkJsFiles, $panel['js']);
 			}
-
 			if (@$userJsFiles = $this->app->getConfig('enqueue/admin/js', null)) {
 				$this->atkJsFiles = array_merge($this->atkJsFiles, $userJsFiles);
 			}
 			$this->enqueueFiles($this->atkJsFiles, 'js');
+
+			if (isset($panel['js-inc'])) {
+				$this->enqueueJsInclude($panel['js-inc']);
+			}
 
 			if (isset ($panel['css'])) {
 				$this->atkCssFiles = array_merge($this->atkCssFiles, $panel['css']);
@@ -103,7 +112,7 @@ class Wp_Controller_Enqueue extends AbstractController
 
 	public function enqueueFrontFiles()
 	{
-		$this->registerAtkJsFiles($this->atkJsFiles);
+		//$this->registerAtkJsFiles($this->atkJsFiles);
 		if (@$frontJsFiles = $this->app->getConfig('enqueue/front/js', null)) {
 			$this->enqueueFiles($frontJsFiles, 'js');
 		}
@@ -115,14 +124,11 @@ class Wp_Controller_Enqueue extends AbstractController
 	public function enqueueFiles($files, $type, $required = null)
 	{
 		if (!isset($required))
-			$required = ['jquery'];
+			$required = ['jquery', 'jquery-ui-core'];
 		try {
 			if ($type === 'js') {
-				//if decide to load jquery ui already register with WP then we need to add each module one by one...
-				/*
-				wp_enqueue_script('jquery-ui-core');
-				wp_enqueue_script('jquery-ui-datepicker');
-				*/
+				//we need jquery ui
+				$this->enqueueJQueryUi();
 				foreach ($files as $file) {
 					//atkjs file need wp-init as a dependency.
 					if (strpos($file, 'http') === 0) {
@@ -130,8 +136,8 @@ class Wp_Controller_Enqueue extends AbstractController
 					} else {
 						$source = $this->app->locateURL('js', $file.'.js');
 					}
-
-					wp_enqueue_script($file, $source, $required);
+					//load in footer with jquery ui file.
+					wp_enqueue_script($file, $source, $required, false, true);
 				}
 			} else {
 				foreach ($files as $file) {
@@ -143,6 +149,33 @@ class Wp_Controller_Enqueue extends AbstractController
 			$this->app->caughtException($e);
 		}
 
+	}
+
+	/*public function registerJQueryUi()
+	{
+		//first need to deregister them cause they are register in footer.
+		foreach ($this->jQueryUiComponents as $component) {
+			wp_deregister_script('jquery-ui-'.$component);
+		}
+
+		//next properly register them back
+		foreach ($this->jQueryUiComponents as $component) {
+			wp_register_script('jquery-ui-'.$component, site_url(  '/wp-includes/js/jquery/ui/'.$component.'.min.js' ), ['jquery']);
+		}
+	}*/
+
+	public function enqueueJQueryUi()
+	{
+		foreach ($this->jQueryUiComponents as $component) {
+			wp_enqueue_script('jquery-ui-'.$component);
+		}
+	}
+
+	public function enqueueJsInclude($files)
+	{
+		foreach ($files as $file) {
+			wp_enqueue_script($file);
+		}
 	}
 
 	public function isAtkPanel($hook)

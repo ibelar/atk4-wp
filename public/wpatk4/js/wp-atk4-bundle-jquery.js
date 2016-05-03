@@ -1,5 +1,19 @@
 /**
  * Bundle atk4 js file
+ *
+ * In order to avoid conflict, all reference to var $ has been replace with jQuery.
+ *
+ * Using this file also required that other atk4 js file load via js include
+ * are also using jQuery instead of var $
+ *
+ * ui.atk4_form.js
+ * ui.atk4_grid.js
+ * ui.atk4_menu.js
+ * ui.atk4_reference.js
+ * ui.atk4_uploader.js
+ * ui.atk4_checkboxes.js
+ * ui.atk4_expander.js
+ * ui.atk4_richtext.js
  */
 
 //jQuery = jQuery.noConflict();
