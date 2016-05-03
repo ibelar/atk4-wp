@@ -12,13 +12,13 @@
 /**
  * Univ Extension.
  */
-$.each({
+jQuery.each({
     message: function(msg,html){
         html.find('span').text(msg);
 
         html.find('.do-close').click(function(e){e.preventDefault();html.remove();});
 
-        var dest=$(".atk-wp-body");
+        var dest=jQuery(".atk-wp-body");
         if(dest.length){
             html.prependTo(dest);
             return html;
@@ -31,23 +31,23 @@ $.each({
         var html, dest;
 
         getDestination = function(){
-            var container = $('#' + id).parents('.atk-wp-body').find('.atkwp-notice');
+            var container = jQuery('#' + id).parents('.atk-wp-body').find('.atkwp-notice');
             if ( ! container.length ) {
                 //check for a shortcode output
-                container = $('#' + id).find('.atkwp-notice');
+                container = jQuery('#' + id).find('.atkwp-notice');
             }
             return container;
         };
 
-        html = $('<div class="atk-layout-row" style="position: absolute; z-index: 1000;"></div>')
-                .append( $('<div class="atk-effect-' + effect + ' atk-cells atk-box-small"></div>')
-                    .append( $('<div class="atk-cell atk-jackscrew"></div>')
-                            .append( $('<i class="icon-info"></i>'))
-                            .append( $('<span>' + msg + '</span>')))
-                    .append( $('<div class="atk-cell"></div>')
-                            .append( $('<a href="javascript: void()" ></a>'))
+        html = jQuery('<div class="atk-layout-row" style="position: absolute; z-index: 1000;"></div>')
+                .append( jQuery('<div class="atk-effect-' + effect + ' atk-cells atk-box-small"></div>')
+                    .append( jQuery('<div class="atk-cell atk-jackscrew"></div>')
+                            .append( jQuery('<i class="icon-info"></i>'))
+                            .append( jQuery('<span>' + msg + '</span>')))
+                    .append( jQuery('<div class="atk-cell"></div>')
+                            .append( jQuery('<a href="javascript: void()" ></a>'))
                                 .click(function(e){e.preventDefault();html.remove();})
-                            .append( $('<i class="icon-cancel"></i>'))
+                            .append( jQuery('<i class="icon-cancel"></i>'))
                             )
                     );
 
@@ -58,4 +58,4 @@ $.each({
         }
         setTimeout(function() { html.remove();},8000);
     }
-},$.univ._import);
+},jQuery.univ._import);

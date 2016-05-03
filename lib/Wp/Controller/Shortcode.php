@@ -20,7 +20,8 @@
 class Wp_Controller_Shortcode extends AbstractController
 {
 
-	public $shortcodes = [];
+	public $shortcodes      = [];
+	public $hasLoadAtkJs    = false;
 
 	/**
 	 * @return array
@@ -55,14 +56,21 @@ class Wp_Controller_Shortcode extends AbstractController
 		$shortcode['number'] = 0;
 		$app = $this->app;
 		add_shortcode($shortcode['name'], function($args) use ($key, $shortcode, $app) {
-			if ($shortcode['atkjs']) {
-				$app->enqueueCtrl->enqueueAtkJsInFront();
-			}
-			if (isset($shortcode['js'])) {
-				$app->enqueueCtrl->enqueueFiles($shortcode['js'], 'js', ['start-atk4']);
-			}
-			if (isset($shortcode['css'])) {
-				$app->enqueueCtrl->enqueueFiles($shortcode['css'], 'css');
+			//Load js and css file on first run.
+			if ($app->shortcodeCtrl->getShortcodeInstance($key) === 0) {
+				if ($shortcode['atkjs'] && !$this->hasLoadAtkJs) {
+					$app->enqueueCtrl->enqueueAtkJsInFront();
+					$this->hasLoadAtkJs = true;
+				}
+				if (isset($shortcode['js'])) {
+					$app->enqueueCtrl->enqueueFiles($shortcode['js'], 'js');
+				}
+				if (isset($shortcode['js-inc'])) {
+					$app->enqueueCtrl->enqueueJsInclude($shortcode['js-inc']);
+				}
+				if (isset($shortcode['css'])) {
+					$app->enqueueCtrl->enqueueFiles($shortcode['css'], 'css');
+				}
 			}
 			return $app->wpShortcodeExecute($shortcode, $args);
 		});

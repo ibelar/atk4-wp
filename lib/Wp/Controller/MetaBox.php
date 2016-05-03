@@ -12,7 +12,7 @@
  * Licensed under MIT
  * =====================================================================*/
 /**
- * This controller is responsible for registering metabox.
+ * This controller is responsible for metabox registration.
  *
  */
 
