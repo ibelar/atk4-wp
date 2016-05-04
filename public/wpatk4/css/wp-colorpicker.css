@@ -1,0 +1,16 @@
+.atk4wp-color-picker {
+    width: 80px !important;
+    padding: 0.3em 0.7em !important;
+}
+
+.wp-picker-open + .wp-picker-input-wrap {
+    display: inline-flex !important;
+}
+
+.wp-color-result{
+    height: 24px;
+}
+
+.atk-form-row-wpcolorpicker > div.atk-cell {
+    vertical-align: top !important;
+}

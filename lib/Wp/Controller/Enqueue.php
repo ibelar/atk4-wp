@@ -100,6 +100,10 @@ class Wp_Controller_Enqueue extends AbstractController
 				$this->atkCssFiles = array_merge($this->atkCssFiles, $userCssFiles);
 			}
 			$this->enqueueFiles($this->atkCssFiles, 'css');
+
+			if (isset($panel['css-inc'])) {
+				$this->enqueueCssInclude($panel['css-inc']);
+			}
 		}
 
 	}
@@ -175,6 +179,13 @@ class Wp_Controller_Enqueue extends AbstractController
 	{
 		foreach ($files as $file) {
 			wp_enqueue_script($file);
+		}
+	}
+
+	public function enqueueCssInclude($files)
+	{
+		foreach ($files as $file) {
+			wp_enqueue_style($file);
 		}
 	}
 
