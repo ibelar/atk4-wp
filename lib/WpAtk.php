@@ -33,6 +33,8 @@ class WpAtk extends App_Web
 	public $widgetCtrl;
 	//The Metabox controller
 	public $metaBoxCtrl;
+	//The dasboard controller
+	public $dashboardCtrl;
 
 	public $shortcodeCtrl;
 
@@ -40,7 +42,13 @@ class WpAtk extends App_Web
 	public $panel;
 
 	//default config files to read
-	public $wpConfigFiles = ['config-wp', 'config-panel', 'config-enqueue', 'config-shortcode', 'config-widget', 'config-metabox'];
+	public $wpConfigFiles = ['config-wp',
+							'config-panel',
+							'config-enqueue',
+							'config-shortcode',
+							'config-widget',
+							'config-metabox',
+							'config-dashboard'];
 
 	public $ajaxMode = false;
 
@@ -91,10 +99,10 @@ class WpAtk extends App_Web
 		$this->panelCtrl        = $this->add('Wp_Controller_Panel', 'wpatk-pan');
 		$this->metaBoxCtrl      = $this->add('Wp_Controller_MetaBox', 'wpatk-mb');
 		$this->shortcodeCtrl    = $this->add('Wp_Controller_Shortcode', 'wpatk-sc');
-
+		$this->dashboardCtrl    = $this->add('Wp_Controller_Dashboard', 'wpatk-ds');
 
 		$this->add('Wp_WpJui');
-		$this->template->trySet('action', $this->pluginName);
+		//$this->template->trySet('action', $this->pluginName);
 
 	}
 
@@ -201,6 +209,7 @@ class WpAtk extends App_Web
 			$this->widgetCtrl->loadWidgets();
 			$this->metaBoxCtrl->loadMetaBoxes();
 			$this->shortcodeCtrl->loadShortcodes();
+			$this->dashboardCtrl->loadDashboards();
 			add_action('init', [$this, 'wpInit']);
 			//register ajax action for this plugin
 			add_action("wp_ajax_{$this->pluginName}", [$this, 'wpAjaxExecute']);
@@ -249,6 +258,33 @@ class WpAtk extends App_Web
 		$this->resetContent();
 	}
 
+
+	/**
+	 * Dashboard output
+	 *
+	 * Dashboard output either a view for display or a configuration form.
+	 * If the form is set in config['dashboard'] this will automatically
+	 * switch from display view or form view.
+	 *
+	 * @param $key
+	 * @param $dashboard
+	 * @param bool $needForm
+	 */
+	public function wpDashboardExecute($key, $dashboard, $needForm = false)
+	{
+		//$t = 't';
+		//set the view to output.
+		if ($needForm) {
+			$use = $dashboard['form']['uses'];
+		} else {
+			$use = $dashboard['uses'];
+		}
+		$this->panel['class'] = $use;
+		$this->panel['id']    = $key;
+		$this->isLayoutNeedInitialise = false;
+		$this->main();
+		$this->resetContent();
+	}
 
 	/**
 	 * Output shortcode view in Wordpress.
