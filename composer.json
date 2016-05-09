@@ -1,7 +1,18 @@
 {
-  "name": "atk4-wp",
-  "description": "Interface for adapting Agile Toolkit framework to work under WordPress",
+  "name": "atk4-wp/atk4-wp",
+  "type": "library",
+  "description": "Use Agile Toolkit framework for WordPress plugin development.",
+  "keywords": ["WordPress","WordPress Plugin", "Agile Toolkit", "Atk4"],
+  "homepage": "https://github.com/ibelar/atk4-wp",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Alain Belair",
+      "email": "belair.alain@gmail.com",
+      "homepage": "https://github.com/ibelar",
+      "role": "Developer"
+    }
+  ],
   "require": {
     "atk4/atk4":"dev-master"
   },
