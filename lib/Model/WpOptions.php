@@ -27,10 +27,15 @@ class Model_WpOptions extends SQL_Model
 		$this->addField('autoload');
 	}
 
-	public function getOptionValue($option)
+	public function getOptionValue($option, $default = null)
 	{
 		$value = $this->tryLoadBy('name', $option)->get('value');
-		return maybe_unserialize($value);
+		if (isset($value)) {
+			$value = maybe_unserialize($value);
+		} else {
+			$value = $default;
+		}
+		return $value;
 	}
 
 	public function saveOptionValue($option, $value)

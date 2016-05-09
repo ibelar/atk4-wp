@@ -87,6 +87,7 @@ class Wp_Controller_Enqueue extends AbstractController
 				$this->atkJsFiles = array_merge($this->atkJsFiles, $userJsFiles);
 			}
 			$this->enqueueFiles($this->atkJsFiles, 'js');
+			//wp_localize_script('wp-atk4-bundle-jquery.min', 'testL10N', ['new' => _('New')]);
 
 			if (isset($panel['js-inc'])) {
 				$this->enqueueJsInclude($panel['js-inc']);

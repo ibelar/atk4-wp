@@ -49,8 +49,6 @@ class Wp_Controller_MetaBox extends AbstractController
 	{
 		//create metaBoxes using closure function.
 		add_action('add_meta_boxes', function() use ($key, $metabox) {
-			$metabox['key'] = $key;
-
 			//Add atk4 js and css files using our key as panel hook
 			$this->app->enqueueCtrl->enqueueAdminFiles($key);
 			$args = (isset($metabox['args']))? $metabox['args'] : null;
