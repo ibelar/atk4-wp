@@ -80,7 +80,6 @@ class WpAtk extends App_Web
 	{
 		$this->pluginName = $name;
 		$this->config_location = $configPath;
-		$this->pathfinder_class = 'WpPathfinder';
 		parent::__construct($name);
 	}
 
