@@ -1240,9 +1240,8 @@ jQuery||console.error("jQuery must be loaded");
 
             }
 
-            var cogs=jQuery('<div id="banner-loader" class="atk-banner atk-cells atk-visible"><div class="atk-cell atk-align-center atk-valign-middle"><div class="atk-box atk-inline atk-size-zetta atk-banner-cogs"></div></div></div>');
+            var cogs=jQuery('<div id="banner-loader" class="atk-banner atk-cells atk-visible"><div class="atk-cell atk-align-center atk-valign-middle"><div class="atk-box atk-inline atk-size-kilo atk-banner-cogs"></div></div></div>');
             cogs.appendTo('body');
-
 
             jQuery.atk4.get(url,data,function(ret){
                 cogs.remove();
