@@ -39,7 +39,7 @@ class Form_WpForm extends Form
 
 	protected function makeFieldMandatory($field)
 	{
-		$field->addHook('validate', [$this, 'validateMandatory']);
+		$field->validateField([$this, 'validateMandatory']);
 		return $field;
 	}
 

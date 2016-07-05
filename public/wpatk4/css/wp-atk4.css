@@ -1000,10 +1000,23 @@ input.ui-button {
     display: inline-block;
     font-weight: bold;
     line-height: 1.618;
-    padding: 0.5em 1em 0.6em 1em;
     text-align: center;
     white-space: nowrap;
 }
+
+a[class*='atk-button'],
+button[class*='atk-button'],
+input[class*='atk-button'],
+a.ui-button,
+button.ui-button,
+input.ui-button {
+  padding: 0.5em 1em 0.6em 1em;
+}
+
+button.ui-button {
+    padding: 0.5em 1.5em 2.3em 1.5em;
+}
+
 a[class*='atk-button']:hover,
 button[class*='atk-button']:hover,
 input[class*='atk-button']:hover,
@@ -4604,7 +4617,7 @@ body .ui-tooltip {
     border-color: #a1a1a1;
 }
 .ui-dialog .ui-widget-header.ui-dialog-titlebar {
-    padding: 1.6rem 1.6rem 0 1.6rem;
+    padding: .6rem .6rem 0 .6rem;
 }
 .ui-dialog .ui-widget-header.ui-dialog-titlebar .ui-dialog-title {
     font-size: 1.25528385rem;
@@ -4638,8 +4651,6 @@ body .ui-tooltip {
     border: none;
 }
 .ui-dialog > .ui-widget-content .ui-dialog-buttonset {
-    border-top: 1px solid #e1e1e1;
-    padding: 0.8rem 1.6rem;
 }
 .ui-dialog > .ui-widget-content .ui-dialog-buttonset > * + * {
     margin-left: 0.5em;
@@ -4650,6 +4661,8 @@ body .ui-tooltip {
 .ui-dialog > .ui-widget-content.ui-dialog-content {
     overflow: auto;
     padding: 0.8rem 1.6rem 1.6rem 1.6rem;
+    margin-top: 8px;
+    border-bottom: 1px solid;
 }
 .ui-tooltip {
     font-size: 0.77582438rem;
@@ -4669,7 +4682,6 @@ body .ui-tooltip {
     height: auto;
     line-height: 1;
     overflow: hidden;
-    text-indent: 0;
 }
 .ui-icon:before {
     display: inline-block;

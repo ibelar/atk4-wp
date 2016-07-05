@@ -35,11 +35,9 @@
  jQuerythis->add('jUI');
  jQuerythis->js(true)->_load('start-atk4');
  */
-
 jQuery.atk4||(function(jQuery){
 
     /*
-
      jQuery.atk4 is a function, which acts as an enhanced onReady handler.
      Syntax:
 
@@ -485,7 +483,7 @@ jQuery.widget('ui.atk4_loader', {
          loaded.
          */
         loading: false,
-        cogs: '<div id="banner-loader" class="atk-banner atk-cells atk-visible"><div class="atk-cell atk-align-center atk-valign-middle"><div class="atk-box atk-inline atk-size-zetta atk-banner-cogs"></div></div></div>',
+        cogs: '<div id="banner-loader" class="atk-banner atk-cells atk-visible"><div class="atk-cell atk-align-center atk-valign-middle"><div class="atk-box atk-inline atk-size-kilo atk-banner-cogs"></div></div></div>',
 
         /*
          when we are loading URLs, we will automaticaly pass arguments to cut stuff out
@@ -1413,7 +1411,7 @@ jQuery||console.error("jQuery must be loaded");
                     }
                 }
 
-                console.log(exact_match);
+                //console.log(exact_match);
 
                 if(exact_match && exact_match.length){
                     if(exact_match instanceof Array){
@@ -1585,7 +1583,7 @@ jQuery.each({
          * This function creates a new dialog and makes sure other dialog-related functions will
          * work perfectly with it
          */
-        var dialog=jQuery('<div class="dialog dialog_autosize" title="Untitled"><div style="min-height: 300px"></div>').appendTo('body');
+        var dialog=jQuery('<div class="dialog dialog_autosize" title="Untitled"><div style="min-height: 300px"></div></div>').appendTo('body');
         if(options.noAutoSizeHack)dialog.removeClass('dialog_autosize');
         dialog.dialog(options);
         if(options.customClass){
