@@ -133,7 +133,9 @@ class WpAtk extends App_Web
 		$this->config_files = array_merge($this->config_files, $this->wpConfigFiles);
 
 		$this->pm = $this->add($this->pagemanager_class, $this->pagemanager_options);
-		$this->pm->parseRequestedURL();
+		//TODO parserRequestedURL need to be adapt to WP
+		// this function cause error when other plugin is running, like WPLM for example.
+		//$this->pm->parseRequestedURL();
 
 		$this->readAllConfig();
 		$this->add($this->pathfinder_class);

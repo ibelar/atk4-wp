@@ -1833,8 +1833,13 @@ jQuery.each({
             return false;
         }
     },
-    atkWpMessage: function(id, effect, msg){
+    atkWpMessage: function(id, effect, msg, time){
         var html, dest;
+
+        if(time == undefined){
+            time = 4000;
+        }
+
 
         getDestination = function(){
             var container = jQuery('#' + id).parents('.atk-wp-body').find('.atkwp-notice');
@@ -1862,6 +1867,6 @@ jQuery.each({
         }else{
             alert(msg);
         }
-        setTimeout(function() { html.remove();},8000);
+        setTimeout(function() { html.remove();},time);
     }
 },jQuery.univ._import);
