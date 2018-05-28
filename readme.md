@@ -1,4 +1,4 @@
-#Welcome
+# Welcome
 
 Welcome to Agile Toolkit for WordPress interface: atk4-wp. 
 This interface enable the use of Agile Toolkit framework within WordPress.
@@ -9,7 +9,7 @@ If you are not familiar with Agile Toolkit, this framework is really easy to lea
 
 [For more information on Agile Toolkit: http://www.agiletoolkit.org] (http://www.agiletoolkit.org)
 
-#Benefits
+# Benefits
 
 With this interface, it is possible to create many WordPress components like: admin page, sub page, meta boxes, widget or shortcode using the Agile Toolkit
 framework. 
@@ -25,32 +25,32 @@ framework.
 * data model with active record pattern and ORM;
 * and many more...
 
-#Getting Started
+# Getting Started
 
 This interface, along with Agile Toolkit framework (atk4) need to be install within your wp-content folder. 
 Each plugin using the atk4-wp interface should be created within the WordPress plugin directory as normal WordPress plugin do.
 
 The atk4-wp interface can be use for multiple plugins development within the same WordPress site.
 
-##Requirement
+## Requirement
 
 This interface required [Composer] (https://getcomposer.org/). Please make sure it is installed before continuing.
 
-###Installing Composer on Linux or Mac OS X
+### Installing Composer on Linux or Mac OS X
 
-```
+```shell
 $ curl -sS https://getcomposer.org/installer | php
 ```
 
-```
+```shell
 $ sudo mv composer.phar /usr/local/bin/composer
 ```
 
-###Installing Composer on Windows
+### Installing Composer on Windows
 
 Download the installer from getcomposer.org/download, execute it and follow the instructions.
 
-##Installation
+## Installation
 
 Download or clone this repository within your WordPress wp-content folder. Using terminal at the root of the atk4-wp folder type:
 
@@ -60,14 +60,14 @@ composer install
 
 Composer will download and install the Agile Toolkit framework within the atk4-wp/vendor directory.
 
-#Atk4-wp Plugin Sample and Template
+# Atk4-wp Plugin Sample and Template
 
 To study this interface or jump start development of your plugin you can use either:
  
  * The [atk4wp-sample](https://github.com/ibelar/atk4wp-sample) plugin;
  * The [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin;
 
-##Using the sample plugin
+## Using the sample plugin
 
 This plugin use different WordPress components: admin pages with main and sub menu items, meta boxes, widget and shortcodes.
 It also updates the WordPress database by adding an event table. Event data information will also be display in meta boxes and widget view. 
@@ -76,13 +76,13 @@ It is a good sample to demonstrate on how to integrate Agile Toolkit views withi
 More information on using the sample here: [atk4wp-sample](https://github.com/ibelar/atk4wp-sample)
 
 
-##Starting from the template
+## Starting from the template
 
 The template will simply install minimum files needed to start building a new WordPress plugin with Agile Tookit using atk4-wp.
 
 More information on using the template here: [atk4wp-template](https://github.com/ibelar/atk4wp-template)
 
-#WordPress components manage by Atk4
+# WordPress components manage by Atk4
 
 Wordpress components managed by Atk4 class like admin pages or panels, widgets, meta boxes and shortcodes are added to WP using configuration options set in your plugin configuration files.
 For example, adding an admin page within WordPress that is managed by an Atk4 View is done by setting the proper options for that page in config-panel. 
@@ -93,17 +93,17 @@ You can then use these classes for adding others elements like views, models, co
 
 For more information on WordPress components and their configuration, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
 
-#WordPress Plugin using the atk4-wp interface.
+# WordPress Plugin using the atk4-wp interface.
 
-##Multiple plugins
+## Multiple plugins
 
 It is possible to create more than one plugin within the same WordPress installation using this interface. This is why the Atk4-wp interface resides within the wp-content folder.
 Each defines plugin using this interface will run as an instance of an Agile Toolkit application.
 
 
-##plugin.php file and the Plugin Class
+## plugin.php file and the Plugin Class
 
-##Directory and file structure
+## Directory and file structure
 
 Below is the recommend directory structure for your plugin. You should start by creating a new directory under WordPress plugins folder that reflect the name of your plugin.
 
@@ -135,7 +135,7 @@ The public directory should contains css, js and images directory and files need
 Configuration files, required for creating WordPress components, are placed directly under your plugin root directory.
 
 
-###plugin.php
+### plugin.php
 
 Each plugin required to properly setup the plugin.php file. Inside the plugin.php file, you need to setup the name and namespace of your plugin. 
 This file is responsible for creating the Agile Toolkit application instance. It also assigns a dynamic variable name to the instance.
@@ -159,7 +159,7 @@ if (!is_null($$atk_plugin_name)) {
 }
 ```
 
-###Plugin Class
+### Plugin Class
 
 The Plugin class is responsible for creating and properly initiating the Agile Toolkit application instance to work under WordPress. In order for this to happen, it must extend the WpAtk4 class and implement the Pluggable class interface.
 
@@ -184,7 +184,7 @@ class Plugin extends \WpAtk implements \Pluggable
 
 For more information on plugin.php file and the Plugin class, see the [atk4wp-template](https://github.com/ibelar/atk4wp-template) plugin.
 
-#License
+# License
 
 Copyright (c) 2016 Alain Belair. MIT Licensed,
 
